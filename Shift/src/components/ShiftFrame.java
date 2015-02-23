@@ -22,8 +22,8 @@ public class ShiftFrame extends JFrame {
 
 		try {
 			ImageIcon ii = new ImageIcon("res/Logo2.png");
-			System.out.println(ii.getImage().toString());
-			System.out.println(ii.getImage() == null);
+//			System.out.println(ii.getImage().toString());
+//			System.out.println(ii.getImage() == null);
 			setIconImage(ii.getImage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -38,9 +38,9 @@ public class ShiftFrame extends JFrame {
 		// Layout
 		CardLayout cl = new CardLayout();
 		setLayout(cl);
-		JPanel jpanel = new JPanel();
-		jpanel.setBackground(Definitions.BG_COLOR);
-		add(jpanel, "Home");
+		ShiftPanel panel = new ShiftPanel();
+		panel.setBackground(Definitions.BG_COLOR);
+		add(panel, "Home");
 
 	}
 
