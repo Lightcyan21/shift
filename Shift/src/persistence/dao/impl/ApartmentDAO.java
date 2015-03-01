@@ -5,7 +5,6 @@ import java.util.List;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
 import persistence.entity.impl.Apartment;
-import persistence.entity.impl.Message;
 
 public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		DAO<Apartment> {
