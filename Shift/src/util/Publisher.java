@@ -2,9 +2,7 @@ package util;
 
 import javax.xml.ws.Endpoint;
 
-import webservices.impl.ExposeWSImpl;
-import webservices.impl.HirerWSImpl;
-import webservices.impl.OrderWSImpl;
+import webservices.impl.GmWSImpl;
 
 public class Publisher {
 
@@ -15,13 +13,15 @@ public class Publisher {
 	public Publisher() {
 		// TODO Port anpassen
 		if (true) {
-			adresse = "http://10.10.10.24:1000/ws/";
+			adresse = "http://10.10.10.24:1000/ws";
 		} else {
 			adresse = "http://localhost:1000/ws/test";
 		}
-		Endpoint.publish(adresse, new ExposeWSImpl());
-		Endpoint.publish(adresse, new HirerWSImpl());
-		Endpoint.publish(adresse, new OrderWSImpl());
+//		Endpoint.publish(adresse + "Expose", new ExposeWSImpl());
+//		Endpoint.publish(adresse + "Hirer", new HirerWSImpl());
+//		Endpoint.publish(adresse + "Order", new OrderWSImpl());
+		
+		Endpoint.publish(adresse, new GmWSImpl());
 	}
 
 	public static Publisher getInstance() {

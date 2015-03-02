@@ -21,7 +21,7 @@ public class HirerWSImpl implements HirerWS {
 	@Override
 	@WebMethod
 	public ArrayList<HashMap<String, Double>> getUtilities() {
-		// TODO Auto-generated method stub
+		System.out.println("Geil");
 		return null;
 	}
 
