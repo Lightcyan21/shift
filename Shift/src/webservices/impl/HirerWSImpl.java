@@ -8,7 +8,7 @@ import javax.jws.WebService;
 
 import webservices.HirerWS;
 
-@WebService(endpointInterface = "webservices.ExposeWS")
+@WebService(endpointInterface = "webservices.HirerWS")
 public class HirerWSImpl implements HirerWS {
 
 	@Override

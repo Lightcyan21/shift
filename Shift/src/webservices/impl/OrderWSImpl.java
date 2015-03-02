@@ -5,7 +5,7 @@ import javax.jws.WebService;
 
 import webservices.OrderWS;
 
-@WebService(endpointInterface = "webservices.ExposeWS")
+@WebService(endpointInterface = "webservices.OrderWS")
 public class OrderWSImpl implements OrderWS {
 
 	
