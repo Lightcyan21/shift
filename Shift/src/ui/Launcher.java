@@ -1,5 +1,6 @@
 package ui;
 
+import util.Publisher;
 import components.ShiftFrame;
 
 
@@ -12,6 +13,7 @@ public class Launcher {
 		// TODO Auto-generated method stub
 			@SuppressWarnings("unused")
 			ShiftFrame sf = new ShiftFrame();
+			Publisher.getInstance();
 	}
 
 }
