@@ -8,7 +8,7 @@ import javax.jws.WebService;
 
 import webservices.HirerWS;
 
-@WebService(endpointInterface = "webservices.ExposeWS")
+@WebService(endpointInterface = "webservices.HirerWS")
 public class HirerWSImpl implements HirerWS {
 
 	@Override
@@ -21,7 +21,7 @@ public class HirerWSImpl implements HirerWS {
 	@Override
 	@WebMethod
 	public ArrayList<HashMap<String, Double>> getUtilities() {
-		// TODO Auto-generated method stub
+		System.out.println("Geil");
 		return null;
 	}
 

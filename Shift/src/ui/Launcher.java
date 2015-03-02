@@ -1,7 +1,7 @@
 package ui;
 
-import components.ShiftFrame;
-
+import ui.controller.MainWindowController;
+import util.Publisher;
 
 public class Launcher {
 
@@ -10,8 +10,9 @@ public class Launcher {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-			@SuppressWarnings("unused")
-			ShiftFrame sf = new ShiftFrame();
+
+		MainWindowController.getInstance();
+		Publisher.getInstance();
 	}
 
 }
