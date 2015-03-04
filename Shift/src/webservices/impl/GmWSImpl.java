@@ -8,7 +8,7 @@ import javax.jws.WebService;
 
 import webservices.GmWS;
 
-@WebService(endpointInterface = "webservices.HirerWS")
+@WebService(endpointInterface = "webservices.GmWS")
 public class GmWSImpl implements GmWS {
 
 	@Override
@@ -17,42 +17,46 @@ public class GmWSImpl implements GmWS {
 			String streetNumber, String city, int levels, int numberFlat,
 			double gardenarea, double totalArea, double[] apartmentArea,
 			int[] roomNumbers, int[] lvl) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	@WebMethod
 	public String setHirer(int NumberOfHirers, String apartmentID) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("läuft");
+		return "Test war erfolgreich";
 	}
 
 	@Override
 	@WebMethod
 	public ArrayList<HashMap<String, Double>> getUtilities() {
 		System.out.println("Der Test war erfolgreich.");
-		return null;
+		HashMap<String, Double> hm = new HashMap<String, Double>();
+		hm.put("test", (double) 2);
+		ArrayList<HashMap<String, Double>> al = new ArrayList<>();
+		al.add(hm);
+		return al;
 	}
 
 	@Override
 	@WebMethod
 	public ArrayList<String> getInfo(String apartmentID) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	@WebMethod
 	public String checkStatus(int orderID) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	@WebMethod
 	public int sendOrder(String name, String apartmentID) {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 

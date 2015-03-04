@@ -11,20 +11,18 @@ public class Asset extends AbstractEntity {
 	private int billID;
 	private double einzelpreis;
 	private String bezeichnung;
-	
-	
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void setId(Long id) {
-		// TODO Auto-generated method stub
-		
+
 	}
+
 	/**
 	 * 
 	 */
@@ -60,5 +58,5 @@ public class Asset extends AbstractEntity {
 	public void setBezeichnung(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}
-	
+
 }

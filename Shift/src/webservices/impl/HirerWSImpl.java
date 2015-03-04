@@ -14,7 +14,7 @@ public class HirerWSImpl implements HirerWS {
 	@Override
 	@WebMethod
 	public String setHirer(int NumberOfHirers, String apartmentID) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -28,7 +28,7 @@ public class HirerWSImpl implements HirerWS {
 	@Override
 	@WebMethod
 	public ArrayList<String> getInfo(String apartmentID) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 

@@ -24,7 +24,7 @@ public class MainWindowController extends
 
 	@Override
 	public void handleEvent(LocalUIEvent event) {
-		// TODO Auto-generated method stub
+	
 
 	}
 

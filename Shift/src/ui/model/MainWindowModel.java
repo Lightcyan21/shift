@@ -6,7 +6,6 @@ public class MainWindowModel extends AbstractModel {
 
 	@Override
 	protected void initDefault() {
-		// TODO Auto-generated method stub
 
 	}
 

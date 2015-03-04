@@ -16,20 +16,18 @@ public class MainWindowView extends AbstractView {
 
 	@Override
 	public Object getMainSurface() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	protected void initUI() {
 		ShiftFrame sf = new ShiftFrame();
-		sf.setVisible(true);
 
 	}
 

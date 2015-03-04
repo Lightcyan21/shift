@@ -48,6 +48,7 @@ public interface GmWS {
 			String city, int levels, int numberFlat, double gardenarea,
 			double totalArea, double[] apartmentArea, int[] roomNumbers,
 			int[] lvl);
+	
 	/**
 	 * You can use this webservice to add a new Hirer to an object. If the
 	 * number of hirers is 0, then it means the apartment is empty.
@@ -60,9 +61,8 @@ public interface GmWS {
 	 * @return a String “Mieter erfolgreich hinzugefügt”, if the process was
 	 *         successfull, else there will be an errormessage
 	 */
-
 	@WebMethod
-	String setHirer(int NumberOfHirers, String apartmentID);
+	public String setHirer(int NumberOfHirers, String apartmentID);
 
 	/**
 	 * You can use this webservice to get the utilities of every hirer. As
@@ -76,7 +76,7 @@ public interface GmWS {
 	 */
 
 	@WebMethod
-	ArrayList<HashMap<String, Double>> getUtilities();
+	public ArrayList<HashMap<String, Double>> getUtilities();
 
 	/**
 	 * You can use this webservice to get the all information about the
