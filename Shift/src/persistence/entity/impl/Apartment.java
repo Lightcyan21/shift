@@ -7,16 +7,16 @@ public class Apartment extends AbstractEntity{
 	 * 
 	 */
 	private static final long serialVersionUID = 1946383270081409190L;
-	private int wohnID;
+	private String wohnID;
 	private double wohnflaeche;
 	private int zimmeranzahl;
 	private int mieteranzahl;
 
-	public int getWohnID() {
+	public String getWohnID() {
 		return wohnID;
 	}
 
-	public void setWohnID(int wohnID) {
+	public void setWohnID(String wohnID) {
 		this.wohnID = wohnID;
 	}
 

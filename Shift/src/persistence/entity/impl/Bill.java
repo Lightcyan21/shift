@@ -46,36 +46,12 @@ public class Bill extends AbstractEntity {
 
 	@Override
 	public Long getId() {
-
+		// nicht genutzt, da RechnungsID String ist.
 		return null;
 	}
 
 	@Override
 	public void setId(Long id) {
-
+		// nicht genutzt, da RechnungsID String ist.
 	}
-
-	// public Bill(String billID, String rechnungssteller,
-	// String rechnungsEmpfaenger, double betrag) {
-	// super();
-	// this.billID = billID;
-	// this.rechnungssteller = rechnungssteller;
-	// this.rechnungsEmpfaenger = rechnungsEmpfaenger;
-	// this.betrag = betrag;
-	// }
-	//
-	// public Bill() {
-	// }
-
-	// public void pushBill() {
-	//
-	// }
-	//
-	// public void storeBill() {
-	//
-	// }
-	//
-	// public void getStoredBill(String billID) {
-	//
-	// }
 }

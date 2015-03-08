@@ -8,20 +8,21 @@ public class Admontion extends AbstractEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 8429005451293689378L;
+	private long admontionID;
 
 	@Override
 	public Long getId() {
-		
-		return null;
+
+		return admontionID;
 	}
 
 	@Override
 	public void setId(Long id) {
-	
-		
+		admontionID = id;
+
 	}
 	/**
 	 * 
 	 */
-	
+
 }

@@ -8,25 +8,17 @@ public class Order extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = 7664079950603416621L;
 	// Auftrag für GS
-	private int orderID;
-	private Apartment wohnID;
+	private long orderID;
+	private Apartment wohnung;
 	private double betrag;
 	private int art;
 
-	public int getOrderID() {
-		return orderID;
-	}
-
-	public void setOrderID(int orderID) {
-		this.orderID = orderID;
-	}
-
 	public Apartment getWohnID() {
-		return wohnID;
+		return wohnung;
 	}
 
 	public void setWohnID(Apartment wohnID) {
-		this.wohnID = wohnID;
+		this.wohnung = wohnID;
 	}
 
 	public double getBetrag() {
@@ -48,25 +40,17 @@ public class Order extends AbstractEntity {
 	@Override
 	public Long getId() {
 
-		return null;
+		return orderID;
 	}
 
 	@Override
 	public void setId(Long id) {
-
+		orderID = id;
 	}
 
-	// public Order(Apartment wohnID, int art) {
-	// super();
-	// this.wohnID = wohnID;
-	// this.art = art;
-	// }
-	//
-	// public void orderPush(Order order){
-	//
-	// }
-	// public void orderCheck (Order order){
-	//
-	// }
+
+	 public void orderCheck (Order order){
+	
+	 }
 
 }

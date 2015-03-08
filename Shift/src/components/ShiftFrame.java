@@ -1,10 +1,19 @@
 package components;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,16 +22,28 @@ public class ShiftFrame extends JFrame {
 
 	private static final long serialVersionUID = 5142346220834009864L;
 	private CardLayout layout;
+	private Dimension screensize;
+	private ShiftPanel2 contentpanel;
+	private static ShiftFrame instance;
 
 	public ShiftFrame() throws HeadlessException {
 		super();
+		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 
 		// Setzen der Fenstereinstellungen
-		setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		setSize(screensize);
 		setTitle(Definitions.TITLE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setMinimumSize(new Dimension(
+				(int) Math.round(screensize.getWidth() * 0.85),
+				(int) Math.round(screensize.getHeight() * 0.5)));
+		setMaximumSize(screensize);
+		setPreferredSize(screensize);
+
 		// Schließen der Anwendung bei Klick auf X
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		// Image für Taskleiste setzen
 		try {
 			ImageIcon ii = new ImageIcon("res/Logo2.png");
 			setIconImage(ii.getImage());
@@ -30,47 +51,97 @@ public class ShiftFrame extends JFrame {
 			System.out.println(e.getMessage());
 		}
 
-		// innere Panels
-
-		ShiftPanel bgpanel = new ShiftPanel();
+		// Definition aller Panel
 		ShiftPanel logopanel = new ShiftPanel();
+		contentpanel = new ShiftPanel2();
+		ShiftPanel northpanel = new ShiftPanel();
 		ShiftPanel filler = new ShiftPanel();
-		ShiftPanel contentpanel = new ShiftPanel();
+		ShiftPanel filler2 = new ShiftPanel();
+		ShiftPanel datumspanel = new ShiftPanel();
+		ShiftPanel eastpanel = new ShiftPanel();
+		ShiftPanel westpanel = new ShiftPanel();
+		ShiftPanel southpanel = new ShiftPanel();
 
+		// Filler eigenschaften
+		Dimension minSize = new Dimension(50, 15);
+		Dimension prefSize = new Dimension(50, 15);
+		Dimension maxSize = new Dimension(50, 15);
+		Dimension datumsize = new Dimension(175, 50);
+
+		// Datum oben rechts
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyy");
+		JLabel datum = new JLabel(sdf.format(date));
+		datum.setFont(new Font("Arial Bold", Font.BOLD, 20));
+		datum.setForeground(Color.white);
+		datumspanel.setLayout(new BoxLayout(datumspanel, BoxLayout.PAGE_AXIS));
+		datumspanel.add(new Box.Filler(datumsize, datumsize, datumsize));
+		datumspanel.add(datum);
+
+		// Logo oben links
 		ImageIcon logoimage = new ImageIcon("res/Logo.png");
-
 		JLabel logo = new JLabel(logoimage);
+		logopanel.setLayout(new BoxLayout(logopanel, BoxLayout.PAGE_AXIS));
+		logopanel.add(new Box.Filler(minSize, prefSize, maxSize));
+		logo.setMinimumSize(new Dimension(268, 98));
+		logopanel.add(logo);
+		logopanel.add(new Box.Filler(minSize, prefSize, maxSize));
 
-		// Layout
-		setLayout(new GridLayout());
+		// Layout des gesamten Fensters
+		setLayout(new BorderLayout());
 
-		//
-		// GridBagLayout gbl = new GridBagLayout();
-		// GridBagConstraints c = new GridBagConstraints();
-		// c.gridx = 0;
-		// c.gridy = 0;
-		//
-		// bgpanel.setLayout(new BorderLayout());
-		// add(bgpanel, BorderLayout.CENTER);
-		// logopanel.add(logo);
-		// bgpanel.add(logopanel, BorderLayout.NORTH);
-		// bgpanel.add(filler, BorderLayout.CENTER);
+		// nördliches Panel
+		northpanel.setLayout(new GridLayout(1, 4));
+		northpanel.add(logopanel);
+		northpanel.add(filler);
+		northpanel.add(filler2);
+		northpanel.add(datumspanel);
 
-		add(logo);
-		add(filler);
-		add(contentpanel);
-		add(logopanel);
-		add(bgpanel);
+		layout = new CardLayout();
+		contentpanel.setLayout(layout);
 
+		// Filler links und rechts
+		int space = Definitions.PADDING;
+		Component east = Box.createRigidArea(new Dimension(space, 0));
+		Component west = Box.createRigidArea(new Dimension(space, 0));
+		Component south = Box.createRigidArea(new Dimension(0, space / 2));
+
+		west.setBackground(Definitions.BG_COLOR);
+		east.setBackground(Definitions.BG_COLOR);
+		south.setBackground(Definitions.BG_COLOR);
+
+		westpanel.add(west);
+		eastpanel.add(east);
+		southpanel.add(south);
+
+		// Zusammenfuegen der Panels
+		add(eastpanel, BorderLayout.EAST);
+		add(westpanel, BorderLayout.WEST);
+		add(northpanel, BorderLayout.NORTH);
+		add(contentpanel, BorderLayout.CENTER);
+		add(southpanel, BorderLayout.SOUTH);
+
+		// Debug
+		// logopanel.setBackground(Color.red);
+		// northpanel.setBackground(Color.blue);
+		// filler.setBackground(Color.black);
+
+		// optionale Fenstereinstellungen
 		// setResizable(false);
 		// setFocusable(true);
 		// setUndecorated(true);
+
 		// sichtbar werden lassen
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-
 		setVisible(true);
-		pack();
 
+	}
+
+	public ShiftPanel2 getContentpanel() {
+		return contentpanel;
+	}
+
+	public void setContentpanel(ShiftPanel2 contentpanel) {
+		this.contentpanel = contentpanel;
 	}
 
 	public CardLayout getLayout() {
@@ -79,6 +150,14 @@ public class ShiftFrame extends JFrame {
 
 	public void setLayout(CardLayout layout) {
 		this.layout = layout;
+	}
+	
+	public static ShiftFrame getInstance(){
+		if (instance == null) {
+		instance = new ShiftFrame();
+		}
+		return instance;
+		
 	}
 
 }

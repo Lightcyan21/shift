@@ -1,13 +1,9 @@
 package webservices;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
-
 
 @WebService
 @SOAPBinding(style = Style.RPC)
@@ -20,7 +16,7 @@ public interface GmWS {
 	 * everything is okay with your message input.
 	 * 
 	 * @param plz
-	 *            Postleitzahl -> String
+	 *            Postleitzahl 5stelliger String
 	 * @param street
 	 *            Straﬂe
 	 * @param streetNumber
@@ -29,7 +25,7 @@ public interface GmWS {
 	 *            Stadt
 	 * @param levels
 	 *            Anzahl der Etagen
-	 * @param numerFlat
+	 * @param numberFlat
 	 *            Anzahl der Wohnungen
 	 * @param gardenarea
 	 *            Nutzfl‰che des Gartens in m≤
@@ -41,14 +37,15 @@ public interface GmWS {
 	 *            Arry mit Anzahl der Zimmer in den R‰umen
 	 * @param lvl
 	 *            Stockwerk der Wohnung
-	 * @return a ArrayList<String> with ids of the apartments oder mit einer Fehlermeldung im 1. Element
+	 * @return a StringArray with ids of the apartments oder mit einer
+	 *         Fehlermeldung im 1. Element
 	 */
 	@WebMethod
-	ArrayList<String> exposeSend(String plz, String street, String streetNumber,
+	String[] exposeSend(String plz, String street, String streetNumber,
 			String city, int levels, int numberFlat, double gardenarea,
 			double totalArea, double[] apartmentArea, int[] roomNumbers,
 			int[] lvl);
-	
+
 	/**
 	 * You can use this webservice to add a new Hirer to an object. If the
 	 * number of hirers is 0, then it means the apartment is empty.
@@ -70,13 +67,13 @@ public interface GmWS {
 	 * the costs and their values.
 	 * 
 	 * 
-	 * @return a List which contains multiple hashmaps, which contains at first
-	 *         the id of the apartment(double=0.0) and the type of costs and
-	 *         their values
+	 * @return a 3dimensional Array. The first dimension is the hirer, the
+	 *         second the type of cost and the third is the actual value. It is
+	 *         a double value converted to a String so u can convert it back if
+	 *         u need it.
 	 */
-
 	@WebMethod
-	public ArrayList<HashMap<String, Double>> getUtilities();
+	public String[][][] getUtilities();
 
 	/**
 	 * You can use this webservice to get the all information about the
@@ -85,13 +82,14 @@ public interface GmWS {
 	 * @param apartmentID
 	 *            unique identifier of the apartment
 	 * 
-	 * @return a String-ArrayList which contains ï Area ï Number of rooms ï Plz
-	 *         ï Location ï Street ï Street number
+	 * @return a String-Array which contains ï Area ï Number of rooms ï Plz ï
+	 *         Location ï Street ï Street number
 	 * 
 	 * 
 	 */
 	@WebMethod
-	ArrayList<String> getInfo(String apartmentID);
+	String[] getInfo(String apartmentID);
+
 	/**
 	 * You can use this webservice to check the status of a specified order. The
 	 * status is expressed as a String value (s. return value)
@@ -117,8 +115,8 @@ public interface GmWS {
 	 *            id of the apartment, which has ordered the service
 	 * @return a int which is the orderID
 	 */
-	
+
 	@WebMethod
 	int sendOrder(String name, String apartmentID);
-	
+
 }

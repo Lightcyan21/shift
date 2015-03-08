@@ -18,14 +18,6 @@ public class House extends AbstractEntity {
 	private int anzahlWohnungen;
 	private double flaeche;
 
-	public Long getHouseID() {
-		return houseID;
-	}
-
-	public void setHouseID(Long houseID) {
-		this.houseID = houseID;
-	}
-
 	public String getPlz() {
 		return plz;
 	}

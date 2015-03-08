@@ -1,5 +1,6 @@
 package ui.controller;
 
+import ui.enums.UI_EVENT;
 import ui.model.MainWindowModel;
 import ui.view.MainWindowView;
 import mvc.controller.abstrct.AbstractController;
@@ -24,7 +25,25 @@ public class MainWindowController extends
 
 	@Override
 	public void handleEvent(LocalUIEvent event) {
-	
+		if (event.getEventId() == UI_EVENT.PUSH_BUTTON1.ordinal()) {
+			System.out.println("Button1");
+		}
+
+		if (event.getEventId() == UI_EVENT.PUSH_BUTTON2.ordinal()) {
+			System.out.println("Button2");
+		}
+
+		if (event.getEventId() == UI_EVENT.PUSH_BUTTON3.ordinal()) {
+			System.out.println("Button3");
+		}
+
+		if (event.getEventId() == UI_EVENT.PUSH_BUTTON4.ordinal()) {
+			System.out.println("Button4");
+		}
+
+		if (event.getEventId() == UI_EVENT.PUSH_BUTTON5.ordinal()) {
+			System.out.println("Button5");
+		}
 
 	}
 

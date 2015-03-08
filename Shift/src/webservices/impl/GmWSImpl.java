@@ -1,8 +1,5 @@
 package webservices.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
@@ -13,7 +10,7 @@ public class GmWSImpl implements GmWS {
 
 	@Override
 	@WebMethod
-	public ArrayList<String> exposeSend(String plz, String street,
+	public String[] exposeSend(String plz, String street,
 			String streetNumber, String city, int levels, int numberFlat,
 			double gardenarea, double totalArea, double[] apartmentArea,
 			int[] roomNumbers, int[] lvl) {
@@ -30,19 +27,24 @@ public class GmWSImpl implements GmWS {
 
 	@Override
 	@WebMethod
-	public ArrayList<HashMap<String, Double>> getUtilities() {
-		System.out.println("Der Test war erfolgreich.");
-		HashMap<String, Double> hm = new HashMap<String, Double>();
-		hm.put("test", (double) 2);
-		ArrayList<HashMap<String, Double>> al = new ArrayList<>();
-		al.add(hm);
-		return al;
+	public String[][][] getUtilities() {
+	
+		return null;
 	}
 
 	@Override
 	@WebMethod
-	public ArrayList<String> getInfo(String apartmentID) {
-
+	public String[] getInfo(String apartmentID) {
+//		String[][][] array = new String[1][2][2];
+//		array[0][0][0] = "test";
+//		array[0][1][0] = "Alex is blöd";
+//		array[0][1][1] = "Jonas ist cool";
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		
 		return null;
 	}
 

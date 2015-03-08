@@ -7,7 +7,7 @@ public class Asset extends AbstractEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -5856918652334582583L;
-	private int assetID;
+	private long assetID;
 	private int billID;
 	private double einzelpreis;
 	private String bezeichnung;
@@ -15,25 +15,17 @@ public class Asset extends AbstractEntity {
 	@Override
 	public Long getId() {
 
-		return null;
+		return assetID;
 	}
 
 	@Override
 	public void setId(Long id) {
-
+		assetID = id;
 	}
 
 	/**
 	 * 
 	 */
-
-	public int getAssetID() {
-		return assetID;
-	}
-
-	public void setAssetID(int assetID) {
-		this.assetID = assetID;
-	}
 
 	public int getBillID() {
 		return billID;
