@@ -48,7 +48,7 @@ public class GmWSImpl implements GmWS {
 
 	@Override
 	@WebMethod
-	public long sendOrder(String name, String apartmentID) {
+	public long sendOrder(String typ, String apartmentID, String mieter) {
 		System.out.println("ok");
 		return 0; 	
 	}

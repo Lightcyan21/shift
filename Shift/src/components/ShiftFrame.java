@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,6 +19,8 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import ui.controller.MainWindowController;
 
 public class ShiftFrame extends JFrame {
 
@@ -87,6 +91,30 @@ public class ShiftFrame extends JFrame {
 		logo.setMinimumSize(new Dimension(268, 98));
 		logopanel.add(logo);
 		logopanel.add(new Box.Filler(minSize, prefSize, maxSize));
+		logopanel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				MainWindowController.getInstance();
+
+			}
+		});
 
 		// Titel
 		title = new JLabel(Definitions.TITLE);

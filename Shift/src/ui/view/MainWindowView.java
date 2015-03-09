@@ -17,7 +17,7 @@ import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
 
 public class MainWindowView extends AbstractView {
-
+private ShiftFrame frame;
 	public MainWindowView(IModel model) {
 		super(model);
 		initUI();
@@ -25,10 +25,10 @@ public class MainWindowView extends AbstractView {
 
 	@Override
 	public Object getMainSurface() {
-		ShiftFrame sf = ShiftFrame.getInstance();
-		sf.getCardlayout().show(sf.getContentpanel(),"main");
-		sf.setHeadline(Definitions.TITLE);
-		sf.validate();
+		frame = ShiftFrame.getInstance();
+		frame.getCardlayout().show(frame.getContentpanel(),"main");
+		frame.setHeadline(Definitions.TITLE);
+		frame.validate();
 		return null;
 	}
 
@@ -41,8 +41,8 @@ public class MainWindowView extends AbstractView {
 	protected void initUI() {
 
 		// erzeugt neue Instanz des Shiftframes
-		ShiftFrame sf = ShiftFrame.getInstance();
-		sf.setHeadline(Definitions.TITLE);
+		frame = ShiftFrame.getInstance();
+		frame.setHeadline(Definitions.TITLE);
 
 
 		// Hinzufuegen der UI Komponenten
@@ -94,8 +94,8 @@ public class MainWindowView extends AbstractView {
 		mainWindowPanel.add(info);
 
 		// hinzufuegen zum eigentlichen Fenster
-		sf.getContentpanel().add(mainWindowPanel, "main");
-		sf.validate();
+		frame.getContentpanel().add(mainWindowPanel, "main");
+		frame.validate();
 	}
 
 }

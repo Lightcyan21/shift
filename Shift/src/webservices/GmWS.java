@@ -109,14 +109,15 @@ public interface GmWS {
 	 * endpoint. The service will return "Danke. Auftrag angekommen", if
 	 * everything is okay with your input.
 	 * 
-	 * @param name
+	 * @param typ
 	 *            is the description of the service
 	 * @param apartmentID
 	 *            id of the apartment, which has ordered the service
+	 * @param mieter
+	 *            Vor- und Zuname des Mieters
 	 * @return a int which is the orderID
 	 */
-
 	@WebMethod
-	long sendOrder(String name, String apartmentID);
+	long sendOrder(String typ, String apartmentID, String mieter);
 
 }
