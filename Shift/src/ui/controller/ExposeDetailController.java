@@ -2,6 +2,7 @@ package ui.controller;
 
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
+import ui.enums.UI_EVENT;
 import ui.model.ExposeDetailModel;
 import ui.view.ExposeDetailView;
 /**
@@ -18,7 +19,10 @@ public class ExposeDetailController extends AbstractController<ExposeDetailView,
 
 	@Override
 	public void handleEvent(LocalUIEvent event) {
-	
+		if (event.getEventId() == UI_EVENT.PUSH_BACK_BUTTON.ordinal()) {
+			System.out.println("--- Wechsle zum Hauptmenu");
+			MainWindowController.getInstance();
+		}
 		
 	}
 

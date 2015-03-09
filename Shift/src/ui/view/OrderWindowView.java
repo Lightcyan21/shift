@@ -10,6 +10,7 @@ import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
 
+import components.Definitions;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -25,6 +26,7 @@ public class OrderWindowView extends AbstractView {
 	@Override
 	public Object getMainSurface() {
 		frame.getCardlayout().show(frame.getContentpanel(), "page");
+		frame.setHeadline(Definitions.ORDERS);
 		frame.validate();
 		return null;
 	}
@@ -38,6 +40,7 @@ public class OrderWindowView extends AbstractView {
 	protected void initUI() {
 		// initialisieren der Variablen
 		frame = ShiftFrame.getInstance();
+		frame.setHeadline(Definitions.ORDERS);
 
 		// Gestalten des Panels
 		ShiftPanel2 sp2 = new ShiftPanel2();

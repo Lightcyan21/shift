@@ -25,6 +25,7 @@ public class ShiftFrame extends JFrame {
 	private Dimension screensize;
 	private ShiftPanel2 contentpanel;
 	private static ShiftFrame instance;
+	private JLabel title;
 
 	public ShiftFrame() throws HeadlessException {
 		super();
@@ -32,7 +33,7 @@ public class ShiftFrame extends JFrame {
 
 		// Setzen der Fenstereinstellungen
 		setSize(screensize);
-		setTitle(Definitions.TITLE);
+		setTitle(Definitions.WINDOW_TITLE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setMinimumSize(new Dimension(
 				(int) Math.round(screensize.getWidth() * 0.85),
@@ -87,13 +88,19 @@ public class ShiftFrame extends JFrame {
 		logopanel.add(logo);
 		logopanel.add(new Box.Filler(minSize, prefSize, maxSize));
 
+		// Titel
+		title = new JLabel(Definitions.TITLE);
+		title.setForeground(Color.white);
+		title.setFont(new Font("Arial Bold", Font.BOLD, 40));
+
 		// Layout des gesamten Fensters
 		setLayout(new BorderLayout());
 
 		// nördliches Panel
-		northpanel.setLayout(new GridLayout(1, 4));
+		northpanel.setLayout(new GridLayout(1, 5));
 		northpanel.add(logopanel);
 		northpanel.add(filler);
+		northpanel.add(title);
 		northpanel.add(filler2);
 		northpanel.add(datumspanel);
 
@@ -155,6 +162,10 @@ public class ShiftFrame extends JFrame {
 		}
 		return instance;
 
+	}
+
+	public void setHeadline(String title) {
+		this.title.setText(title);
 	}
 
 }

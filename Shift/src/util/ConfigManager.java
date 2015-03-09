@@ -13,8 +13,9 @@ public class ConfigManager {
 	
 	private static ConfigManager instance;
 	
-	public static final String CONF_CLIENTA_RECIPIENT = "CONF_CLIENTA_RECIPIENT";
-	public static final String CONF_CLIENTA_AUTHOR = "CONF_CLIENTA_AUTHOR";
+	// public static final String CONF_CLIENTA_RECIPIENT =
+	// "CONF_CLIENTA_RECIPIENT";
+	// public static final String CONF_CLIENTA_AUTHOR = "CONF_CLIENTA_AUTHOR";
 	
 	
 	public ConfigManager(){

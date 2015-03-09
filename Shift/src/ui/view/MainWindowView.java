@@ -27,6 +27,7 @@ public class MainWindowView extends AbstractView {
 	public Object getMainSurface() {
 		ShiftFrame sf = ShiftFrame.getInstance();
 		sf.getCardlayout().show(sf.getContentpanel(),"main");
+		sf.setHeadline(Definitions.TITLE);
 		sf.validate();
 		return null;
 	}
@@ -41,6 +42,8 @@ public class MainWindowView extends AbstractView {
 
 		// erzeugt neue Instanz des Shiftframes
 		ShiftFrame sf = ShiftFrame.getInstance();
+		sf.setHeadline(Definitions.TITLE);
+
 
 		// Hinzufuegen der UI Komponenten
 		ShiftPanel2 mainWindowPanel = new ShiftPanel2();

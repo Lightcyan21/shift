@@ -8,6 +8,7 @@ import javax.swing.JButton;
 
 import ui.enums.UI_EVENT;
 
+import components.Definitions;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -25,6 +26,7 @@ public class OrderStatusView extends AbstractView {
 	@Override
 	public Object getMainSurface() {
 		frame.getCardlayout().show(frame.getContentpanel(), "checkStatus");
+		frame.setHeadline(Definitions.CHECK_STATUS);
 		frame.validate();
 		return null;
 	}
@@ -38,11 +40,12 @@ public class OrderStatusView extends AbstractView {
 	protected void initUI() {
 		// initialisieren der Variablen
 		frame = ShiftFrame.getInstance();
+		frame.setHeadline(Definitions.CHECK_STATUS);
 
 		// Gestalten des Panels
-		ShiftPanel2 sp3 = new ShiftPanel2();
+		ShiftPanel2 content = new ShiftPanel2();
 		JButton button = new JButton("Back");
-		sp3.add(button);
+		content.add(button);
 
 		button.addActionListener(new ActionListener() {
 
@@ -53,7 +56,7 @@ public class OrderStatusView extends AbstractView {
 		});
 
 		// Layout hinzufuegen und Karte zeigen
-		frame.getContentpanel().add(sp3, "checkStatus");
+		frame.getContentpanel().add(content, "checkStatus");
 		frame.getCardlayout().show(frame.getContentpanel(), "checkStatus");
 		frame.validate();
 

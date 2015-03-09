@@ -10,10 +10,10 @@ public class GmWSImpl implements GmWS {
 
 	@Override
 	@WebMethod
-	public String[] exposeSend(String plz, String street,
-			String streetNumber, String city, int levels, int numberFlat,
-			double gardenarea, double totalArea, double[] apartmentArea,
-			int[] roomNumbers, int[] lvl) {
+	public String[] exposeSend(String plz, String street, String streetNumber,
+			String city, int levels, int numberFlat, double gardenarea,
+			double totalArea, double[] apartmentArea, int[] roomNumbers,
+			int[] lvl) {
 
 		return null;
 	}
@@ -28,7 +28,7 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public String[][][] getUtilities() {
-	
+
 		return null;
 	}
 
@@ -48,9 +48,9 @@ public class GmWSImpl implements GmWS {
 
 	@Override
 	@WebMethod
-	public int sendOrder(String name, String apartmentID) {
-
-		return 0;
+	public long sendOrder(String name, String apartmentID) {
+		System.out.println("ok");
+		return 0; 	
 	}
 
 }

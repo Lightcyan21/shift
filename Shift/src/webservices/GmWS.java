@@ -117,6 +117,6 @@ public interface GmWS {
 	 */
 
 	@WebMethod
-	int sendOrder(String name, String apartmentID);
+	long sendOrder(String name, String apartmentID);
 
 }
