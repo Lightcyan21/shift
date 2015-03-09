@@ -4,9 +4,6 @@ import persistence.entity.AbstractEntity;
 
 public class House extends AbstractEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3829466885552959540L;
 	private Long houseID;
 	private String plz;

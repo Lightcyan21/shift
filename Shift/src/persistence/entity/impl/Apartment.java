@@ -3,9 +3,7 @@ package persistence.entity.impl;
 import persistence.entity.AbstractEntity;
 
 public class Apartment extends AbstractEntity{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1946383270081409190L;
 	private String wohnID;
 	private double wohnflaeche;

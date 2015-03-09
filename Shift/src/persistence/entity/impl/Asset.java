@@ -3,9 +3,7 @@ package persistence.entity.impl;
 import persistence.entity.AbstractEntity;
 
 public class Asset extends AbstractEntity {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -5856918652334582583L;
 	private long assetID;
 	private int billID;
@@ -22,10 +20,6 @@ public class Asset extends AbstractEntity {
 	public void setId(Long id) {
 		assetID = id;
 	}
-
-	/**
-	 * 
-	 */
 
 	public int getBillID() {
 		return billID;

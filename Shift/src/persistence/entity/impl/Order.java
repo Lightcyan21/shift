@@ -3,9 +3,7 @@ package persistence.entity.impl;
 import persistence.entity.AbstractEntity;
 
 public class Order extends AbstractEntity {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 7664079950603416621L;
 	// Auftrag für GS
 	private long orderID;
@@ -48,9 +46,8 @@ public class Order extends AbstractEntity {
 		orderID = id;
 	}
 
-
-	 public void orderCheck (Order order){
-	
-	 }
+	public void orderCheck(Order order) {
+		
+	}
 
 }

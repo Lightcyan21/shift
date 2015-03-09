@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 public class ShiftFrame extends JFrame {
 
 	private static final long serialVersionUID = 5142346220834009864L;
-	private CardLayout layout;
+	private CardLayout cardlayout;
 	private Dimension screensize;
 	private ShiftPanel2 contentpanel;
 	private static ShiftFrame instance;
@@ -97,8 +97,9 @@ public class ShiftFrame extends JFrame {
 		northpanel.add(filler2);
 		northpanel.add(datumspanel);
 
-		layout = new CardLayout();
-		contentpanel.setLayout(layout);
+		// inneres Layout
+		cardlayout = new CardLayout();
+		contentpanel.setLayout(cardlayout);
 
 		// Filler links und rechts
 		int space = Definitions.PADDING;
@@ -144,20 +145,16 @@ public class ShiftFrame extends JFrame {
 		this.contentpanel = contentpanel;
 	}
 
-	public CardLayout getLayout() {
-		return layout;
+	public CardLayout getCardlayout() {
+		return cardlayout;
 	}
 
-	public void setLayout(CardLayout layout) {
-		this.layout = layout;
-	}
-	
-	public static ShiftFrame getInstance(){
+	public static ShiftFrame getInstance() {
 		if (instance == null) {
-		instance = new ShiftFrame();
+			instance = new ShiftFrame();
 		}
 		return instance;
-		
+
 	}
 
 }

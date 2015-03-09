@@ -25,4 +25,9 @@ public class AccountingController extends
 
 	}
 
+	public static AccountingController getInstance() {
+		// TODO Instanziierung
+		return null;
+	}
+
 }

@@ -35,16 +35,7 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public String[] getInfo(String apartmentID) {
-//		String[][][] array = new String[1][2][2];
-//		array[0][0][0] = "test";
-//		array[0][1][0] = "Alex is blöd";
-//		array[0][1][1] = "Jonas ist cool";
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		
+
 		return null;
 	}
 

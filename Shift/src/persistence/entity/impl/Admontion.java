@@ -4,9 +4,6 @@ import persistence.entity.AbstractEntity;
 
 public class Admontion extends AbstractEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8429005451293689378L;
 	private long admontionID;
 
@@ -21,8 +18,5 @@ public class Admontion extends AbstractEntity {
 		admontionID = id;
 
 	}
-	/**
-	 * 
-	 */
 
 }

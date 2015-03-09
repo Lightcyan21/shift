@@ -3,9 +3,7 @@ package persistence.entity.impl;
 import persistence.entity.AbstractEntity;
 
 public class Bill extends AbstractEntity {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -4535878538723747602L;
 	private String billID;
 	private String rechnungssteller;

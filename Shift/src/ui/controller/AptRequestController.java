@@ -25,4 +25,9 @@ public class AptRequestController extends
 
 	}
 
+	public static AptRequestController getInstance() {
+		// TODO Instanziierung
+		return null;
+	}
+
 }

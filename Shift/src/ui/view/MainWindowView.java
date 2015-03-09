@@ -9,6 +9,7 @@ import javax.swing.JButton;
 
 import ui.enums.UI_EVENT;
 
+import components.Definitions;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -24,7 +25,9 @@ public class MainWindowView extends AbstractView {
 
 	@Override
 	public Object getMainSurface() {
-
+		ShiftFrame sf = ShiftFrame.getInstance();
+		sf.getCardlayout().show(sf.getContentpanel(),"main");
+		sf.validate();
 		return null;
 	}
 
@@ -41,54 +44,54 @@ public class MainWindowView extends AbstractView {
 
 		// Hinzufuegen der UI Komponenten
 		ShiftPanel2 mainWindowPanel = new ShiftPanel2();
-		JButton button1 = new JButton("button1");
-		JButton button2 = new JButton("button2");
-		JButton button3 = new JButton("button3");
-		JButton button4 = new JButton("button4");
-		JButton button5 = new JButton("button5");
+		JButton orders = new JButton(Definitions.ORDERS);
+		JButton check_status = new JButton(Definitions.CHECK_STATUS);
+		JButton houses = new JButton(Definitions.HOUSES);
+		JButton search = new JButton(Definitions.SEARCH);
+		JButton info = new JButton(Definitions.INFO);
 
 		// ActionListener hinzufügen
-		button1.addActionListener(new ActionListener() {
+		orders.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				fireLocalUIEvent(this, UI_EVENT.PUSH_BUTTON1.ordinal());
+				fireLocalUIEvent(this, UI_EVENT.ORDERS.ordinal());
 			}
 		});
-		button2.addActionListener(new ActionListener() {
+		check_status.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				fireLocalUIEvent(this, UI_EVENT.PUSH_BUTTON2.ordinal());
+				fireLocalUIEvent(this, UI_EVENT.CHECK_STATUS.ordinal());
 			}
 		});
-		button3.addActionListener(new ActionListener() {
+		houses.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				fireLocalUIEvent(this, UI_EVENT.PUSH_BUTTON3.ordinal());
+				fireLocalUIEvent(this, UI_EVENT.HOUSES.ordinal());
 			}
 		});
-		button4.addActionListener(new ActionListener() {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				fireLocalUIEvent(this, UI_EVENT.PUSH_BUTTON4.ordinal());
+				fireLocalUIEvent(this, UI_EVENT.SEARCH.ordinal());
 			}
 		});
-		button5.addActionListener(new ActionListener() {
+		info.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				fireLocalUIEvent(this, UI_EVENT.PUSH_BUTTON5.ordinal());
+				fireLocalUIEvent(this, UI_EVENT.INFO.ordinal());
 			}
 		});
-		
+
 		// Hinzufuegen der Komponeten zum Panel
 		mainWindowPanel.setLayout(new GridLayout(3, 2, 100, 100));
-		mainWindowPanel.add(button1);
-		mainWindowPanel.add(button2);
-		mainWindowPanel.add(button3);
-		mainWindowPanel.add(button4);
-		mainWindowPanel.add(button5);
+		mainWindowPanel.add(orders);
+		mainWindowPanel.add(check_status);
+		mainWindowPanel.add(houses);
+		mainWindowPanel.add(search);
+		mainWindowPanel.add(info);
 
 		// hinzufuegen zum eigentlichen Fenster
-		sf.getContentpanel().add(mainWindowPanel);
+		sf.getContentpanel().add(mainWindowPanel, "main");
 		sf.validate();
 	}
 
