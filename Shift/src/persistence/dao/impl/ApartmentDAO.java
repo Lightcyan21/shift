@@ -8,13 +8,12 @@ import persistence.entity.impl.Apartment;
 
 public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		DAO<Apartment> {
-	private static long counter = 1L;
 
 	@Override
 	public Apartment create() {
-		Apartment apartment = new Apartment();
-		apartment.setId(++counter);
-		return apartment;
+		// Apartment apartment = new Apartment();
+		// apartment.setId(++counter);
+		return new Apartment();
 	}
 
 	@Override
@@ -30,8 +29,16 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 	@Override
 	public Apartment getById(long id) {
-
+		// nicht nutzbar, da ApartmentID ein String ist. Vgl. getApartment()
 		return null;
+	}
+
+	public Apartment getApartment(String id) {
+		// Objekt aus Datenbank laden
+		
+		// Attribute einem neuem Apartmentobjekt zuweisen
+		
+		return new Apartment();
 	}
 
 	@Override

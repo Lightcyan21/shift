@@ -2,7 +2,7 @@ package persistence.entity.impl;
 
 import persistence.entity.AbstractEntity;
 
-public class Apartment extends AbstractEntity{
+public class Apartment extends AbstractEntity {
 
 	private static final long serialVersionUID = 1946383270081409190L;
 	private String wohnID;
@@ -44,36 +44,12 @@ public class Apartment extends AbstractEntity{
 
 	@Override
 	public Long getId() {
-		
+		// nicht in Verwendung da Apartment keine Long ID verwendet
 		return null;
 	}
 
 	@Override
 	public void setId(Long id) {
-		
-		
+		// nicht in Verwendung da Apartment keine Long ID verwendet
 	}
-
-	// public Apartment(int wohnID, double wohnflaeche, int zimmeranzahl,
-	// int mieteranzahl) {
-	// super();
-	// this.wohnID = wohnID;
-	// this.wohnflaeche = wohnflaeche;
-	// this.zimmeranzahl = zimmeranzahl;
-	// this.mieteranzahl = mieteranzahl;
-	// }
-	//
-	// public Apartment(int wohnID, double wohnflaeche, int zimmeranzahl,
-	// int mieteranzahl, int mieterID) {
-	// super();
-	// this.wohnID = wohnID;
-	// this.wohnflaeche = wohnflaeche;
-	// this.zimmeranzahl = zimmeranzahl;
-	// this.mieteranzahl = mieteranzahl;
-	// }
-	//
-	// public void addMieterAnzahl(int mieterAnzahl) {
-	//
-	// }
-
 }

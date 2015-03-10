@@ -9,14 +9,12 @@ public class Admontion extends AbstractEntity {
 
 	@Override
 	public Long getId() {
-
 		return admontionID;
 	}
 
 	@Override
 	public void setId(Long id) {
 		admontionID = id;
-
 	}
 
 }
