@@ -5,16 +5,19 @@ import persistence.entity.AbstractEntity;
 public class Apartment extends AbstractEntity {
 
 	private static final long serialVersionUID = 1946383270081409190L;
-	private String wohnID;
+	private int wohnID;
 	private double wohnflaeche;
 	private int zimmeranzahl;
 	private int mieteranzahl;
+	
+	public Apartment(){
+	}
 
-	public String getWohnID() {
+	public int getWohnID() {
 		return wohnID;
 	}
 
-	public void setWohnID(String wohnID) {
+	public void setWohnID(int wohnID) {
 		this.wohnID = wohnID;
 	}
 

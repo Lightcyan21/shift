@@ -9,6 +9,7 @@ public class Bill extends AbstractEntity {
 	private String rechnungssteller;
 	private String rechnungsEmpfaenger;
 	private double betrag;
+	private String verwendungszweck;
 
 	public String getBillID() {
 		return billID;
@@ -51,5 +52,13 @@ public class Bill extends AbstractEntity {
 	@Override
 	public void setId(Long id) {
 		// nicht genutzt, da RechnungsID String ist.
+	}
+
+	public String getVerwendungszweck() {
+		return verwendungszweck;
+	}
+
+	public void setVerwendungszweck(String verwendungszweck) {
+		this.verwendungszweck = verwendungszweck;
 	}
 }
