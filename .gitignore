@@ -2,3 +2,5 @@
 
 *.war
 *.ear
+
+/bin
