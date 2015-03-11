@@ -38,10 +38,10 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 			ResultSet res;
 			res = pre.getGeneratedKeys();
 			if (res !=  null && res.next()) { 
-				apt.setWohnID(res.getInt(1));
+				// TODO bitte ueberarbeiten
+				//apt.setWohnID(res.getInt(1));
 			}		
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -80,7 +80,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 			try {
 				PreparedStatement pre;
 				pre = con.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = " + entity.getWohnID());
-				
+				// TODO ueberarbeiten da wohnid (aptid) String sein muss (Form: "1.1.1")
 				pre.setInt(1, entity.getWohnID());
 				pre.setDouble(2, entity.getWohnflaeche());
 				pre.setInt(3, entity.getZimmeranzahl());

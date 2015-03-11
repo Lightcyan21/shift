@@ -6,6 +6,7 @@ public class Order extends AbstractEntity {
 
 	private static final long serialVersionUID = 7664079950603416621L;
 	// Auftrag für GS
+	// nicht mehr benutzen, da MySQL nicht "Order" akzeptiert
 	private long orderID;
 	private Apartment wohnung;
 	private double betrag;

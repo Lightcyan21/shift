@@ -82,8 +82,9 @@ public interface GmWS {
 	 * @param apartmentID
 	 *            unique identifier of the apartment
 	 * 
-	 * @return a String-Array which contains • Area • Number of rooms • Plz •
-	 *         Location • Street • Street number
+	 * @return a String-Array which contains Area Number of rooms Plz
+	 * 
+	 *         Location Street Street number
 	 * 
 	 * 
 	 */

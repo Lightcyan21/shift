@@ -1,10 +1,9 @@
 package persistence.entity.impl;
 
-// KLASSE MIT JONAS ABSPRECHEN!!!
 
 import persistence.entity.AbstractEntity;
 
-public class job extends AbstractEntity {
+public class Job extends AbstractEntity {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -13,19 +12,17 @@ public class job extends AbstractEntity {
 	private int wohnungsID;
 	private int status;
 	private int statusRechnung;
-	private int statusBestätigung;
+	private int statusBestaetigung;
 	private int statusWeiterleitung;
 	
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setId(Long id) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -69,12 +66,12 @@ public class job extends AbstractEntity {
 		this.statusRechnung = statusRechnung;
 	}
 
-	public int getStatusBestätigung() {
-		return statusBestätigung;
+	public int getStatusBestaetigung() {
+		return statusBestaetigung;
 	}
 
-	public void setStatusBestätigung(int statusBestätigung) {
-		this.statusBestätigung = statusBestätigung;
+	public void setStatusBestaetigung(int statusBestaetigung) {
+		this.statusBestaetigung = statusBestaetigung;
 	}
 
 	public int getStatusWeiterleitung() {
