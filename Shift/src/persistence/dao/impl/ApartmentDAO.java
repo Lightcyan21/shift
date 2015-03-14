@@ -15,6 +15,7 @@ import persistence.entity.impl.Apartment;
 public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		DAO<Apartment> {
 
+
 	@Override
 	public Apartment create() {
 		
@@ -55,7 +56,8 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 	@Override
 	public List<Apartment> findAll() {
-
+		// TODO bitte ausimplementieren, da notwendig für WEbservice
+		// getUtilities();
 		return null;
 	}
 
@@ -67,11 +69,12 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 	public Apartment getApartment(String id) {
 		// Objekt aus Datenbank laden
-		
+
 		// Attribute einem neuem Apartmentobjekt zuweisen
-		
+
 		return new Apartment();
 	}
+
 
 	@Override
 	public void persist(Apartment entity) {
@@ -79,9 +82,9 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		
 			try {
 				PreparedStatement pre;
-				pre = con.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = " + entity.getWohnID());
+				pre = con.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = " + entity.getAptID());
 				// TODO ueberarbeiten da wohnid (aptid) String sein muss (Form: "1.1.1")
-				pre.setInt(1, entity.getWohnID());
+				pre.setString(1, entity.getAptID());
 				pre.setDouble(2, entity.getWohnflaeche());
 				pre.setInt(3, entity.getZimmeranzahl());
 				pre.setInt(4, entity.getMieteranzahl());
@@ -96,8 +99,6 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 				}
 			}
 		}
-
-	
 
 	@Override
 	public void reload(Apartment entity) {

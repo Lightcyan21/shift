@@ -4,13 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
-import javax.swing.JButton;
-
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
 
 import components.Definitions;
+import components.ShiftButton;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -44,7 +43,7 @@ public class OrderWindowView extends AbstractView {
 
 		// Gestalten des Panels
 		ShiftPanel2 sp2 = new ShiftPanel2();
-		JButton button = new JButton("Back");
+		ShiftButton button = new ShiftButton("Back");
 		sp2.add(button);
 
 		button.addActionListener(new ActionListener() {

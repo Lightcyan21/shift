@@ -1,5 +1,6 @@
 package persistence.entity.impl;
 
+import persistence.dao.impl.HouseDAO;
 import persistence.entity.AbstractEntity;
 
 public class Apartment extends AbstractEntity {
@@ -9,8 +10,15 @@ public class Apartment extends AbstractEntity {
 	private double wohnflaeche;
 	private int zimmeranzahl;
 	private int mieteranzahl;
+	private long houseID;
 	
 	public Apartment(){
+	}
+
+	public House getHouse() {
+		HouseDAO housedao = new HouseDAO();
+		House house = housedao.getById(houseID);
+		return house;
 	}
 
 	public String getAptID() {

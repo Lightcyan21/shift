@@ -5,19 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
-import javax.swing.JButton;
-
+import mvc.model.IModel;
+import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
 
 import components.Definitions;
+import components.ShiftButton;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
-import mvc.model.IModel;
-import mvc.view.abstrct.AbstractView;
-
 public class MainWindowView extends AbstractView {
-private ShiftFrame frame;
+	private ShiftFrame frame;
+
 	public MainWindowView(IModel model) {
 		super(model);
 		initUI();
@@ -26,7 +25,7 @@ private ShiftFrame frame;
 	@Override
 	public Object getMainSurface() {
 		frame = ShiftFrame.getInstance();
-		frame.getCardlayout().show(frame.getContentpanel(),"main");
+		frame.getCardlayout().show(frame.getContentpanel(), "main");
 		frame.setHeadline(Definitions.TITLE);
 		frame.validate();
 		return null;
@@ -44,14 +43,13 @@ private ShiftFrame frame;
 		frame = ShiftFrame.getInstance();
 		frame.setHeadline(Definitions.TITLE);
 
-
 		// Hinzufuegen der UI Komponenten
 		ShiftPanel2 mainWindowPanel = new ShiftPanel2();
-		JButton orders = new JButton(Definitions.ORDERS);
-		JButton check_status = new JButton(Definitions.CHECK_STATUS);
-		JButton houses = new JButton(Definitions.HOUSES);
-		JButton search = new JButton(Definitions.SEARCH);
-		JButton info = new JButton(Definitions.INFO);
+		ShiftButton orders = new ShiftButton(Definitions.ORDERS);
+		ShiftButton check_status = new ShiftButton(Definitions.CHECK_STATUS);
+		ShiftButton houses = new ShiftButton(Definitions.HOUSES);
+		ShiftButton search = new ShiftButton(Definitions.SEARCH);
+		ShiftButton info = new ShiftButton(Definitions.INFO);
 
 		// ActionListener hinzufügen
 		orders.addActionListener(new ActionListener() {
