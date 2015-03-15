@@ -17,37 +17,37 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 	@Override
 	public Bill create() {
 		Bill bill;
-		bill = new Bill();   // Daten werden als Objekt geliefert (Entities) und aus ihnen in die 
+		bill = new Bill(); // Daten werden als Objekt geliefert (Entities) und
+							// aus ihnen in die
 							// DB übertragen
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
-		
+
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("insert into bill (rechnungssteller, rechnungsEmpfaenger, betrag, verwendungszweck) values (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-			
-			pre.setString(1, bill.getRechnungssteller());		//geht das so?
-			pre.setString(2, bill.getRechnungsEmpfaenger());
-			pre.setDouble(3, bill.getBetrag());
-			pre.setString(4, bill.getVerwendungszweck());
-			
+			pre = con
+					.prepareStatement(
+							"insert into bill (rechnungssteller, rechnungsEmpfaenger, betrag, verwendungszweck) values (?, ?, ?, ?);",
+							Statement.RETURN_GENERATED_KEYS);
+
+			pre.setString(1, null);
+			pre.setString(2, null);
+			pre.setDouble(3, 0);
+			pre.setString(4, null);
+
 			pre.execute();
-			
+
 			ResultSet res;
 			res = pre.getGeneratedKeys();
-			if (res !=  null && res.next()) { 
+			if (res != null && res.next()) {
 				bill.setBillID(res.getString(res.getString(1)));
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-						e.printStackTrace();
+			e.printStackTrace();
 		}
-		
-		 
-		
-		
 
 		return null;
 	}
