@@ -1,5 +1,4 @@
 package persistence.dao.impl;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,6 +47,39 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		
 		return apt;
 	}
+	
+	public Apartment createNew(String ID) {
+		Apartment apt;
+		apt = new Apartment();
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		try {
+			PreparedStatement pre;
+			pre = con
+					.prepareStatement(
+							"insert into appartment (wohnflaeche, zimmeranzahl, mieteranzahl) values (?, ?, ?);",
+							Statement.RETURN_GENERATED_KEYS);
+
+			pre.setDouble(1, 0);
+			pre.setInt(2, 10);
+			pre.setInt(3, 0);
+
+			pre.execute();
+
+			ResultSet res;
+			res = pre.getGeneratedKeys();
+			if (res != null && res.next()) {
+				// TODO bitte ueberarbeiten
+				// apt.setWohnID(res.getInt(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return apt;
+	}
 
 	@Override
 	public void delete(Apartment entity) {
@@ -56,8 +88,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 	@Override
 	public List<Apartment> findAll() {
-		// TODO bitte ausimplementieren, da notwendig für WEbservice
-		// getUtilities();
+
 		return null;
 	}
 
@@ -75,30 +106,32 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		return new Apartment();
 	}
 
-
 	@Override
 	public void persist(Apartment entity) {
 		Connection con = DBUtil.getConnection();
-		
+
+		try {
+			PreparedStatement pre;
+			pre = con
+					.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = "
+							+ entity.getAptID());
+			// TODO ueberarbeiten da wohnid (aptid) String sein muss (Form:
+			// "1.1.1")
+			pre.setString(1, entity.getAptID());
+			pre.setDouble(2, entity.getWohnflaeche());
+			pre.setInt(3, entity.getZimmeranzahl());
+			pre.setInt(4, entity.getMieteranzahl());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				PreparedStatement pre;
-				pre = con.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = " + entity.getAptID());
-				// TODO ueberarbeiten da wohnid (aptid) String sein muss (Form: "1.1.1")
-				pre.setString(1, entity.getAptID());
-				pre.setDouble(2, entity.getWohnflaeche());
-				pre.setInt(3, entity.getZimmeranzahl());
-				pre.setInt(4, entity.getMieteranzahl());
-							
+				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			} finally {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
 			}
 		}
+	}
 
 	@Override
 	public void reload(Apartment entity) {

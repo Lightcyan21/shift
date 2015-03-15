@@ -40,7 +40,7 @@ public class GmWSImpl implements GmWS {
 			Apartment apt;
 
 			for (int i = 0; i < apartmentArea.length; i++) {
-				apt = aptdao.create();
+				apt = aptdao.createNew(house.getId() + "." + lvl[i] + "." + i);
 				apt.setWohnflaeche(apartmentArea[i]);
 				apt.setZimmeranzahl(roomNumbers[i]);
 				apt.setAptID(house.getId() + "." + lvl[i] + "." + i);
@@ -123,7 +123,7 @@ public class GmWSImpl implements GmWS {
 			result[i][7][0] = allApt.get(i).getAptID()+"#Fensterreinigung#Gemeinkosten";
 			// Treppenreinigung
 			result[i][8][0] = allApt.get(i).getAptID()+"#Teppichreinigung#Gemeinkosten";
-
+			
 
 		}
 
