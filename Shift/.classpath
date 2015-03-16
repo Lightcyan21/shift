@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/vw-1_4.jar"/>
 	<classpathentry kind="lib" path="lib/gs-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/BH_1_0.jar"/>
+	<classpathentry kind="lib" path="lib/gs-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

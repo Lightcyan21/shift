@@ -169,6 +169,7 @@ public class GmWSImpl implements GmWS {
 	@WebMethod
 	public long sendOrder(String typ, String apartmentID, String mieter) {
 		// TODO ggf. Auftrag parsen und an GS senden und ID zurückgeben
+		
 		return 0;
 	}
 
