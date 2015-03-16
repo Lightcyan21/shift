@@ -4,14 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
-import javax.swing.JButton;
-
-import ui.enums.UI_EVENT;
-
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
+import ui.enums.UI_EVENT;
 
 import components.Definitions;
+import components.ShiftButton;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -46,7 +44,7 @@ public class AccountingView extends AbstractView {
 
 		// Gestalten des Panels
 		ShiftPanel2 content = new ShiftPanel2();
-		JButton button = new JButton("Back");
+		ShiftButton button = new ShiftButton("Back");
 		content.add(button);
 
 		button.addActionListener(new ActionListener() {

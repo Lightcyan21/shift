@@ -124,6 +124,8 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 		Connection con;
 		con = DBUtil.getConnection();
+		
+		Apartment apt = new Apartment();
 
 		try {
 			PreparedStatement pre;
@@ -134,13 +136,19 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 			ResultSet result = pre.executeQuery();
 
-			pre.execute();
+			
+			apt.setAptID(result.getString("wohnungsID"));
+			apt.setMieteranzahl(result.getInt("mieteranzahl")); // falls nötig
+			apt.setZimmeranzahl(result.getInt("zimmeranzahl")); // *
+			apt.setWohnflaeche(result.getDouble("wohnflaeche")); // *
+
+			// pre.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return new Apartment();
+		return apt;
 	}
 
 	@Override
