@@ -2,63 +2,93 @@ package persistence.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
 import persistence.entity.impl.Admonition;
-import persistence.entity.impl.Apartment;
+import persistence.entity.impl.Order;
 
 public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 		DAO<Admonition> {
 
 	@Override
 	public Admonition create() {
-		
-		Admonition adm;
-		adm = new Admonition();
 
 		Connection con;
 		con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
-			pre = con
-					.prepareStatement("insert into admonition (admonitionID, jobID, price) values (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+			pre = con.prepareStatement("insert into admonition (preis) values (?);");
 
-			pre.set(1, 0);
-			pre.setInt(2, 0);
-			pre.setInt(3, 0);
+			pre.setDouble(1, 0);
 
 			pre.execute();
 
-			// ResultSet res; //Result/Rückgabewert erforderlich?
-			// res = pre.getGeneratedKseys();
-			// if (res != null && res.next()) {
-			// // TODO bitte ueberarbeiten
-			// //apt.setWohnID(res.getInt(1));
-			// }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return apt;
-
-
 		return null;
+
 	}
 
 	@Override
 	public void delete(Admonition entity) {
+		
+		Connection con;
+		con = DBUtil.getConnection();
+
+		try {
+			PreparedStatement pre;
+			pre = con.prepareStatement("delete from admonition where admonitionID = ?;");
+
+			pre.setLong(1, entity.getId());
+
+			pre.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public List<Admonition> findAll() {
+		
+		Connection con;
+		con = DBUtil.getConnection();
 
-		return null;
+		List<Admonition> admList = new ArrayList<>();
+
+		try {
+			PreparedStatement pre;
+			pre = con.prepareStatement("select * from admonition");
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+
+				Admonition adm = new Admonition();
+				adm.setId(result.getLong("jobID"));
+				//ergänzen. In Admonition.java ausimpementieren
+				
+				
+
+				admList.add(adm);
+			}
+
+			// pre.execute(); //notwendig? oder doppelt?
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return admList;
+
 	}
 
 	@Override

@@ -5,16 +5,16 @@ import persistence.entity.AbstractEntity;
 public class Admonition extends AbstractEntity {
 
 	private static final long serialVersionUID = 8429005451293689378L;
-	private long admontionID;
+	private long admonitionID;
 
 	@Override
 	public Long getId() {
-		return admontionID;
+		return admonitionID;
 	}
 
 	@Override
 	public void setId(Long id) {
-		admontionID = id;
+		admonitionID = id;
 	}
 
 }

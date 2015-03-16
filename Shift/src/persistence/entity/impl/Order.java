@@ -4,20 +4,74 @@ import persistence.entity.AbstractEntity;
 
 public class Order extends AbstractEntity {
 
-	private static final long serialVersionUID = 7664079950603416621L;
-	// Auftrag für GS
-	// nicht mehr benutzen, da MySQL nicht "Order" akzeptiert
-	private long orderID;
-	private Apartment wohnung;
-	private double betrag;
-	private int art;
+	private static final long serialVersionUID = 1L;
 
-	public Apartment getWohnID() {
-		return wohnung;
+	private long jobID;
+	private String jobName;
+	private String wohnungsID;
+	private String mieter;
+	private double betrag;
+	private int status;
+	private int statusRechnung;
+	private int statusBestaetigung;
+	private int statusWeiterleitung;
+
+	@Override
+	public Long getId() {
+		return jobID;
 	}
 
-	public void setWohnID(Apartment wohnID) {
-		this.wohnung = wohnID;
+	@Override
+	public void setId(Long jobID) {
+		this.jobID = jobID;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getWohnungsID() {
+		return wohnungsID;
+	}
+
+	public void setWohnungsID(String wohnungsID) {
+		this.wohnungsID = wohnungsID;
+	}
+
+	public int getStatusRechnung() {
+		return statusRechnung;
+	}
+
+	public void setStatusRechnung(int statusRechnung) {
+		this.statusRechnung = statusRechnung;
+	}
+
+	public int getStatusBestaetigung() {
+		return statusBestaetigung;
+	}
+
+	public void setStatusBestaetigung(int statusBestaetigung) {
+		this.statusBestaetigung = statusBestaetigung;
+	}
+
+	public int getStatusWeiterleitung() {
+		return statusWeiterleitung;
+	}
+
+	public void setStatusWeiterleitung(int statusWeiterleitung) {
+		this.statusWeiterleitung = statusWeiterleitung;
 	}
 
 	public double getBetrag() {
@@ -28,27 +82,12 @@ public class Order extends AbstractEntity {
 		this.betrag = betrag;
 	}
 
-	public int getArt() {
-		return art;
+	public String getMieter() {
+		return mieter;
 	}
 
-	public void setArt(int art) {
-		this.art = art;
-	}
-
-	@Override
-	public Long getId() {
-
-		return orderID;
-	}
-
-	@Override
-	public void setId(Long id) {
-		orderID = id;
-	}
-
-	public void orderCheck(Order order) {
-		
+	public void setMieter(String mieter) {
+		this.mieter = mieter;
 	}
 
 }

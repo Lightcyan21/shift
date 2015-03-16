@@ -42,12 +42,6 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 			pre.execute();
 
-			// ResultSet res; //Result/Rückgabewert erforderlich?
-			// res = pre.getGeneratedKseys();
-			// if (res != null && res.next()) {
-			// // TODO bitte ueberarbeiten
-			// //apt.setWohnID(res.getInt(1));
-			// }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -64,7 +58,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("delete from apartment where wohnungsID values (?);");
+					.prepareStatement("delete from apartment where wohnungsID = ?;");
 
 			pre.setString(1, entity.getAptID());
 
@@ -124,23 +118,31 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 		Connection con;
 		con = DBUtil.getConnection();
-		
+
+		ArrayList<Apartment> aptList = new ArrayList<>();
+
 		Apartment apt = new Apartment();
 
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("select * from apartment where wohnungsID values (?);");
+					.prepareStatement("select * from apartment where wohnungsID = ?;");
 
 			pre.setString(1, id);
 
 			ResultSet result = pre.executeQuery();
 
-			
-			apt.setAptID(result.getString("wohnungsID"));
-			apt.setMieteranzahl(result.getInt("mieteranzahl")); // falls nötig
-			apt.setZimmeranzahl(result.getInt("zimmeranzahl")); // *
-			apt.setWohnflaeche(result.getDouble("wohnflaeche")); // *
+			while (result.next()) {
+				apt.setAptID(result.getString("wohnungsID"));
+				apt.setMieteranzahl(result.getInt("mieteranzahl")); // falls
+																	// nötig
+				apt.setZimmeranzahl(result.getInt("zimmeranzahl")); // *
+				apt.setWohnflaeche(result.getDouble("wohnflaeche")); // *
+
+				aptList.add(apt);
+			}
+
+			// apt = aptList[1]; //falsch
 
 			// pre.execute();
 

@@ -28,9 +28,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 
 		try {
 			PreparedStatement pre;
-			pre = con
-					.prepareStatement(
-							"insert into bill (rechnungssteller, rechnungsEmpfaenger, betrag, verwendungszweck) values (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+			pre = con.prepareStatement("insert into bill (rechnungssteller, rechnungsEmpfaenger, gesamtbetrag, verwendungszweck) values (?, ?, ?, ?);");
 
 			pre.setString(1, null);
 			pre.setString(2, null);
@@ -39,11 +37,6 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 
 			pre.execute();
 
-			ResultSet res;
-			res = pre.getGeneratedKeys();
-			if (res != null && res.next()) {
-				bill.setBillID(res.getString(res.getString(1)));
-			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -61,8 +54,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 
 		try {
 			PreparedStatement pre;
-			pre = con
-					.prepareStatement("delete from bill where billID values (?);");
+			pre = con.prepareStatement("delete from bill where billID = ?;");
 
 			pre.setString(1, entity.getBillID());
 
@@ -93,7 +85,8 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 				Bill bill = new Bill();
 				bill.setBillID(result.getString("billID"));
 				bill.setRechnungssteller(result.getString("rechnungssteller"));
-				bill.setRechnungsEmpfaenger(result.getString("rechnungsempfaenger")); 
+				bill.setRechnungsEmpfaenger(result
+						.getString("rechnungsempfaenger"));
 				bill.setBetrag(result.getDouble("gesamtbetrag"));
 
 				billList.add(bill);
@@ -109,41 +102,46 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 	}
 
 	@Override
-	public Bill getById(long id) { //long oder int? (in DB ist int, in Konzept String, in Methode double...)
-		
+	public Bill getById(long id) {
+
 		Connection con;
 		con = DBUtil.getConnection();
-		
+
+		ArrayList<Bill> billList = new ArrayList<>();
 		Bill bill = new Bill();
 
 		try {
 			PreparedStatement pre;
-			pre = con
-					.prepareStatement("select * from bill where billID values (?);");
+			pre = con.prepareStatement("select * from bill where billID =?;");
 
-			pre.setDouble(1, id);
+			pre.setDouble(1, (int) id);
 
 			ResultSet result = pre.executeQuery();
-			
-			bill.setBillID(result.getString("billID"));
-			bill.setRechnungssteller(result.getString("rechnungssteller"));
-			bill.setRechnungsEmpfaenger(result.getString("rechnungsempfaenger")); 
-			bill.setBetrag(result.getDouble("gesamtbetrag"));
-			bill.setVerwendungszweck(result.getString("verwendungszweck"));
 
-//			pre.execute();
+			while (result.next()) {
+				bill.setBillID(result.getString("billID"));
+				bill.setRechnungssteller(result.getString("rechnungssteller"));
+				bill.setRechnungsEmpfaenger(result
+						.getString("rechnungsempfaenger"));
+				bill.setBetrag(result.getDouble("gesamtbetrag"));
+				bill.setVerwendungszweck(result.getString("verwendungszweck"));
+
+				billList.add(bill);
+
+			}
+
+			// pre.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 
 		return bill;
 	}
 
 	@Override
 	public void persist(Bill entity) {
-		
+
 		Connection con = DBUtil.getConnection();
 
 		try {
