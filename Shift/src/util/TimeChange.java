@@ -9,7 +9,7 @@ public class TimeChange {
 
 	private static TimeChange instance;
 
-	public static void month() {
+	public void month() {
 		// Nebenkosten
 		getUtilities();
 		// Rechnungsposten addieren
@@ -18,7 +18,7 @@ public class TimeChange {
 
 	}
 
-	private static void getUtilities() {
+	private void getUtilities() {
 		// TODO Nebenkostenaufschlüsselung
 		ApartmentDAO aptdao = new ApartmentDAO();
 		List<Apartment> allApt = aptdao.findAll();
