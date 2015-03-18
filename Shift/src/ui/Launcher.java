@@ -12,7 +12,7 @@ public class Launcher {
 
 		MainWindowController.getInstance();
 		Publisher.getInstance();
-
+		
 	}
 
 }
