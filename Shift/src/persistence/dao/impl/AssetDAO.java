@@ -11,7 +11,6 @@ import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
 import persistence.entity.impl.Asset;
-import persistence.entity.impl.Order;
 
 public class AssetDAO extends AbstractDAO<Asset> implements DAO<Asset> {
 

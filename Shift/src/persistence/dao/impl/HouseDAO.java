@@ -10,7 +10,6 @@ import java.util.List;
 import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
-import persistence.entity.impl.Asset;
 import persistence.entity.impl.House;
 
 public class HouseDAO extends AbstractDAO<House> implements DAO<House> {

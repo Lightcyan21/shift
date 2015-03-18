@@ -11,7 +11,6 @@ import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
 import persistence.entity.impl.Admonition;
-import persistence.entity.impl.Order;
 
 public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 		DAO<Admonition> {
