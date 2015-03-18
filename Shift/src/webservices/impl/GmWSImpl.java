@@ -121,7 +121,7 @@ public class GmWSImpl implements GmWS {
 		OrderDAO orderdao = new OrderDAO();
 		ApartmentDAO aptdao = new ApartmentDAO();
 		Order order = orderdao.create();
-		order.setWohnID(aptdao.getApartment(apartmentID));
+//		order.setWohnID(aptdao.getApartment(apartmentID));
 		// order.setArt(typ);
 		// order.setMieter();
 		orderdao.persist(order);
