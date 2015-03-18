@@ -121,4 +121,21 @@ public interface GmWS {
 	@WebMethod
 	long sendOrder(String typ, String apartmentID, String mieter);
 
+	/**
+	 * you can use this Webservice to send 'Shift Gebaeudemanagement' a Bill.
+	 * 
+	 * @param verwendungszweck
+	 *            these parameters are the same as 'buchhaltung'. you can check
+	 *            them here: http://www.baldoapp.de/javadoc/projekt/buchhaltung/
+	 * @return String "Rechnung angekommen", if the bill successfull transfered
+	 *         to us. We will send it so "Buchhaltung" else it will return
+	 *         "Fehler! Bitte erneut senden" and do nothing.
+	 */
+	@WebMethod
+	String erfasseRechnung(String verwendungszweck, String sender,
+			String rechnungsersteller, String rechnungsempfaenger,
+			double betrag, String rechnungsdatum, String zahlungsdatum);
+	
+	@WebMethod int pushDate(int year, int month, int day);
+
 }

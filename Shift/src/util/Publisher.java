@@ -24,6 +24,7 @@ public class Publisher {
 		// Endpoint.publish(adresse + "Order", new OrderWSImpl());
 
 		Endpoint.publish(adresse, new GmWSImpl());
+		System.out.println("Webservices gestartet...");
 	}
 
 	public static Publisher getInstance() {

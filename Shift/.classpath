@@ -7,7 +7,7 @@
 	<classpathentry kind="lib" path="lib/bank0815-1_0.jar"/>
 	<classpathentry kind="lib" path="lib/vw-1_4.jar"/>
 	<classpathentry kind="lib" path="lib/gs-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/Bh-1_1.jar"/>
 	<classpathentry kind="lib" path="lib/zeit_1_0.jar"/>
+	<classpathentry kind="lib" path="lib/bh-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
