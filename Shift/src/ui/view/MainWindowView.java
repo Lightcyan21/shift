@@ -46,14 +46,27 @@ public class MainWindowView extends AbstractView {
 
 		// Hinzufuegen der UI Komponenten
 		ShiftPanel2 mainWindowPanel = new ShiftPanel2();
-		ShiftButton2 orders = new ShiftButton2(Definitions.ORDERS);
-		ShiftButton2 check_status = new ShiftButton2(Definitions.CHECK_STATUS);
-		ShiftButton2 houses = new ShiftButton2(Definitions.HOUSES);
-		ShiftButton2 search = new ShiftButton2 ("");
+		
+		ShiftPanel2 orders2 = new ShiftPanel2();
+		ShiftButton2 orders = new ShiftButton2(Definitions.ORDERS);		
+		orders2.add(orders);
+
+		ShiftPanel2 check_status2 = new ShiftPanel2 ();
+		ShiftButton2 check_status = new ShiftButton2(Definitions.CHECK_STATUS); 
+		check_status2.add(check_status);
+		
+		ShiftPanel2 houses2 = new ShiftPanel2 ();
+		ShiftButton2 houses = new ShiftButton2(Definitions.HOUSES); 
+		houses2.add (houses);
+		
+		ShiftPanel2 search2 = new ShiftPanel2 ();
+		ShiftButton2 search = new ShiftButton2 (""); 
+		search2.add(search);
 		search.setIcon(new ImageIcon ("res/WohnungsInfo.png"));
 //		ImageIcon.setSize(10, 10);
 		
-		ShiftButton2 info = new ShiftButton2(Definitions.INFO);
+		ShiftPanel2 info2 = new ShiftPanel2 ();
+		ShiftButton2 info = new ShiftButton2(Definitions.INFO); info2.add(info);
 
 		// ActionListener hinzufügen
 		orders.addActionListener(new ActionListener() {
@@ -91,11 +104,11 @@ public class MainWindowView extends AbstractView {
 
 		// Hinzufuegen der Komponeten zum Panel
 		mainWindowPanel.setLayout(new GridLayout(3, 2, 100, 100));
-		mainWindowPanel.add(orders);
-		mainWindowPanel.add(check_status);
-		mainWindowPanel.add(houses);
-		mainWindowPanel.add(search);
-		mainWindowPanel.add(info);
+		mainWindowPanel.add(orders2);
+		mainWindowPanel.add(check_status2);
+		mainWindowPanel.add(houses2);
+		mainWindowPanel.add(search2);
+		mainWindowPanel.add(info2);
 
 		// hinzufuegen zum eigentlichen Fenster
 		frame.getContentpanel().add(mainWindowPanel, "main");
