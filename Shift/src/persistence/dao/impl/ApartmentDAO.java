@@ -40,6 +40,8 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 			pre.setString(4, id);
 
 			pre.execute();
+			
+			apt.setAptID(id);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

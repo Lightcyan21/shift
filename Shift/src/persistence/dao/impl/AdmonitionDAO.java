@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
+
 import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
@@ -17,22 +19,33 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 
 	@Override
 	public Admonition create() {
+		
+		Admonition adm = new Admonition();
+		int key = 0;
 
 		Connection con;
 		con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("insert into admonition (preis) values (?);");
+			pre = con.prepareStatement("insert into admonition (preis) values (?);", Statement.RETURN_GENERATED_KEYS);
 
 			pre.setDouble(1, 0);
 
 			pre.execute();
+			
+			ResultSet rs = pre.getGeneratedKeys();
+			if (rs != null && rs.next()) {
+			    key = rs.getInt(1);
+			}
+			
+			adm.setId((long) key);
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return adm;
 
 	}
 
