@@ -12,33 +12,36 @@ public interface GmWS {
 	/**
 	 * You can use this webservice to deliver a specified message to this
 	 * endpoint. It has to be passed all parameters in which a null parameter is
-	 * forbidden. The service will return "Danke. Nachricht angekommen", if
-	 * everything is okay with your message input.
+	 * forbidden. The service will return an String array, with all the ids of
+	 * the apartments, if everything is okay with your message input. Else it
+	 * will return an error message in the first array slot, with the text:
+	 * "Fehler aufgetreten, bitte Eingabe ueberpruefen"
 	 * 
 	 * @param plz
 	 *            Postleitzahl 5stelliger String
 	 * @param street
-	 *            Straße
+	 *            Straße, vollständig ausgeschrieben
 	 * @param streetNumber
 	 *            Hausnummer
 	 * @param city
-	 *            Stadt
+	 *            Stadt e.g. "Hamburg", "Berlin"
 	 * @param levels
 	 *            Anzahl der Etagen
 	 * @param numberFlat
 	 *            Anzahl der Wohnungen
 	 * @param gardenarea
-	 *            Nutzfläche des Gartens in m²
+	 *            Nutzfläche des Gartens des Gebaeudes in m²
 	 * @param totalArea
-	 *            gesamte Wohnflaeche
+	 *            gesamte Wohnflaeche des Gebaeudes in m²
 	 * @param apartmentArea
-	 *            Array mit den Wohnflaechen der einzelnen WOhnungen
+	 *            Array mit den Wohnflaechen der einzelnen WOhnung
 	 * @param roomNumbers
-	 *            Arry mit Anzahl der Zimmer in den Räumen
+	 *            Array mit Anzahl der Zimmer in den Wohnungen
 	 * @param lvl
-	 *            Stockwerk der Wohnung
-	 * @return a StringArray with ids of the apartments oder mit einer
-	 *         Fehlermeldung im 1. Element
+	 *            Array mit Stockwerk der jeweiligen Wohnung
+	 * @return a StringArray with ids of the apartments or an error message in
+	 *         the first array slot, with the text:
+	 *         "Fehler aufgetreten, bitte Eingabe ueberpruefen"
 	 */
 	@WebMethod
 	String[] exposeSend(String plz, String street, String streetNumber,
@@ -48,7 +51,8 @@ public interface GmWS {
 
 	/**
 	 * You can use this webservice to add a new Hirer to an object. If the
-	 * number of hirers is 0, then it means the apartment is empty.
+	 * number of hirers is 0, then it means the apartment is empty. apartmentID
+	 * is always a String with following structure: [houseID].[Level].[AptID]
 	 * 
 	 * @param NumberOfHirers
 	 *            is the number of different hirers in the apartment
@@ -57,66 +61,59 @@ public interface GmWS {
 	 * 
 	 * @return a String “Mieter erfolgreich hinzugefügt”, if the process was
 	 *         successfull, else there will be an errormessage
+	 *         "Fehler aufgetreten, bitte Eingabe ueberpruefen"
 	 */
 	@WebMethod
 	public String setHirer(int NumberOfHirers, String apartmentID);
 
 	/**
-	 * You can use this webservice to get the utilities of every hirer. As
-	 * result u get a List of HashMaps. Those Lists contains multiple type of
-	 * the costs and their values.
-	 * 
-	 * 
-	 * @return a 3dimensional Array. The first dimension is the hirer, the
-	 *         second the type of cost and the third is the actual value. It is
-	 *         a double value converted to a String so u can convert it back if
-	 *         u need it.
-	 */
-	@WebMethod
-	public String[][][] getUtilities();
-
-	/**
 	 * You can use this webservice to get the all information about the
-	 * apartment.
+	 * apartment. apartmentID is always a String with following structure:
+	 * [houseID].[Level].[AptID]. If the id is wrong, there will be an
+	 * errormessage "Fehler aufgetreten, bitte Eingabe ueberpruefen"
 	 * 
 	 * @param apartmentID
 	 *            unique identifier of the apartment
 	 * 
-	 * @return a String-Array which contains Area Number of rooms Plz
-	 * 
-	 *         Location Street Street number
-	 * 
-	 * 
+	 * @return a String-Array which contains the following informations in
+	 *         exactly this order in the array: Area, Number of rooms, Plz,
+	 *         Location, Street, Street number. If there is no apt with this ID
+	 *         it will return an error message:
+	 *         "Fehler aufgetreten, bitte Eingabe ueberpruefen"
 	 */
 	@WebMethod
 	String[] getInfo(String apartmentID);
 
 	/**
 	 * You can use this webservice to check the status of a specified order. The
-	 * status is expressed as a String value (s. return value)
+	 * status is expressed as a String value.
 	 * 
 	 * @param orderID
 	 *            is the unique identifier of the order
-	 * @return String status
-	 * 
-	 *         Status is declarated in "Angekommen" "In Arbeit" "Erledigt +
-	 *         Rechnung versendet" "Abgelehnt" "Rechnung bezahlt"
+	 * @return String status Status is declarated in "Angekommen" "In Arbeit"
+	 *         "Erledigt + Rechnung versendet" "Abgelehnt" "Rechnung bezahlt"
+	 * @see sendOrder
 	 */
 	@WebMethod
 	String checkStatus(int orderID);
 
 	/**
-	 * You can use this webservice to deliver a specified order to this
-	 * endpoint. The service will return "Danke. Auftrag angekommen", if
-	 * everything is okay with your input.
+	 * You can use this webservice to deliver a specified order. The service
+	 * will return the id of the order as a long value, if everything is okay
+	 * with your input.if there isnt any Apartment with this ID or a service
+	 * with this name, it will return 0.
 	 * 
 	 * @param typ
-	 *            is the description of the service
+	 *            is the explizit description of the service, possible Strings
+	 *            are: "Installation", "Treppenreinigung",
+	 *            "Hecke schneiden","Schluesseldienst", "Reparatur",
+	 *            "Instandhaltung"
 	 * @param apartmentID
 	 *            id of the apartment, which has ordered the service
 	 * @param mieter
-	 *            Vor- und Zuname des Mieters
-	 * @return a int which is the orderID
+	 *            full name of the hirer
+	 * @return a long which is the orderID
+	 * @see checkStatus
 	 */
 	@WebMethod
 	long sendOrder(String typ, String apartmentID, String mieter);
@@ -125,17 +122,43 @@ public interface GmWS {
 	 * you can use this Webservice to send 'Shift Gebaeudemanagement' a Bill.
 	 * 
 	 * @param verwendungszweck
-	 *            these parameters are the same as 'buchhaltung'. you can check
-	 *            them here: http://www.baldoapp.de/javadoc/projekt/buchhaltung/
+	 *            welche die Rechnung eindeutig identifziert (nach Vorgabe der
+	 *            Bank)
+	 * @param sender
+	 *            der Absender der Rechnung mit dem offiziellen Kürzel
+	 * @param rechnungsersteller
+	 *            mit dem offiziellen kürzel
+	 * @param rechnungsempfaenger
+	 *            mit dem offiziellen Kürzel
+	 * @param betrag
+	 *            mit dem Betrag der Rechung
+	 * @param rechnungsdatum
+	 *            als String mit dem Format "DD.MM.YYYY"
+	 * @param zahlungsdatum
+	 *            als String mit dem Format "DD.MM.YYYY"
 	 * @return String "Rechnung angekommen", if the bill successfull transfered
-	 *         to us. We will send it so "Buchhaltung" else it will return
-	 *         "Fehler! Bitte erneut senden" and do nothing.
+	 *         to us. We will send it to "Buchhaltung" else it will return
+	 *         "Fehler aufgetreten, bitte Eingabe ueberpruefen" and do nothing.
 	 */
 	@WebMethod
 	String erfasseRechnung(String verwendungszweck, String sender,
 			String rechnungsersteller, String rechnungsempfaenger,
 			double betrag, String rechnungsdatum, String zahlungsdatum);
-	
-	@WebMethod int pushDate(int year, int month, int day);
+
+	/**
+	 * you can use this webservice to send us a time update
+	 * 
+	 * @param year
+	 *            the current year.
+	 * @param month
+	 *            the current month as an int (0 = January) (11 = december)
+	 * @param day
+	 *            the current day
+	 * @return a returncode, 100 means everything is fine, 401 if the time jump
+	 *         cant be calculated, 402 if the class 'zeitsprung' does not return
+	 *         an Integer or String
+	 */
+	@WebMethod
+	int pushDate(int year, int month, int day);
 
 }
