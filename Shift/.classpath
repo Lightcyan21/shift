@@ -5,9 +5,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.33-bin.jar"/>
 	<classpathentry kind="lib" path="lib/bank0815-1_0.jar"/>
-	<classpathentry kind="lib" path="lib/vw-1_4.jar"/>
 	<classpathentry kind="lib" path="lib/gs-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/zeit_1_0.jar"/>
 	<classpathentry kind="lib" path="lib/bh-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/vw-1_5.jar"/>
+	<classpathentry kind="lib" path="lib/zeit-1_1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
