@@ -3,9 +3,8 @@ package components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
+
 import javax.swing.JButton;
 
 public class ShiftButton2 extends JButton {
@@ -20,4 +19,6 @@ public class ShiftButton2 extends JButton {
 			setPreferredSize(new Dimension(233, 73));
 			setBorder (null);
 			}
+		
+		
 }

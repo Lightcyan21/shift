@@ -63,7 +63,6 @@ public class MainWindowView extends AbstractView {
 		ShiftButton2 search = new ShiftButton2 (""); 
 		search2.add(search);
 		search.setIcon(new ImageIcon ("res/WohnungsInfo.png"));
-//		ImageIcon.setSize(10, 10);
 		
 		ShiftPanel2 info2 = new ShiftPanel2 ();
 		ShiftButton2 info = new ShiftButton2(Definitions.INFO); info2.add(info);
