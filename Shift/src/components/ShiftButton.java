@@ -2,7 +2,9 @@ package components;
 
 import java.awt.Font;
 
+
 import javax.swing.JButton;
+
 
 public class ShiftButton extends JButton {
 
@@ -13,8 +15,10 @@ public class ShiftButton extends JButton {
 
 	public ShiftButton(String text) {
 		super(text);
-		setFont(new Font("Arial Bold", Font.BOLD, 20));
-
-	}
+		setFont(new Font("Arial Black", Font.BOLD, 20));
+			 
+			
+		
+		}
 
 }

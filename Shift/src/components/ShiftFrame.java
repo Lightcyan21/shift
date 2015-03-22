@@ -19,6 +19,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import ui.controller.MainWindowController;
 
@@ -50,7 +51,7 @@ public class ShiftFrame extends JFrame {
 
 		// Image für Taskleiste setzen
 		try {
-			ImageIcon ii = new ImageIcon("res/Logo2.png");
+			ImageIcon ii = new ImageIcon("res/small.png");
 			setIconImage(ii.getImage());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -60,8 +61,8 @@ public class ShiftFrame extends JFrame {
 		ShiftPanel logopanel = new ShiftPanel();
 		contentpanel = new ShiftPanel2();
 		ShiftPanel northpanel = new ShiftPanel();
-		ShiftPanel filler = new ShiftPanel();
-		ShiftPanel filler2 = new ShiftPanel();
+//		ShiftPanel filler = new ShiftPanel();
+//		ShiftPanel filler2 = new ShiftPanel();
 		ShiftPanel datumspanel = new ShiftPanel();
 		ShiftPanel eastpanel = new ShiftPanel();
 		ShiftPanel westpanel = new ShiftPanel();
@@ -77,18 +78,18 @@ public class ShiftFrame extends JFrame {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyy");
 		JLabel datum = new JLabel(sdf.format(date));
-		datum.setFont(new Font("Arial Bold", Font.BOLD, 20));
+		datum.setFont(new Font("Arial Black", Font.BOLD, 20));
 		datum.setForeground(Color.white);
 		datumspanel.setLayout(new BoxLayout(datumspanel, BoxLayout.PAGE_AXIS));
 		datumspanel.add(new Box.Filler(datumsize, datumsize, datumsize));
 		datumspanel.add(datum);
 
 		// Logo oben links
-		ImageIcon logoimage = new ImageIcon("res/Logo.png");
+		ImageIcon logoimage = new ImageIcon("res/image2.png");
 		JLabel logo = new JLabel(logoimage);
 		logopanel.setLayout(new BoxLayout(logopanel, BoxLayout.PAGE_AXIS));
 		logopanel.add(new Box.Filler(minSize, prefSize, maxSize));
-		logo.setMinimumSize(new Dimension(268, 98));
+		logo.setMinimumSize(new Dimension(68, 70));
 		logopanel.add(logo);
 		logopanel.add(new Box.Filler(minSize, prefSize, maxSize));
 		logopanel.addMouseListener(new MouseListener() {
@@ -119,17 +120,18 @@ public class ShiftFrame extends JFrame {
 		// Titel
 		title = new JLabel(Definitions.TITLE);
 		title.setForeground(Color.white);
-		title.setFont(new Font("Arial Bold", Font.BOLD, 40));
+		title.setFont(new Font("Arial Black", Font.BOLD, 80));
+		title.setHorizontalAlignment(SwingConstants.CENTER);
 
 		// Layout des gesamten Fensters
 		setLayout(new BorderLayout());
 
 		// nördliches Panel
-		northpanel.setLayout(new GridLayout(1, 5));
+		northpanel.setLayout(new GridLayout(1, 3, 50,50));
 		northpanel.add(logopanel);
-		northpanel.add(filler);
+//		northpanel.add(filler);
 		northpanel.add(title);
-		northpanel.add(filler2);
+//		northpanel.add(filler2);
 		northpanel.add(datumspanel);
 
 		// inneres Layout
