@@ -2,6 +2,9 @@ package ui.controller;
 
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
+import persistence.dao.impl.ApartmentDAO;
+import persistence.entity.impl.Apartment;
+import persistence.entity.impl.House;
 import ui.enums.UI_EVENT;
 import ui.model.OrderStatusModel;
 import ui.view.OrderStatusView;
@@ -39,6 +42,37 @@ public class OrderStatusController extends
 		if (event.getEventId() == UI_EVENT.PUSH_BACK_BUTTON.ordinal()) {
 			System.out.println("--- Wechsle zum Hauptmenu");
 			MainWindowController.getInstance();
+		}
+
+		if (event.getEventId() == UI_EVENT.ORDER_SEND.ordinal()) {
+			event.getSource();
+			ApartmentDAO aptdao = new ApartmentDAO();
+			Apartment apt = aptdao.getApartment("1.1.1");
+			House house = apt.getHouse();
+			int size = 0;
+			switch ("Treppenreinigung") {
+			case "Treppenreinigung":
+				size = house.getStockwerke();
+				break;
+			case "Instandhaltung":
+				size = house.getAnzahlWohnungen();
+				break;
+			case "Schlüsseldienst":
+				size = 1;
+				break;
+			case "Installationen":
+				size = house.getAnzahlWohnungen();
+				break;
+			case "Reparaturen":
+				size = 1;
+				break;
+			case "Hecke schneiden":
+				size = 1;
+				break;
+			default:
+				return;
+			}
+
 		}
 	}
 

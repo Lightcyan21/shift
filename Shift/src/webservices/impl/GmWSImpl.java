@@ -1,15 +1,11 @@
 package webservices.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import components.Definitions;
-
 import persistence.dao.impl.ApartmentDAO;
-import persistence.dao.impl.BillDAO;
 import persistence.dao.impl.HouseDAO;
 import persistence.dao.impl.OrderDAO;
 import persistence.entity.impl.Apartment;
@@ -21,6 +17,8 @@ import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 import baldoapp.Zeitsprung;
 
+import components.Definitions;
+
 @WebService(endpointInterface = "webservices.GmWS")
 public class GmWSImpl implements GmWS {
 
@@ -31,7 +29,7 @@ public class GmWSImpl implements GmWS {
 			double totalArea, double[] apartmentArea, int[] roomNumbers,
 			int[] lvl) {
 		String[] result;
-
+		System.out.println("Initialisiere Wohnungen eintragen...");
 		if (apartmentArea.length == roomNumbers.length
 				&& roomNumbers.length == lvl.length) {
 			result = new String[apartmentArea.length];
@@ -46,6 +44,7 @@ public class GmWSImpl implements GmWS {
 			house.setGartenflaeche(gardenarea);
 			house.setFlaeche(totalArea);
 			housedao.persist(house);
+			System.out.println("Haus eingetragen...");
 			ApartmentDAO aptdao = new ApartmentDAO();
 			Apartment apt;
 
@@ -56,12 +55,15 @@ public class GmWSImpl implements GmWS {
 				apt.setAptID(house.getId() + "." + lvl[i] + "." + i);
 				aptdao.persist(apt);
 				result[i] = apt.getAptID();
+				System.out.println("WOhnung mit ID: " + apt.getAptID()
+						+ "angelegt");
 			}
 			return result;
 
 		} else {
 			result = new String[1];
 			result[0] = Definitions.ERROR_MESSAGE;
+			System.out.println("Fehler beim Eitnragen der Wohnung.");
 			return result;
 		}
 	}
@@ -69,13 +71,16 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public String setHirer(int NumberOfHirers, String apartmentID) {
+		System.out.println("Neuer Mieter wird eingetragen...");
 		ApartmentDAO aptdao = new ApartmentDAO();
 		Apartment apt = aptdao.getApartment(apartmentID);
 		if (apt == null) {
+			System.out.println(Definitions.ERROR_MESSAGE);
 			return Definitions.ERROR_MESSAGE;
 		} else {
 			apt.setMieteranzahl(NumberOfHirers);
 			aptdao.persist(apt);
+			System.out.println("Mieter erfolgreich hinzugefuegt...");
 			return "Mieter erfolgreich hinzugefügt.";
 		}
 	}
@@ -85,6 +90,7 @@ public class GmWSImpl implements GmWS {
 	public String[] getInfo(String apartmentID) {
 		// TODO AptID pruefen
 		// return a String-Array which contains
+		System.out.println("Wohnungsinformationen abrufen...");
 		String[] informations = new String[6];
 
 		ApartmentDAO aptdao = new ApartmentDAO();
@@ -105,6 +111,7 @@ public class GmWSImpl implements GmWS {
 		informations[4] = house.getStrasse();
 		// Street number
 		informations[5] = house.getHausnr();
+		System.out.println("Informationen erfolgreich abgerufen...");
 		return informations;
 
 	}
@@ -112,7 +119,8 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public String checkStatus(int orderID) {
-		//TODO  order ID prüfen
+		// TODO order ID prüfen
+		System.out.println("Status abrufen angefragt...");
 		OrderDAO orderdao = new OrderDAO();
 		Order order = orderdao.getById(orderID);
 		if (order == null) {
@@ -120,6 +128,7 @@ public class GmWSImpl implements GmWS {
 		}
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
+		System.out.println("Status wird abgerufen...");
 		return gs.getState(orderID);
 	}
 
@@ -128,48 +137,19 @@ public class GmWSImpl implements GmWS {
 	public long sendOrder(String typ, String apartmentID, String mieter) {
 		// TODO AptID pruefen
 		// TODO typen mit GS abstimmen
+		System.out.println("Order erhalten...");
 		OrderDAO orderdao = new OrderDAO();
 		ApartmentDAO aptdao = new ApartmentDAO();
-		Apartment apt = aptdao.getApartment(apartmentID);
-		House house = apt.getHouse();
-		int size = 0;
-		switch (typ) {
-		case "Treppenreinigung":
-			size = house.getStockwerke();
-			break;
-		case "Instandhaltung":
-			size = house.getAnzahlWohnungen();
-			break;
-		case "Schlüsseldienst":
-			size = 1;
-			break;
-		case "Installationen":
-			size = house.getAnzahlWohnungen();
-			break;
-		case "Reparaturen":
-			size = 1;
-			break;
-		case "Hecke schneiden":
-			size = 1;
-			break;
-		default:
-			return 0;
-		}
-
 		Order order = orderdao.create();
 		order.setWohnungsID(apartmentID);
 		order.setJobName(typ);
 		order.setMieter(mieter);
+		order.setStatusWeiterleitung(0);
+		order.setStatus(0);
+		order.setStatusBestaetigung(0);
 		orderdao.persist(order);
-		ServiceWSImplService gsservice = new ServiceWSImplService();
-		ServiceWS gs = gsservice.getServiceWSImplPort();
-
-		if (gs.sendOrderToFm(typ, Integer.parseInt(apartmentID), size, 0) != "Auftrag wurde angenommen.") {
-			return 0;
-		} else {
-			return order.getId();
-		}
-
+		System.out.println("Order gespeichert...");
+		return order.getId();
 	}
 
 	@Override
@@ -177,15 +157,17 @@ public class GmWSImpl implements GmWS {
 	public String erfasseRechnung(String verwendungszweck, String sender,
 			String rechnungsersteller, String rechnungsempfaenger,
 			double betrag, String rechnungsdatum, String zahlungsdatum) {
+		System.out.println("Rechnung erhalten...");
 		SchnittstellenimplService bhservice = new SchnittstellenimplService();
 		SchnittstelleBH bh = bhservice.getSchnittstellenimplPort();
+		System.out.println("Rechnung an BH senden...");
 		String ergebnis = bh.erfasseRechnung(verwendungszweck, "GM",
-				rechnungsersteller, rechnungsempfaenger, betrag, rechnungsdatum, zahlungsdatum);
+				rechnungsersteller, rechnungsempfaenger, betrag,
+				rechnungsdatum, zahlungsdatum);
 		System.out.println(ergebnis);
-		if (ergebnis == "Rechnung angekommen"){
+		if (ergebnis == "Rechnung angekommen") {
 			return "Rechnung angekommen";
-		}
-		else {
+		} else {
 			return Definitions.ERROR_MESSAGE;
 		}
 	}
@@ -193,6 +175,7 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public int pushDate(int year, int month, int day) {
+		System.out.println("Zeitsprung erhalten...");
 		Date localDate = null;
 		Zeitsprung zeitsprung = new Zeitsprung(localDate);
 		System.out.println("localDate - zu Beginn der Methode: "
@@ -218,6 +201,7 @@ public class GmWSImpl implements GmWS {
 				 * Abarbeitung der erforderlichen Anwendungsschritte bei einem
 				 * Monatssprung - in der Methode
 				 */
+				System.out.println("Monatssprung...");
 				TimeChange.getInstance().month(month);
 				break;
 			case "year":
@@ -225,6 +209,7 @@ public class GmWSImpl implements GmWS {
 				 * Abarbeitung der erforderlichen Anwendungsschritte bei einem
 				 * Jahressprung - in der Methode
 				 */
+				System.out.println("Jahressprung");
 				TimeChange.getInstance().year();
 				break;
 
