@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
+
 import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
@@ -16,13 +18,19 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 
 	@Override
 	public House create() {
-		
+
+		House house = new House();
+		int key = 0;
+
 		Connection con;
 		con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("insert into house (plz, strasse, ort, hausnr, stockwerke, anzahlWohnungen, gartenflaeche, flaeche) values (?, ?, ?, ?, ?, ?, ?, ?);");
+			pre = con
+					.prepareStatement(
+							"insert into house (plz, strasse, ort, hausnr, stockwerke, anzahlWohnungen, gartenflaeche, flaeche) values (?, ?, ?, ?, ?, ?, ?, ?);",
+							Statement.RETURN_GENERATED_KEYS);
 
 			pre.setString(1, null);
 			pre.setString(2, null);
@@ -35,17 +43,24 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 
 			pre.execute();
 
+			ResultSet rs = pre.getGeneratedKeys();
+			if (rs != null && rs.next()) {
+				key = rs.getInt(1);
+			}
+
+			house.setId((long) key);
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return null;
+
+		return house;
 	}
 
 	@Override
 	public void delete(House entity) {
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
 
@@ -65,7 +80,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 
 	@Override
 	public List<House> findAll() {
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
 
@@ -98,13 +113,13 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return houseList;
 	}
 
 	@Override
 	public House getById(long id) {
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
 
@@ -119,7 +134,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 			ResultSet result = pre.executeQuery();
 
 			while (result.next()) {
-				
+
 				house.setId(result.getLong("houseID"));
 				house.setPlz(result.getString("plz"));
 				house.setStrasse(result.getString("strasse"));
@@ -137,7 +152,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return house;
 	}
 
@@ -147,8 +162,10 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ? WHERE assetID = " + entity.getId());
-			
+			pre = con
+					.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ? WHERE assetID = "
+							+ entity.getId());
+
 			pre.setLong(1, entity.getId());
 			pre.setString(2, entity.getPlz());
 			pre.setString(3, entity.getStrasse());
@@ -158,7 +175,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 			pre.setInt(4, entity.getAnzahlWohnungen());
 			pre.setDouble(4, entity.getGartenflaeche());
 			pre.setDouble(4, entity.getFlaeche());
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

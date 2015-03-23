@@ -12,9 +12,9 @@ public class Order extends AbstractEntity {
 	private String mieter;
 	private double betrag;
 	private int status;
-	private int statusRechnung;
-	private int statusBestaetigung;
-	private int statusWeiterleitung;
+	private boolean statusRechnung;
+	private boolean statusBestaetigung;
+	private boolean statusWeiterleitung;
 
 	@Override
 	public Long getId() {
@@ -50,30 +50,6 @@ public class Order extends AbstractEntity {
 		this.wohnungsID = wohnungsID;
 	}
 
-	public int getStatusRechnung() {
-		return statusRechnung;
-	}
-
-	public void setStatusRechnung(int statusRechnung) {
-		this.statusRechnung = statusRechnung;
-	}
-
-	public int getStatusBestaetigung() {
-		return statusBestaetigung;
-	}
-
-	public void setStatusBestaetigung(int statusBestaetigung) {
-		this.statusBestaetigung = statusBestaetigung;
-	}
-
-	public int getStatusWeiterleitung() {
-		return statusWeiterleitung;
-	}
-
-	public void setStatusWeiterleitung(int statusWeiterleitung) {
-		this.statusWeiterleitung = statusWeiterleitung;
-	}
-
 	public double getBetrag() {
 		return betrag;
 	}
@@ -88,6 +64,30 @@ public class Order extends AbstractEntity {
 
 	public void setMieter(String mieter) {
 		this.mieter = mieter;
+	}
+
+	public boolean isStatusRechnung() {
+		return statusRechnung;
+	}
+
+	public void setStatusRechnung(boolean statusRechnung) {
+		this.statusRechnung = statusRechnung;
+	}
+
+	public boolean isStatusBestaetigung() {
+		return statusBestaetigung;
+	}
+
+	public void setStatusBestaetigung(boolean statusBestaetigung) {
+		this.statusBestaetigung = statusBestaetigung;
+	}
+
+	public boolean isStatusWeiterleitung() {
+		return statusWeiterleitung;
+	}
+
+	public void setStatusWeiterleitung(boolean statusWeiterleitung) {
+		this.statusWeiterleitung = statusWeiterleitung;
 	}
 
 }

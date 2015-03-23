@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
+
 import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
@@ -16,13 +18,19 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 
 	@Override
 	public Bill create() {
-		
+
+		Bill bill = new Bill();
+		int key = 0;
+
 		Connection con;
 		con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("insert into bill (rechnungssteller, rechnungsEmpfaenger, gesamtbetrag, verwendungszweck) values (?, ?, ?, ?);");
+			pre = con
+					.prepareStatement(
+							"insert into bill (rechnungssteller, rechnungsEmpfaenger, gesamtbetrag, verwendungszweck) values (?, ?, ?, ?);",
+							Statement.RETURN_GENERATED_KEYS);
 
 			pre.setString(1, null);
 			pre.setString(2, null);
@@ -31,13 +39,19 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 
 			pre.execute();
 
+			ResultSet rs = pre.getGeneratedKeys();
+			if (rs != null && rs.next()) {
+				key = rs.getInt(1);
+			}
+
+			bill.setId((long) key);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return null;
+		return bill;
 	}
 
 	@Override
