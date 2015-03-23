@@ -64,7 +64,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			PreparedStatement pre;
 			pre = con.prepareStatement("delete from bill where billID = ?;");
 
-			pre.setString(1, entity.getBillID());
+			pre.setLong(1, entity.getBillID());
 
 			pre.execute();
 
@@ -91,7 +91,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			while (result.next()) {
 
 				Bill bill = new Bill();
-				bill.setBillID(result.getString("billID"));
+				bill.setBillID(result.getLong("billID"));
 				bill.setRechnungssteller(result.getString("rechnungssteller"));
 				bill.setRechnungsEmpfaenger(result
 						.getString("rechnungsempfaenger"));
@@ -127,7 +127,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			ResultSet result = pre.executeQuery();
 
 			while (result.next()) {
-				bill.setBillID(result.getString("billID"));
+				bill.setBillID(result.getLong("billID"));
 				bill.setRechnungssteller(result.getString("rechnungssteller"));
 				bill.setRechnungsEmpfaenger(result
 						.getString("rechnungsempfaenger"));
@@ -157,7 +157,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			pre = con
 					.prepareStatement("update bill SET billID = ?, rechnungssteller = ?, rechnungsempfaenger = ?, gesamtbetrag = ?, verwendungszweck = ? WHERE billID = "
 							+ entity.getBillID());
-			pre.setString(1, entity.getBillID());
+			pre.setLong(1, entity.getBillID());
 			pre.setString(2, entity.getRechnungssteller());
 			pre.setString(3, entity.getRechnungssteller());
 			pre.setDouble(4, entity.getBetrag());
