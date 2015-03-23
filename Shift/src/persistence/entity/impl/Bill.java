@@ -5,17 +5,17 @@ import persistence.entity.AbstractEntity;
 public class Bill extends AbstractEntity {
 	
 	private static final long serialVersionUID = -4535878538723747602L;
-	private String billID;
+	private long billID;
 	private String rechnungssteller;
 	private String rechnungsEmpfaenger;
 	private double betrag;
 	private String verwendungszweck;
 
-	public String getBillID() {
+	public long getBillID() {
 		return billID;
 	}
 
-	public void setBillID(String billID) {
+	public void setBillID(long billID) {
 		this.billID = billID;
 	}
 

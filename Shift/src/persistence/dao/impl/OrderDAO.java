@@ -117,6 +117,49 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 		return orderList;
 	}
 
+	public List<Order> getOrderByRequester(String id) {
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		List<Order> orderList = new ArrayList<>();
+
+		try {
+			PreparedStatement pre;
+			pre = con.prepareStatement("select * from job where wohnungsID =?;");
+			
+			pre.setString(1, id);
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+
+				Order order = new Order();
+				order.setId(result.getLong("jobID"));
+				order.setWohnungsID(result.getString("wohnungsID"));
+				order.setJobName(result.getString("jobName"));
+				order.setMieter(result.getString("mieter"));
+				order.setBetrag(result.getDouble("betrag"));
+				order.setStatus(result.getInt("status"));
+				order.setStatusRechnung(result.getBoolean("statusRechnung"));
+				order.setStatusBestaetigung(result
+						.getBoolean("statusBestaetigung"));
+				order.setStatusWeiterleitung(result
+						.getBoolean("statusWeiterleitung"));
+
+				orderList.add(order);
+			}
+
+			// pre.execute(); //notwendig? oder doppelt?
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return orderList;
+
+	}
+
 	@Override
 	public Order getById(long id) {
 
