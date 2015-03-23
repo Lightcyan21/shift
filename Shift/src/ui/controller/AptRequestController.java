@@ -29,6 +29,7 @@ public class AptRequestController extends
 			System.out.println("--- Wechsle zum Hauptmenu");
 			MainWindowController.getInstance();
 		}
+	
 	}
 
 	public static AptRequestController getInstance() {

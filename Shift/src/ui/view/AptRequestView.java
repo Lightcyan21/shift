@@ -72,6 +72,8 @@ public class AptRequestView extends AbstractView {
 		ShiftPanel2 northpanel = new ShiftPanel2();
 		ShiftPanel2 centerpanel = new ShiftPanel2();
 		ShiftPanel2 buttonpanel = new ShiftPanel2();
+		ShiftPanel2 eastpanel = new ShiftPanel2();
+		ShiftPanel2 westpanel = new ShiftPanel2();
 
 		content.setLayout(new BorderLayout());
 		northpanel.setLayout(new FlowLayout());
@@ -117,7 +119,9 @@ public class AptRequestView extends AbstractView {
 		// WohnungsID, Anzahl Mieter m² Anzahl Zimmer
 		mainTable = createAptRequestTable();
 		mainTablePane = new JScrollPane(mainTable);
-		
+
+		eastpanel.setBackground(Color.red);
+		westpanel.setBackground(Color.green);
 
 		// add
 		northpanel.add(label);
@@ -127,6 +131,8 @@ public class AptRequestView extends AbstractView {
 		centerpanel.add(mainTablePane);
 
 		// Borderlayout setzen
+		content.add(eastpanel, BorderLayout.EAST);
+		content.add(westpanel, BorderLayout.WEST);
 		content.add(northpanel, BorderLayout.NORTH);
 		content.add(buttonpanel, BorderLayout.SOUTH);
 		content.add(centerpanel, BorderLayout.CENTER);
@@ -154,7 +160,7 @@ public class AptRequestView extends AbstractView {
 		table.setSelectionForeground(Definitions.BG_COLOR_CONTENT);
 
 		table.getColumnModel().getColumn(0).setPreferredWidth(25);
-		
+
 		table.getTableHeader().resizeAndRepaint();
 		table.setDefaultRenderer(Object.class, new TableRowRenderer(tableModel));
 		table.setDefaultRenderer(Long.class, new TableRowRenderer(tableModel));
@@ -165,11 +171,11 @@ public class AptRequestView extends AbstractView {
 		String id = textfield.getText();
 		System.out.println(id);
 		textfield.setText("");
-		 ApartmentDAO aptdao = new ApartmentDAO();
-		 Apartment apt = aptdao.getApartment(id);
-		 apt.getMieteranzahl();
-		 apt.getWohnflaeche();
-		 apt.getZimmeranzahl();
+		ApartmentDAO aptdao = new ApartmentDAO();
+		Apartment apt = aptdao.getApartment(id);
+		apt.getMieteranzahl();
+		apt.getWohnflaeche();
+		apt.getZimmeranzahl();
 
 	}
 
