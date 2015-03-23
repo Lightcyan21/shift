@@ -105,8 +105,12 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (billList.size() != 0) {
+			return billList;
+		} else {
+			return null;
+		}
 
-		return billList;
 	}
 
 	@Override
@@ -144,24 +148,42 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			e.printStackTrace();
 		}
 
-		return bill;
+		if (bill.getBillID() != 0 && bill.getRechnungssteller() != null
+				&& bill.getRechnungsEmpfaenger() != null
+				&& bill.getBetrag() != 0 && bill.getVerwendungszweck() != null) {
+			return bill;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public void persist(Bill entity) {
+	public boolean persist(Bill entity) {
+
+		boolean rt = false;
 
 		Connection con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update bill SET billID = ?, rechnungssteller = ?, rechnungsempfaenger = ?, gesamtbetrag = ?, verwendungszweck = ? WHERE billID = "
-							+ entity.getBillID());
+					.prepareStatement("update bill SET billID = ?, rechnungssteller = ?, rechnungsempfaenger = ?, gesamtbetrag = ?, verwendungszweck = ? WHERE billID = ?;");
 			pre.setLong(1, entity.getBillID());
 			pre.setString(2, entity.getRechnungssteller());
-			pre.setString(3, entity.getRechnungssteller());
+			pre.setString(3, entity.getRechnungsEmpfaenger());
 			pre.setDouble(4, entity.getBetrag());
 			pre.setString(5, entity.getVerwendungszweck());
+			pre.setLong(6, entity.getBillID());
+
+			if (entity.getBillID() != 0 && entity.getRechnungssteller() != null
+					&& entity.getRechnungsEmpfaenger() != null
+					&& entity.getBetrag() != 0
+					&& entity.getVerwendungszweck() != null) {
+				pre.executeUpdate();
+				rt = true;
+			} else {
+				rt = false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -172,6 +194,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 				e.printStackTrace();
 			}
 		}
+		return rt;
 
 	}
 
