@@ -144,9 +144,9 @@ public class GmWSImpl implements GmWS {
 		order.setWohnungsID(apartmentID);
 		order.setJobName(typ);
 		order.setMieter(mieter);
-		order.setStatusWeiterleitung(0);
+		order.setStatusWeiterleitung(false);
 		order.setStatus(0);
-		order.setStatusBestaetigung(0);
+		order.setStatusBestaetigung(false);
 		orderdao.persist(order);
 		System.out.println("Order gespeichert...");
 		return order.getId();
