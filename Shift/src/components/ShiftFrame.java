@@ -12,7 +12,6 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -22,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import ui.controller.MainWindowController;
+import util.TimeChange;
 
 public class ShiftFrame extends JFrame {
 
@@ -31,6 +31,7 @@ public class ShiftFrame extends JFrame {
 	private ShiftPanel2 contentpanel;
 	private static ShiftFrame instance;
 	private JLabel title;
+	private JLabel datum;
 
 	public ShiftFrame() throws HeadlessException {
 		super();
@@ -61,8 +62,8 @@ public class ShiftFrame extends JFrame {
 		ShiftPanel logopanel = new ShiftPanel();
 		contentpanel = new ShiftPanel2();
 		ShiftPanel northpanel = new ShiftPanel();
-//		ShiftPanel filler = new ShiftPanel();
-//		ShiftPanel filler2 = new ShiftPanel();
+		// ShiftPanel filler = new ShiftPanel();
+		// ShiftPanel filler2 = new ShiftPanel();
 		ShiftPanel datumspanel = new ShiftPanel();
 		ShiftPanel eastpanel = new ShiftPanel();
 		ShiftPanel westpanel = new ShiftPanel();
@@ -75,9 +76,9 @@ public class ShiftFrame extends JFrame {
 		Dimension datumsize = new Dimension(175, 50);
 
 		// Datum oben rechts
-		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyy");
-		JLabel datum = new JLabel(sdf.format(date));
+		 datum = new JLabel(
+				sdf.format(TimeChange.getInstance().getTime()));
 		datum.setFont(new Font("Arial Black", Font.BOLD, 20));
 		datum.setForeground(Color.white);
 		datumspanel.setLayout(new BoxLayout(datumspanel, BoxLayout.PAGE_AXIS));
@@ -93,23 +94,23 @@ public class ShiftFrame extends JFrame {
 		logopanel.add(logo);
 		logopanel.add(new Box.Filler(minSize, prefSize, maxSize));
 		logopanel.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent arg0) {
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				MainWindowController.getInstance();
@@ -127,11 +128,11 @@ public class ShiftFrame extends JFrame {
 		setLayout(new BorderLayout());
 
 		// nördliches Panel
-		northpanel.setLayout(new GridLayout(1, 3, 50,50));
+		northpanel.setLayout(new GridLayout(1, 3, 50, 50));
 		northpanel.add(logopanel);
-//		northpanel.add(filler);
+		// northpanel.add(filler);
 		northpanel.add(title);
-//		northpanel.add(filler2);
+		// northpanel.add(filler2);
 		northpanel.add(datumspanel);
 
 		// inneres Layout
@@ -172,6 +173,12 @@ public class ShiftFrame extends JFrame {
 		// sichtbar werden lassen
 		setVisible(true);
 
+	}
+
+	public void setDatum() {
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		datum.setText(sdf.format(TimeChange.getInstance().getTime()));
+		instance.validate();
 	}
 
 	public ShiftPanel2 getContentpanel() {

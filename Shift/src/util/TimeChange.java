@@ -1,5 +1,7 @@
 package util;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import persistence.dao.impl.ApartmentDAO;
@@ -8,16 +10,19 @@ import persistence.dao.impl.OrderDAO;
 import persistence.entity.impl.Apartment;
 import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
+import ui.controller.OrderWindowController;
+import ui.model.OrderWindowModel;
+import ui.view.OrderWindowView;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 import webservices.impl.VerwaltungWS;
 import webservices.impl.VerwaltungWSImplService;
-
 import components.Definitions;
 
 public class TimeChange {
 
 	private static TimeChange instance;
+	private Date localDate;
 
 	public void month(int month) {
 
@@ -34,6 +39,9 @@ public class TimeChange {
 
 		// Rechnung erstellen
 		// Buchhaltungsrechnung + gezahlte Aufträge + gewinn
+		for (int i = 0; i < invoice.length; i++) {
+
+		}
 		// an Verwaltung senden
 
 	}
@@ -198,7 +206,21 @@ public class TimeChange {
 	}
 
 	public static TimeChange getInstance() {
+		if (instance == null) {
+			instance = new TimeChange();
+		} 
 		return instance;
+	}
+
+	public Date getTime() {
+		return localDate;
+	}
+	public void setTime(Date localDate) {
+		this.localDate = localDate;
+	}
+
+	public  void initTime() {
+		 localDate = new Date(0);
 	}
 
 }

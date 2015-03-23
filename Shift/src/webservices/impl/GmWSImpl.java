@@ -6,9 +6,11 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import persistence.dao.impl.ApartmentDAO;
+import persistence.dao.impl.BillDAO;
 import persistence.dao.impl.HouseDAO;
 import persistence.dao.impl.OrderDAO;
 import persistence.entity.impl.Apartment;
+import persistence.entity.impl.Bill;
 import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
 import util.TimeChange;
@@ -158,25 +160,34 @@ public class GmWSImpl implements GmWS {
 			String rechnungsersteller, String rechnungsempfaenger,
 			double betrag, String rechnungsdatum, String zahlungsdatum) {
 		System.out.println("Rechnung erhalten...");
-		SchnittstellenimplService bhservice = new SchnittstellenimplService();
-		SchnittstelleBH bh = bhservice.getSchnittstellenimplPort();
+		BillDAO billdao = new BillDAO();
+		Bill bill = billdao.create();
+		bill.setBetrag(betrag);
+		bill.setRechnungsEmpfaenger(rechnungsempfaenger);
+		bill.setRechnungssteller(rechnungsersteller);
+		bill.setVerwendungszweck(verwendungszweck);
+		billdao.persist(bill);
+		
 		System.out.println("Rechnung an BH senden...");
+		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
+		BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
 		String ergebnis = bh.erfasseRechnung(verwendungszweck, "GM",
 				rechnungsersteller, rechnungsempfaenger, betrag,
 				rechnungsdatum, zahlungsdatum);
 		System.out.println(ergebnis);
-		if (ergebnis == "Rechnung angekommen") {
+		if (ergebnis.equals("Rechnung angekommen")) {
 			return "Rechnung angekommen";
 		} else {
 			return Definitions.ERROR_MESSAGE;
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	@WebMethod
 	public int pushDate(int year, int month, int day) {
 		System.out.println("Zeitsprung erhalten...");
-		Date localDate = null;
+		Date localDate = TimeChange.getInstance().getTime();
 		Zeitsprung zeitsprung = new Zeitsprung(localDate);
 		System.out.println("localDate - zu Beginn der Methode: "
 				+ localDate.getDate() + "." + (localDate.getMonth() + 1) + "."
