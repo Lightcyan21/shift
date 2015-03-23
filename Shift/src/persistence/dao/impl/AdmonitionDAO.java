@@ -148,8 +148,10 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("update admonition SET admonitionID = ?, jobID = ?, preis = ? WHERE admonitionID = " + entity.getId());
-			
+			pre = con
+					.prepareStatement("update admonition SET admonitionID = ?, jobID = ?, preis = ? WHERE admonitionID = "
+							+ entity.getId());
+
 			pre.setLong(1, entity.getId());
 			pre.setInt(2, entity.getJobID());
 			pre.setDouble(3, entity.getPreis());
