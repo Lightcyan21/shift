@@ -6,6 +6,8 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import components.Definitions;
+
 import persistence.dao.impl.ApartmentDAO;
 import persistence.dao.impl.BillDAO;
 import persistence.dao.impl.HouseDAO;
@@ -15,6 +17,8 @@ import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
 import util.TimeChange;
 import webservices.GmWS;
+import webservices.ServiceWS;
+import webservices.ServiceWSImplService;
 import baldoapp.Zeitsprung;
 
 @WebService(endpointInterface = "webservices.GmWS")
@@ -57,7 +61,7 @@ public class GmWSImpl implements GmWS {
 
 		} else {
 			result = new String[1];
-			result[0] = "Fehler aufgetreten, bitte Eingabe ueberpruefen";
+			result[0] = Definitions.ERROR_MESSAGE;
 			return result;
 		}
 	}
@@ -67,21 +71,19 @@ public class GmWSImpl implements GmWS {
 	public String setHirer(int NumberOfHirers, String apartmentID) {
 		ApartmentDAO aptdao = new ApartmentDAO();
 		Apartment apt = aptdao.getApartment(apartmentID);
-		apt.setMieteranzahl(NumberOfHirers);
-		aptdao.persist(apt);
-		return "Mieter erfolgreich hinzugefügt.";
-	}
-
-	@Override
-	@WebMethod
-	public String[][][] getUtilities() {
-
-		return null;
+		if (apt == null) {
+			return Definitions.ERROR_MESSAGE;
+		} else {
+			apt.setMieteranzahl(NumberOfHirers);
+			aptdao.persist(apt);
+			return "Mieter erfolgreich hinzugefügt.";
+		}
 	}
 
 	@Override
 	@WebMethod
 	public String[] getInfo(String apartmentID) {
+		// TODO AptID pruefen
 		// return a String-Array which contains
 		String[] informations = new String[6];
 
@@ -110,23 +112,64 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public String checkStatus(int orderID) {
-		// TODO Status von GS abrufen
-		return null;
+		//TODO  order ID prüfen
+		OrderDAO orderdao = new OrderDAO();
+		Order order = orderdao.getById(orderID);
+		if (order == null) {
+			return Definitions.ERROR_MESSAGE;
+		}
+		ServiceWSImplService gsservice = new ServiceWSImplService();
+		ServiceWS gs = gsservice.getServiceWSImplPort();
+		return gs.getState(orderID);
 	}
 
 	@Override
 	@WebMethod
 	public long sendOrder(String typ, String apartmentID, String mieter) {
-		// TODO ggf. Auftrag parsen und an GS senden und ID zurückgeben
+		// TODO AptID pruefen
+		// TODO typen mit GS abstimmen
 		OrderDAO orderdao = new OrderDAO();
 		ApartmentDAO aptdao = new ApartmentDAO();
-		Order order = orderdao.create();
-//		order.setWohnID(aptdao.getApartment(apartmentID));
-		// order.setArt(typ);
-		// order.setMieter();
-		orderdao.persist(order);
+		Apartment apt = aptdao.getApartment(apartmentID);
+		House house = apt.getHouse();
+		int size = 0;
+		switch (typ) {
+		case "Treppenreinigung":
+			size = house.getStockwerke();
+			break;
+		case "Instandhaltung":
+			size = house.getAnzahlWohnungen();
+			break;
+		case "Schlüsseldienst":
+			size = 1;
+			break;
+		case "Installationen":
+			size = house.getAnzahlWohnungen();
+			break;
+		case "Reparaturen":
+			size = 1;
+			break;
+		case "Hecke schneiden":
+			size = 1;
+			break;
+		default:
+			return 0;
+		}
 
-		return 0;
+		Order order = orderdao.create();
+		order.setWohnungsID(apartmentID);
+		order.setJobName(typ);
+		order.setMieter(mieter);
+		orderdao.persist(order);
+		ServiceWSImplService gsservice = new ServiceWSImplService();
+		ServiceWS gs = gsservice.getServiceWSImplPort();
+
+		if (gs.sendOrderToFm(typ, Integer.parseInt(apartmentID), size, 0) != "Auftrag wurde angenommen.") {
+			return 0;
+		} else {
+			return order.getId();
+		}
+
 	}
 
 	@Override
@@ -137,9 +180,14 @@ public class GmWSImpl implements GmWS {
 		SchnittstellenimplService bhservice = new SchnittstellenimplService();
 		SchnittstelleBH bh = bhservice.getSchnittstellenimplPort();
 		String ergebnis = bh.erfasseRechnung(verwendungszweck, "GM",
-				rechnungsersteller, rechnungsempfaenger, betrag, null, null);
+				rechnungsersteller, rechnungsempfaenger, betrag, rechnungsdatum, zahlungsdatum);
 		System.out.println(ergebnis);
-		return "Rechnung angekommen";
+		if (ergebnis == "Rechnung angekommen"){
+			return "Rechnung angekommen";
+		}
+		else {
+			return Definitions.ERROR_MESSAGE;
+		}
 	}
 
 	@Override
@@ -170,7 +218,7 @@ public class GmWSImpl implements GmWS {
 				 * Abarbeitung der erforderlichen Anwendungsschritte bei einem
 				 * Monatssprung - in der Methode
 				 */
-				TimeChange.getInstance().month();
+				TimeChange.getInstance().month(month);
 				break;
 			case "year":
 				/*
