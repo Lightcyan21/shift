@@ -65,8 +65,8 @@ public class ShiftFrame extends JFrame {
 		// ShiftPanel filler = new ShiftPanel();
 		// ShiftPanel filler2 = new ShiftPanel();
 		ShiftPanel datumspanel = new ShiftPanel();
-		ShiftPanel eastpanel = new ShiftPanel();
-		ShiftPanel westpanel = new ShiftPanel();
+//		ShiftPanel eastpanel = new ShiftPanel();
+//		ShiftPanel westpanel = new ShiftPanel();
 		ShiftPanel southpanel = new ShiftPanel();
 
 		// Filler eigenschaften
@@ -149,13 +149,13 @@ public class ShiftFrame extends JFrame {
 		east.setBackground(Definitions.BG_COLOR);
 		south.setBackground(Definitions.BG_COLOR);
 
-		westpanel.add(west);
-		eastpanel.add(east);
+//		westpanel.add(west);
+//		eastpanel.add(east);
 		southpanel.add(south);
 
 		// Zusammenfuegen der Panels
-		add(eastpanel, BorderLayout.EAST);
-		add(westpanel, BorderLayout.WEST);
+//		add(eastpanel, BorderLayout.EAST);
+//		add(westpanel, BorderLayout.WEST);
 		add(northpanel, BorderLayout.NORTH);
 		add(contentpanel, BorderLayout.CENTER);
 		add(southpanel, BorderLayout.SOUTH);
