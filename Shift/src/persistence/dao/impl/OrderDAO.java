@@ -109,12 +109,14 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 				orderList.add(order);
 			}
 
-			// pre.execute(); //notwendig? oder doppelt?
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return orderList;
+		if (orderList.size() != 0) {
+			return orderList;
+		} else {
+			return null;
+		}
 	}
 
 	public List<Order> getOrderByRequester(String id) {
@@ -126,8 +128,9 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("select * from job where wohnungsID =?;");
-			
+			pre = con
+					.prepareStatement("select * from job where wohnungsID =?;");
+
 			pre.setString(1, id);
 
 			ResultSet result = pre.executeQuery();
@@ -156,7 +159,11 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			e.printStackTrace();
 		}
 
-		return orderList;
+		if (orderList.size() != 0) {
+			return orderList;
+		} else {
+			return null;
+		}
 
 	}
 
@@ -201,19 +208,26 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			e.printStackTrace();
 		}
 
-		return order;
+		if (order.getId() != 0 && order.getWohnungsID() != null
+				&& order.getJobName() != null && order.getMieter() != null
+				&& order.getBetrag() != 0 && order.getStatus() != 0) {
+			return order;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public void persist(Order entity) {
+	public boolean persist(Order entity) {
+
+		boolean rt = false;
 
 		Connection con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update job SET jobID = ?, wohnungsID = ?, jobName = ?, mieter = ?, betrag = ?, status = ?, statusRechnung = ?, statusBestaetigung = ?, statusWeiterleitung = ? WHERE jobID = "
-							+ entity.getId());
+					.prepareStatement("update job SET jobID = ?, wohnungsID = ?, jobName = ?, mieter = ?, betrag = ?, status = ?, statusRechnung = ?, statusBestaetigung = ?, statusWeiterleitung = ? WHERE jobID = ?;");
 			pre.setLong(1, entity.getId());
 			pre.setString(2, entity.getWohnungsID());
 			pre.setString(3, entity.getJobName());
@@ -223,6 +237,17 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			pre.setBoolean(7, entity.isStatusRechnung());
 			pre.setBoolean(8, entity.isStatusBestaetigung());
 			pre.setBoolean(9, entity.isStatusWeiterleitung());
+			pre.setLong(10, entity.getId());
+
+			if (entity.getId() != 0 && entity.getWohnungsID() != null
+					&& entity.getJobName() != null
+					&& entity.getMieter() != null && entity.getBetrag() != 0
+					&& entity.getStatus() != 0) {
+				pre.executeUpdate();
+				rt = true;
+			} else {
+				rt = false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -233,6 +258,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 				e.printStackTrace();
 			}
 		}
+		return rt;
 
 	}
 

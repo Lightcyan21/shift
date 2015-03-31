@@ -16,7 +16,7 @@ public class ShiftButton2 extends JButton {
 			setFont(new Font("Arial Black", Font.BOLD, 20));
 			setOpaque(false);
 			setBackground(new Color (0,0,0,0));
-			setPreferredSize(new Dimension(233, 73));
+			setPreferredSize(new Dimension(233, 75));
 			setBorder (null);
 			}
 		

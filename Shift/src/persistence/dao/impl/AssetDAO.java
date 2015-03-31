@@ -102,8 +102,12 @@ public class AssetDAO extends AbstractDAO<Asset> implements DAO<Asset> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (assetList.size() != 0) {
+			return assetList;
+		} else {
+			return null;
+		}
 
-		return assetList;
 	}
 
 	@Override
@@ -136,25 +140,42 @@ public class AssetDAO extends AbstractDAO<Asset> implements DAO<Asset> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (asset.getId() != 0 && asset.getBillID() != 0
+				&& asset.getEinzelpreis() != 0
+				&& asset.getBezeichnung() != null) {
+			return asset;
+		} else {
+			return null;
+		}
 
-		return asset;
 	}
 
 	@Override
-	public void persist(Asset entity) {
+	public boolean persist(Asset entity) {
+
+		boolean rt = false;
 
 		Connection con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update asset SET assetID = ?, billID = ?, einzelpreis = ?, bezeichnung = ? WHERE assetID = "
-							+ entity.getId());
+					.prepareStatement("update asset SET assetID = ?, billID = ?, einzelpreis = ?, bezeichnung = ? WHERE assetID = ?;");
 
 			pre.setLong(1, entity.getId());
 			pre.setInt(2, entity.getBillID());
 			pre.setDouble(3, entity.getEinzelpreis());
 			pre.setString(4, entity.getBezeichnung());
+			pre.setLong(5, entity.getId());
+
+			if (entity.getId() != 0 && entity.getBillID() != 0
+					&& entity.getEinzelpreis() != 0
+					&& entity.getBezeichnung() != null) {
+				pre.executeUpdate();
+				rt = true;
+			} else {
+				rt = false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -165,6 +186,7 @@ public class AssetDAO extends AbstractDAO<Asset> implements DAO<Asset> {
 				e.printStackTrace();
 			}
 		}
+		return rt;
 
 	}
 

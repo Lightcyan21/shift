@@ -39,7 +39,8 @@ public class OrderWindowController extends
 			ServiceWS gs = gsservice.getServiceWSImplPort();
 			OrderDAO orderdao = new OrderDAO();
 			Order order = orderdao.create();
-//			gs.sendOrderToFm(event.getData(), "1.1.1", 1, order.getId());
+			System.out.println(gs.sendOrderToFm(event.getData().toString(),
+					"1.1.1", 1, order.getId()));
 		}
 	}
 

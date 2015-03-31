@@ -19,7 +19,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 
 	@Override
 	public Admonition create() {
-		
+
 		Admonition adm = new Admonition();
 		int key = 0;
 
@@ -28,19 +28,20 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("insert into admonition (preis) values (?);", Statement.RETURN_GENERATED_KEYS);
+			pre = con.prepareStatement(
+					"insert into admonition (preis) values (?);",
+					Statement.RETURN_GENERATED_KEYS);
 
 			pre.setDouble(1, 0);
 
 			pre.execute();
-			
+
 			ResultSet rs = pre.getGeneratedKeys();
 			if (rs != null && rs.next()) {
-			    key = rs.getInt(1);
+				key = rs.getInt(1);
 			}
-			
+
 			adm.setId((long) key);
-			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -51,13 +52,14 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 
 	@Override
 	public void delete(Admonition entity) {
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("delete from admonition where admonitionID = ?;");
+			pre = con
+					.prepareStatement("delete from admonition where admonitionID = ?;");
 
 			pre.setLong(1, entity.getId());
 
@@ -71,10 +73,11 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 
 	@Override
 	public List<Admonition> findAll() {
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
 
+		Admonition adm = new Admonition();
 		List<Admonition> admList = new ArrayList<>();
 
 		try {
@@ -85,76 +88,84 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 
 			while (result.next()) {
 
-				Admonition adm = new Admonition();
 				adm.setId(result.getLong("admonitionID"));
 				adm.setJobID(result.getInt("jobID"));
 				adm.setPreis(result.getDouble("preis"));
-				//ergänzen. In Admonition.java ausimpementieren
-				
-				
 
 				admList.add(adm);
 			}
 
-			// pre.execute(); //notwendig? oder doppelt?
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return admList;
+		if (admList.size() != 0) {
+			return admList;
+		} else {
+			return null;
+		}
 
 	}
 
 	@Override
 	public Admonition getById(long id) {
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
 
-//		ArrayList<Admonition> admList = new ArrayList<>();
 		Admonition adm = new Admonition();
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("select * from admonition where admonitionID =?;");
+			pre = con
+					.prepareStatement("select * from admonition where admonitionID =?;");
 
 			pre.setDouble(1, (int) id);
 
 			ResultSet result = pre.executeQuery();
 
 			while (result.next()) {
-				
+
 				adm.setId(result.getLong("admonitionID"));
 				adm.setJobID(result.getInt("jobID"));
 				adm.setPreis(result.getDouble("preis"));
 
-//				admList.add(adm);
-
 			}
-
-			// pre.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (adm.getId() != 0 && adm.getJobID() != 0 && adm.getPreis() != 0) {
+			return adm;
+		} else {
+			return null;
+		}
 
-		return adm;
 	}
 
 	@Override
-	public void persist(Admonition entity) {
-		
+	public boolean persist(Admonition entity) {
+
+		boolean rt = false;
+
 		Connection con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update admonition SET admonitionID = ?, jobID = ?, preis = ? WHERE admonitionID = "
-							+ entity.getId());
+					.prepareStatement("update admonition SET admonitionID = ?, jobID = ?, preis = ? WHERE admonitionID = ?;");
 
 			pre.setLong(1, entity.getId());
-			pre.setInt(2, entity.getJobID());
+			pre.setLong(2, entity.getJobID());
 			pre.setDouble(3, entity.getPreis());
+			pre.setLong(4, entity.getId());
+
+			if (entity.getId() != 0 && entity.getJobID() != 0
+					&& entity.getPreis() != 0) {
+				pre.executeUpdate();
+				rt = true;
+			} else {
+				rt = false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -165,6 +176,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 				e.printStackTrace();
 			}
 		}
+		return rt;
 
 	}
 

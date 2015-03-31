@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
@@ -11,3 +12,18 @@
 	<classpathentry kind="lib" path="lib/gs-1_4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="res"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.33-bin.jar"/>
+	<classpathentry kind="lib" path="lib/zeit-1_1.jar"/>
+	<classpathentry kind="lib" path="lib/bank0815-1_2.jar"/>
+	<classpathentry kind="lib" path="lib/bh-1_6.jar"/>
+	<classpathentry kind="lib" path="lib/gs-1_2.jar"/>
+	<classpathentry kind="lib" path="lib/vw-1_7.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
+>>>>>>> refs/remotes/origin/master

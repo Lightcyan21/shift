@@ -14,7 +14,7 @@ public interface DAO<T extends IEntity> {
 
 	public T getById(long id);
 
-	public void persist(T entity);
+	public boolean persist(T entity);
 
 	public void reload(T entity);
 	

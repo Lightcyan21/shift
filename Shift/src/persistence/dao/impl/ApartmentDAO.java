@@ -40,7 +40,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 			pre.setString(4, id);
 
 			pre.execute();
-			
+
 			apt.setAptID(id);
 
 		} catch (SQLException e) {
@@ -89,10 +89,9 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 				Apartment apt = new Apartment();
 				apt.setAptID(result.getString("wohnungsID"));
-				// apt.setMieteranzahl(result.getInt("mieteranzahl")); //falls
-				// nötig
-				// apt.setZimmeranzahl(result.getInt("zimmeranzahl")); // *
-				// apt.setWohnflaeche(result.getDouble("wohnflaeche")); // *
+				apt.setMieteranzahl(result.getInt("mieteranzahl"));
+				apt.setZimmeranzahl(result.getInt("zimmeranzahl"));
+				apt.setWohnflaeche(result.getDouble("wohnflaeche"));
 
 				aptList.add(apt);
 			}
@@ -102,8 +101,12 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (aptList.size() != 0) {
+			return aptList;
+		} else {
+			return null;
+		}
 
-		return aptList;
 	}
 
 	@Override
@@ -135,40 +138,53 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 			while (result.next()) {
 				apt.setAptID(result.getString("wohnungsID"));
-				apt.setMieteranzahl(result.getInt("mieteranzahl")); // falls
-																	// nötig
-				apt.setZimmeranzahl(result.getInt("zimmeranzahl")); // *
-				apt.setWohnflaeche(result.getDouble("wohnflaeche")); // *
+				apt.setMieteranzahl(result.getInt("mieteranzahl"));
+
+				apt.setZimmeranzahl(result.getInt("zimmeranzahl"));
+				apt.setWohnflaeche(result.getDouble("wohnflaeche"));
 
 				aptList.add(apt);
 			}
 
-			// apt = aptList[1]; //falsch
-
-			// pre.execute();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (apt.getAptID() != null && apt.getMieteranzahl() != 0
+				&& apt.getZimmeranzahl() != 0 && apt.getWohnflaeche() != 0) {
+			return apt;
+		} else {
+			return null;
+		}
 
-		return apt;
 	}
 
 	@Override
-	public void persist(Apartment entity) {
+	public boolean persist(Apartment entity) {
+
+		boolean rt = false;
+
 		Connection con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = "
-							+ entity.getAptID());
+					.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = ?;");
 			// TODO ueberarbeiten da wohnid (aptid) String sein muss (Form:
 			// "1.1.1")
 			pre.setString(1, entity.getAptID());
 			pre.setDouble(2, entity.getWohnflaeche());
 			pre.setInt(3, entity.getZimmeranzahl());
 			pre.setInt(4, entity.getMieteranzahl());
+			pre.setString(5, entity.getAptID());
+
+			if (entity.getAptID() != null && entity.getWohnflaeche() != 0
+					&& entity.getZimmeranzahl() != 0
+					&& entity.getMieteranzahl() != 0) {
+				pre.executeUpdate();
+				rt = true;
+			} else {
+				rt = false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -179,6 +195,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 				e.printStackTrace();
 			}
 		}
+		return rt;
 	}
 
 	@Override

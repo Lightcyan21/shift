@@ -48,16 +48,23 @@ public class MainWindowView extends AbstractView {
 		ShiftPanel2 mainWindowPanel = new ShiftPanel2();
 		
 		ShiftPanel2 orders2 = new ShiftPanel2();
-		ShiftButton2 orders = new ShiftButton2(Definitions.ORDERS);		
+		ShiftButton2 orders = new ShiftButton2 ("");
 		orders2.add(orders);
-
+		orders.setIcon(new ImageIcon ("res/Auftrag.png"));
+		//ShiftButton2 orders = new ShiftButton2(Definitions.ORDERS);		
+		
 		ShiftPanel2 check_status2 = new ShiftPanel2 ();
-		ShiftButton2 check_status = new ShiftButton2(Definitions.CHECK_STATUS); 
+		ShiftButton2 check_status = new ShiftButton2 ("");
 		check_status2.add(check_status);
+		check_status.setIcon(new ImageIcon ("res/Status.png"));
+		//ShiftButton2 check_status = new ShiftButton2(Definitions.CHECK_STATUS); 
 		
 		ShiftPanel2 houses2 = new ShiftPanel2 ();
-		ShiftButton2 houses = new ShiftButton2(Definitions.HOUSES); 
-		houses2.add (houses);
+		ShiftButton2 houses = new ShiftButton2 ("");
+		houses2.add(houses);
+		houses.setIcon(new ImageIcon ("res/Gebäude.png"));
+		//ShiftButton2 houses = new ShiftButton2(Definitions.HOUSES); 
+	
 		
 		ShiftPanel2 search2 = new ShiftPanel2 ();
 		ShiftButton2 search = new ShiftButton2 (""); 
@@ -65,7 +72,10 @@ public class MainWindowView extends AbstractView {
 		search.setIcon(new ImageIcon ("res/WohnungsInfo.png"));
 		
 		ShiftPanel2 info2 = new ShiftPanel2 ();
-		ShiftButton2 info = new ShiftButton2(Definitions.INFO); info2.add(info);
+		ShiftButton2 info = new ShiftButton2 ("");
+		info2.add(info);
+		info.setIcon(new ImageIcon("res/BuchhaltungInfo.png"));
+		//ShiftButton2 info = new ShiftButton2(Definitions.INFO); info2.add(info);
 
 		// ActionListener hinzufügen
 		orders.addActionListener(new ActionListener() {
@@ -102,7 +112,7 @@ public class MainWindowView extends AbstractView {
 		// 1 neue Panals
 
 		// Hinzufuegen der Komponeten zum Panel
-		mainWindowPanel.setLayout(new GridLayout(3, 2, 100, 100));
+		mainWindowPanel.setLayout(new GridLayout(3, 2, 100, 5));
 		mainWindowPanel.add(orders2);
 		mainWindowPanel.add(check_status2);
 		mainWindowPanel.add(houses2);

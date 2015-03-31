@@ -113,8 +113,12 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (houseList.size() != 0) {
+			return houseList;
+		} else {
+			return null;
+		}
 
-		return houseList;
 	}
 
 	@Override
@@ -152,29 +156,53 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (house.getId() != 0 && house.getPlz() != null
+				& house.getStrasse() != null && house.getOrt() != null
+				&& house.getHausnr() != null && house.getStockwerke() != 0
+				&& house.getAnzahlWohnungen() != 0
+				&& house.getGartenflaeche() != 0 && house.getFlaeche() != 0) {
+			return house;
+		} else {
+			return null;
+		}
 
-		return house;
 	}
 
 	@Override
-	public void persist(House entity) {
+	public boolean persist(House entity) {
+
+		boolean rt = false;
+
 		Connection con = DBUtil.getConnection();
 
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ? WHERE assetID = "
-							+ entity.getId());
+					.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ? WHERE assetID = ?;");
 
 			pre.setLong(1, entity.getId());
 			pre.setString(2, entity.getPlz());
 			pre.setString(3, entity.getStrasse());
 			pre.setString(4, entity.getOrt());
-			pre.setString(4, entity.getHausnr());
-			pre.setInt(4, entity.getStockwerke());
-			pre.setInt(4, entity.getAnzahlWohnungen());
-			pre.setDouble(4, entity.getGartenflaeche());
-			pre.setDouble(4, entity.getFlaeche());
+			pre.setString(5, entity.getHausnr());
+			pre.setInt(6, entity.getStockwerke());
+			pre.setInt(7, entity.getAnzahlWohnungen());
+			pre.setDouble(8, entity.getGartenflaeche());
+			pre.setDouble(9, entity.getFlaeche());
+			pre.setLong(10, entity.getId());
+
+			if (entity.getId() != 0 && entity.getPlz() != null
+					&& entity.getStrasse() != null && entity.getOrt() != null
+					&& entity.getHausnr() != null
+					&& entity.getStockwerke() != 0
+					&& entity.getAnzahlWohnungen() != 0
+					&& entity.getGartenflaeche() != 0
+					&& entity.getFlaeche() != 0) {
+				pre.executeUpdate();
+				rt = true;
+			} else {
+				rt = false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -185,6 +213,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 				e.printStackTrace();
 			}
 		}
+		return rt;
 	}
 
 	@Override

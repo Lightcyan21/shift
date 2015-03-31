@@ -6,7 +6,7 @@ public class Admonition extends AbstractEntity {
 
 	private static final long serialVersionUID = 8429005451293689378L;
 	private long admonitionID;
-	private int jobID;
+	private long jobID;
 	private double preis;
 
 	@Override
@@ -27,11 +27,11 @@ public class Admonition extends AbstractEntity {
 		this.preis = preis;
 	}
 
-	public int getJobID() {
+	public long getJobID() {
 		return jobID;
 	}
 
-	public void setJobID(int jobID) {
+	public void setJobID(long jobID) {
 		this.jobID = jobID;
 	}
 
