@@ -1,6 +1,5 @@
 package util;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -10,13 +9,11 @@ import persistence.dao.impl.OrderDAO;
 import persistence.entity.impl.Apartment;
 import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
-import ui.controller.OrderWindowController;
-import ui.model.OrderWindowModel;
-import ui.view.OrderWindowView;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 import webservices.impl.VerwaltungWS;
 import webservices.impl.VerwaltungWSImplService;
+
 import components.Definitions;
 
 public class TimeChange {
@@ -67,6 +64,7 @@ public class TimeChange {
 			order.setJobName(Definitions.RASEN_MAEHEN_STRING);
 			order.setBetrag(Definitions.rasen_maehen * house.getGartenflaeche());
 			orderdao.persist(order);
+			
 
 			// Gartenpflege
 			order = orderdao.create();

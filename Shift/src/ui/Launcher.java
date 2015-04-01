@@ -10,7 +10,7 @@ public class Launcher {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		TimeChange.getInstance().initTime();
 		MainWindowController.getInstance();
 		Publisher.getInstance();
