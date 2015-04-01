@@ -160,5 +160,12 @@ public interface GmWS {
 	 */
 	@WebMethod
 	int pushDate(int year, int month, int day);
+	
+	/**
+	 * you can use this webservice to send us a admonition
+	 * @param verwendungszweck Verwendungszweck der Rechnung
+	 * @return an int
+	 */
+	@WebMethod int mahnungEmpfangen(String verwendungszweck); 
 
 }

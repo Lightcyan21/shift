@@ -12,7 +12,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Vector;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -72,8 +74,9 @@ public class AptRequestView extends AbstractView {
 		ShiftPanel2 northpanel = new ShiftPanel2();
 		ShiftPanel2 centerpanel = new ShiftPanel2();
 		ShiftPanel2 buttonpanel = new ShiftPanel2();
-		ShiftPanel2 eastpanel = new ShiftPanel2();
-		ShiftPanel2 westpanel = new ShiftPanel2();
+		ShiftPanel2 tablepanel = new ShiftPanel2();
+		// ShiftPanel2 eastpanel = new ShiftPanel2();
+		// ShiftPanel2 westpanel = new ShiftPanel2();
 
 		content.setLayout(new BorderLayout());
 		northpanel.setLayout(new FlowLayout());
@@ -116,12 +119,11 @@ public class AptRequestView extends AbstractView {
 		});
 
 		// Tabelle in der Mitte
-		// WohnungsID, Anzahl Mieter m² Anzahl Zimmer
 		mainTable = createAptRequestTable();
 		mainTablePane = new JScrollPane(mainTable);
 
-		eastpanel.setBackground(Color.red);
-		westpanel.setBackground(Color.green);
+		// eastpanel.setBackground(Color.red);
+		// westpanel.setBackground(Color.green);
 
 		// add
 		northpanel.add(label);
@@ -131,8 +133,8 @@ public class AptRequestView extends AbstractView {
 		centerpanel.add(mainTablePane);
 
 		// Borderlayout setzen
-		content.add(eastpanel, BorderLayout.EAST);
-		content.add(westpanel, BorderLayout.WEST);
+		// content.add(eastpanel, BorderLayout.EAST);
+		// content.add(westpanel, BorderLayout.WEST);
 		content.add(northpanel, BorderLayout.NORTH);
 		content.add(buttonpanel, BorderLayout.SOUTH);
 		content.add(centerpanel, BorderLayout.CENTER);
@@ -141,7 +143,7 @@ public class AptRequestView extends AbstractView {
 		frame.getContentpanel().add(content, "search");
 		frame.getCardlayout().show(frame.getContentpanel(), "search");
 		frame.validate();
-
+		textfield.requestFocus();
 	}
 
 	private JTable createAptRequestTable() {
@@ -159,7 +161,7 @@ public class AptRequestView extends AbstractView {
 		table.setSelectionBackground(Definitions.BG_COLOR);
 		table.setSelectionForeground(Definitions.BG_COLOR_CONTENT);
 
-		table.getColumnModel().getColumn(0).setPreferredWidth(25);
+		// table.getColumnModel().getColumn(0).setPreferredWidth(25);
 
 		table.getTableHeader().resizeAndRepaint();
 		table.setDefaultRenderer(Object.class, new TableRowRenderer(tableModel));
@@ -169,22 +171,26 @@ public class AptRequestView extends AbstractView {
 
 	protected void aptRequest() {
 		String id = textfield.getText();
-		System.out.println(id);
+		tableModel.removeAllRows();
+		System.out.println("Rufe Wohnungsdaten ab... ID:" + id);
 		textfield.setText("");
 		ApartmentDAO aptdao = new ApartmentDAO();
 		Apartment apt = aptdao.getApartment(id);
-		apt.getMieteranzahl();
-		apt.getWohnflaeche();
-		apt.getZimmeranzahl();
-
+		if (apt != null) {
+			addZeile(id, apt.getMieteranzahl(), apt.getWohnflaeche(),
+					apt.getZimmeranzahl());
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Aprtment nicht gefunden");
+		}
 	}
 
-	public void addZeile(long id, String text) {
-		tableModel.addRow(new AptRequestRow(id, text));
+	public void addZeile(String id, int counterHirer, double qm, int countRooms) {
+		tableModel.addRow(new AptRequestRow(id, counterHirer, qm, countRooms));
 		tableModel.fireTableDataChanged();
 	}
 
-	public void deleteZeile(long id) {
+	public void deleteZeile(String id) {
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			AptRequestRow r = (AptRequestRow) tableModel.getRow(i);
 			if (r.getId() == id)
@@ -207,7 +213,6 @@ public class AptRequestView extends AbstractView {
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int col) {
-
 			setForeground(Color.BLACK);
 			setBackground(Color.white);
 			if (value != null)
@@ -232,12 +237,16 @@ public class AptRequestView extends AbstractView {
 
 		private static final long serialVersionUID = -5574999980921824807L;
 
-		private static Class[] columnClass = { Long.class, String.class, };
+		private static Class[] columnClass = { String.class, Integer.class,
+				Double.class, Integer.class };
 
-		private static String[] columnNames = { "Meine-ID", "Der Text", };
+		private static String[] columnNames = { "WohnungsID", "Anzahl Mieter",
+				"m²", "Anzahl Zimmer" };
 
 		public AptRequestTableModel() {
 			super(columnClass, columnNames);
+			// WohnungsID, Anzahl Mieter m² Anzahl Zimmer
+
 		}
 
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -252,7 +261,11 @@ public class AptRequestView extends AbstractView {
 			case 0:
 				return row.getId();
 			case 1:
-				return row.getText();
+				return row.getCounterHirer();
+			case 2:
+				return row.getQm();
+			case 3:
+				return row.getCountRooms();
 			}
 			return null;
 		}
@@ -262,39 +275,68 @@ public class AptRequestView extends AbstractView {
 
 			switch (columnIndex) {
 			case 0:
-				row.setId((long) value);
+				row.setId((String) value);
+				break;
 			case 1:
-				row.setText((String) value);
-
-				fireTableCellUpdated(rowIndex, columnIndex);
+				row.setCounterHirer((int) value);
+				break;
+			case 2:
+				row.setQm((double) value);
+				break;
+			case 3:
+				row.setCountRooms((int) value);
+				break;
 			}
+			fireTableCellUpdated(rowIndex, columnIndex);
+
 		}
 	}
 
 	class AptRequestRow implements IRow {
 
-		private long id;
-		private String text;
+		private String id;
+		private int counterHirer;
+		private double qm;
+		private int countRooms;
 
-		public AptRequestRow(long id, String text) {
+		public AptRequestRow(String id, int counterHirer, double qm,
+				int countRooms) {
 			this.id = id;
-			this.text = text;
+			this.counterHirer = counterHirer;
+			this.qm = qm;
+			this.countRooms = countRooms;
 		}
 
-		public long getId() {
+		public String getId() {
 			return id;
 		}
 
-		public void setId(long id) {
+		public void setId(String id) {
 			this.id = id;
 		}
 
-		public String getText() {
-			return text;
+		public int getCounterHirer() {
+			return counterHirer;
 		}
 
-		public void setText(String text) {
-			this.text = text;
+		public void setCounterHirer(int counterHirer) {
+			this.counterHirer = counterHirer;
+		}
+
+		public double getQm() {
+			return qm;
+		}
+
+		public void setQm(double qm) {
+			this.qm = qm;
+		}
+
+		public int getCountRooms() {
+			return countRooms;
+		}
+
+		public void setCountRooms(int countRooms) {
+			this.countRooms = countRooms;
 		}
 
 		@Override
