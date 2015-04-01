@@ -7,6 +7,7 @@ public class Order extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 
 	private long jobID;
+	private String newJobID;
 	private String jobName;
 	private String wohnungsID;
 	private String mieter;
@@ -25,6 +26,14 @@ public class Order extends AbstractEntity {
 	@Override
 	public void setId(Long jobID) {
 		this.jobID = jobID;
+	}
+
+	public String getNewJobID() {
+		return newJobID;
+	}
+
+	public void setNewJobID(String newJobID) {
+		this.newJobID = newJobID;
 	}
 
 	public String getJobName() {

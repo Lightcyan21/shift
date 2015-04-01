@@ -119,7 +119,6 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 		Connection con;
 		con = DBUtil.getConnection();
 
-		ArrayList<Bill> billList = new ArrayList<>();
 		Bill bill = new Bill();
 
 		try {
@@ -138,11 +137,45 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 				bill.setBetrag(result.getDouble("gesamtbetrag"));
 				bill.setVerwendungszweck(result.getString("verwendungszweck"));
 
-				billList.add(bill);
-
 			}
 
-			// pre.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		if (bill.getBillID() != 0 && bill.getRechnungssteller() != null
+				&& bill.getRechnungsEmpfaenger() != null
+				&& bill.getBetrag() != 0 && bill.getVerwendungszweck() != null) {
+			return bill;
+		} else {
+			return null;
+		}
+	}
+
+	public Bill getByVerwendungszweck(String vz) {
+		Connection con;
+		con = DBUtil.getConnection();
+
+		Bill bill = new Bill();
+
+		try {
+			PreparedStatement pre;
+			pre = con
+					.prepareStatement("select * from bill where verwendungszweck =?;");
+
+			pre.setString(1, vz);
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+				bill.setBillID(result.getLong("billID"));
+				bill.setRechnungssteller(result.getString("rechnungssteller"));
+				bill.setRechnungsEmpfaenger(result
+						.getString("rechnungsempfaenger"));
+				bill.setBetrag(result.getDouble("gesamtbetrag"));
+				bill.setVerwendungszweck(result.getString("verwendungszweck"));
+
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
