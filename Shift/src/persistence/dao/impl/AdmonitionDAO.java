@@ -91,6 +91,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 				adm.setId(result.getLong("admonitionID"));
 				adm.setJobID(result.getInt("jobID"));
 				adm.setPreis(result.getDouble("preis"));
+				adm.setSeen(result.getBoolean("seen"));
 
 				admList.add(adm);
 			}
@@ -128,6 +129,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 				adm.setId(result.getLong("admonitionID"));
 				adm.setJobID(result.getInt("jobID"));
 				adm.setPreis(result.getDouble("preis"));
+				adm.setSeen(result.getBoolean("seen"));
 
 			}
 
@@ -152,12 +154,13 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update admonition SET admonitionID = ?, jobID = ?, preis = ? WHERE admonitionID = ?;");
+					.prepareStatement("update admonition SET admonitionID = ?, jobID = ?, preis = ?, seen =? WHERE admonitionID = ?;");
 
 			pre.setLong(1, entity.getId());
 			pre.setLong(2, entity.getJobID());
 			pre.setDouble(3, entity.getPreis());
 			pre.setLong(4, entity.getId());
+			pre.setBoolean(5, entity.isSeen());
 
 			if (entity.getId() != 0 && entity.getJobID() != 0
 					&& entity.getPreis() != 0) {

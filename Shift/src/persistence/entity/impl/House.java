@@ -14,6 +14,7 @@ public class House extends AbstractEntity {
 	private int stockwerke;
 	private int anzahlWohnungen;
 	private double flaeche;
+	private boolean seen;
 
 	public String getPlz() {
 		return plz;
@@ -88,6 +89,14 @@ public class House extends AbstractEntity {
 	@Override
 	public void setId(Long id) {
 		houseID = id;
+	}
+
+	public boolean isSeen() {
+		return seen;
+	}
+
+	public void setSeen(boolean seen) {
+		this.seen = seen;
 	}
 
 }

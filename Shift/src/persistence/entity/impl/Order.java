@@ -15,6 +15,7 @@ public class Order extends AbstractEntity {
 	private boolean statusRechnung;
 	private boolean statusBestaetigung;
 	private boolean statusWeiterleitung;
+	private boolean seen;
 
 	@Override
 	public Long getId() {
@@ -88,6 +89,14 @@ public class Order extends AbstractEntity {
 
 	public void setStatusWeiterleitung(boolean statusWeiterleitung) {
 		this.statusWeiterleitung = statusWeiterleitung;
+	}
+
+	public boolean isSeen() {
+		return seen;
+	}
+
+	public void setSeen(boolean seen) {
+		this.seen = seen;
 	}
 
 }

@@ -8,6 +8,7 @@ public class Admonition extends AbstractEntity {
 	private long admonitionID;
 	private long jobID;
 	private double preis;
+	private boolean seen;
 
 	@Override
 	public Long getId() {
@@ -33,6 +34,14 @@ public class Admonition extends AbstractEntity {
 
 	public void setJobID(long jobID) {
 		this.jobID = jobID;
+	}
+
+	public boolean isSeen() {
+		return seen;
+	}
+
+	public void setSeen(boolean seen) {
+		this.seen = seen;
 	}
 
 }

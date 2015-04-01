@@ -104,6 +104,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 				house.setAnzahlWohnungen(result.getInt("anzahlWohnungen"));
 				house.setGartenflaeche(result.getDouble("gartenflaeche"));
 				house.setFlaeche(result.getDouble("flaeche"));
+				house.setSeen(result.getBoolean("seen"));
 
 				houseList.add(house);
 			}
@@ -148,6 +149,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 				house.setAnzahlWohnungen(result.getInt("anzahlWohnungen"));
 				house.setGartenflaeche(result.getDouble("gartenflaeche"));
 				house.setFlaeche(result.getDouble("flaeche"));
+				house.setSeen(result.getBoolean("seen"));
 
 			}
 
@@ -178,7 +180,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ? WHERE assetID = ?;");
+					.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ?, seen = ? WHERE assetID = ?;");
 
 			pre.setLong(1, entity.getId());
 			pre.setString(2, entity.getPlz());
@@ -190,6 +192,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 			pre.setDouble(8, entity.getGartenflaeche());
 			pre.setDouble(9, entity.getFlaeche());
 			pre.setLong(10, entity.getId());
+			pre.setBoolean(11, entity.isSeen());
 
 			if (entity.getId() != 0 && entity.getPlz() != null
 					&& entity.getStrasse() != null && entity.getOrt() != null
