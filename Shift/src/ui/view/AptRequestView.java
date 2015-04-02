@@ -181,7 +181,7 @@ public class AptRequestView extends AbstractView {
 					apt.getZimmeranzahl());
 		} else {
 			JOptionPane.showMessageDialog(new JFrame(),
-					"Aprtment nicht gefunden");
+					"Apartment nicht gefunden");
 		}
 	}
 
