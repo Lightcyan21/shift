@@ -53,6 +53,7 @@ public class AptRequestView extends AbstractView {
 		frame.getCardlayout().show(frame.getContentpanel(), "search");
 		frame.setHeadline(Definitions.SEARCH);
 		frame.validate();
+		textfield.requestFocus();
 		return null;
 	}
 
@@ -74,7 +75,6 @@ public class AptRequestView extends AbstractView {
 		ShiftPanel2 northpanel = new ShiftPanel2();
 		ShiftPanel2 centerpanel = new ShiftPanel2();
 		ShiftPanel2 buttonpanel = new ShiftPanel2();
-		ShiftPanel2 tablepanel = new ShiftPanel2();
 		// ShiftPanel2 eastpanel = new ShiftPanel2();
 		// ShiftPanel2 westpanel = new ShiftPanel2();
 
@@ -137,7 +137,7 @@ public class AptRequestView extends AbstractView {
 		// content.add(westpanel, BorderLayout.WEST);
 		content.add(northpanel, BorderLayout.NORTH);
 		content.add(buttonpanel, BorderLayout.SOUTH);
-		content.add(centerpanel, BorderLayout.CENTER);
+		content.add(mainTablePane, BorderLayout.CENTER);
 
 		// Layout hinzufuegen und Karte zeigen
 		frame.getContentpanel().add(content, "search");

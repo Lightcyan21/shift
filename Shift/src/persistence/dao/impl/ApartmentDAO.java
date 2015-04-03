@@ -149,8 +149,9 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (apt.getAptID() != null && apt.getMieteranzahl() != 0
-				&& apt.getZimmeranzahl() != 0 && apt.getWohnflaeche() != 0) {
+		if (apt.getAptID() != null ){
+//				&& apt.getMieteranzahl() != 0
+//				&& apt.getZimmeranzahl() != 0 && apt.getWohnflaeche() != 0) {
 			return apt;
 		} else {
 			return null;

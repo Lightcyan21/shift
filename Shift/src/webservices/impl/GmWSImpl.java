@@ -1,5 +1,6 @@
 package webservices.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.jws.WebMethod;
@@ -20,7 +21,6 @@ import webservices.GmWS;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 import baldoapp.Zeitsprung;
-
 import components.Definitions;
 
 @WebService(endpointInterface = "webservices.GmWS")
@@ -51,12 +51,13 @@ public class GmWSImpl implements GmWS {
 			System.out.println("Haus eingetragen...");
 			ApartmentDAO aptdao = new ApartmentDAO();
 			Apartment apt;
+			apt = aptdao.createNew(house.getId() + ".0.0");
+			aptdao.persist(apt);
 
 			for (int i = 0; i < apartmentArea.length; i++) {
 				apt = aptdao.createNew(house.getId() + "." + lvl[i] + "." + i);
 				apt.setWohnflaeche(apartmentArea[i]);
 				apt.setZimmeranzahl(roomNumbers[i]);
-				apt.setAptID(house.getId() + "." + lvl[i] + "." + i);
 				aptdao.persist(apt);
 				result[i] = apt.getAptID();
 				System.out.println("Wohnung mit ID: " + apt.getAptID()
@@ -184,11 +185,11 @@ public class GmWSImpl implements GmWS {
 		// rechnungsersteller, rechnungsempfaenger, betrag,
 		// rechnungsdatum, zahlungsdatum);
 		// System.out.println(ergebnis);
-		//		if (ergebnis.equals("Rechnung angekommen")) {
-			return "Rechnung angekommen";
-//		} else {
-//			return Definitions.ERROR_MESSAGE;
-//		}
+		// if (ergebnis.equals("Rechnung angekommen")) {
+		return "Rechnung angekommen";
+		// } else {
+		// return Definitions.ERROR_MESSAGE;
+		// }
 	}
 
 	@SuppressWarnings("deprecation")
@@ -229,7 +230,7 @@ public class GmWSImpl implements GmWS {
 				 * Abarbeitung der erforderlichen Anwendungsschritte bei einem
 				 * Jahressprung - in der Methode
 				 */
-				System.out.println("Jahressprung");
+				System.out.println("Jahressprung...");
 				TimeChange.getInstance().year();
 				break;
 
@@ -246,14 +247,17 @@ public class GmWSImpl implements GmWS {
 		System.out.println("Object: " + o.toString());
 		System.out.println("sprungArt: " + sprungArt);
 		System.out.println("returncode: " + returncode);
-		System.out.println("aktuelles localDate - nach der Methode: "
-				+ localDate.getDate() + "." + (localDate.getMonth() + 1) + "."
-				+ localDate.getYear());
+		TimeChange.getInstance().setTime(new Date(year, month, day));
+
+		System.out.println("aktuelles localDate - nach der Methode: " + day
+				+ "." + (month + 1) + "." + year);
+
 		return returncode;
 	}
 
 	@Override
 	public int mahnungEmpfangen(String verwendungszweck) {
+		// Return 0 - hat geklappt, 1- hat nicht geklappt
 		AdmonitionDAO admdao = new AdmonitionDAO();
 		Admonition adm = admdao.create();
 		adm.setJobID(0);
