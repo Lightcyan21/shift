@@ -178,18 +178,32 @@ public class GmWSImpl implements GmWS {
 		bill.setVerwendungszweck(verwendungszweck);
 		billdao.persist(bill);
 
+		// Order Rechnung zuweisen
+		if (verwendungszweck.startsWith("GS")) {
+			String id = verwendungszweck.substring(2);
+			while (id.startsWith("0")) {
+				id = id.substring(1);
+			}
+			System.out.println("Order ID:" + id);
+
+			OrderDAO orderdao = new OrderDAO();
+			Order order = orderdao.getById(Long.parseLong(id));
+			order.setStatusRechnung(true);
+			orderdao.persist(order);
+		}
+		;
 		System.out.println("Rechnung an BH senden...");
-		// BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
-		// BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
-		// String ergebnis = bh.erfasseRechnung(verwendungszweck, "GM",
-		// rechnungsersteller, rechnungsempfaenger, betrag,
-		// rechnungsdatum, zahlungsdatum);
-		// System.out.println(ergebnis);
-		// if (ergebnis.equals("Rechnung angekommen")) {
-		return "Rechnung angekommen";
-		// } else {
-		// return Definitions.ERROR_MESSAGE;
-		// }
+		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
+		BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
+		String ergebnis = bh.erfasseRechnung(verwendungszweck, "GM",
+				rechnungsersteller, rechnungsempfaenger, betrag,
+				rechnungsdatum, zahlungsdatum);
+		System.out.println(ergebnis);
+		if (ergebnis.equals("Rechnung angekommen")) {
+			return "Rechnung angekommen";
+		} else {
+			return Definitions.ERROR_MESSAGE;
+		}
 	}
 
 	@SuppressWarnings("deprecation")
