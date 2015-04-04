@@ -75,7 +75,7 @@ public class MainWindowView extends AbstractView {
 		ShiftButton2 info = new ShiftButton2 ("");
 		info2.add(info);
 		info.setIcon(new ImageIcon("res/BuchhaltungInfo.png"));
-		//ShiftButton2 info = new ShiftButton2(Definitions.INFO); info2.add(info);
+		//ShiftButton2 info = new ShiftButton2(Definitions.INFO);
 
 		// ActionListener hinzufügen
 		orders.addActionListener(new ActionListener() {

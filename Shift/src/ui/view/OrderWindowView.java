@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
 
 import mvc.model.IModel;
@@ -24,6 +25,7 @@ import util.IRow;
 import util.TableModel;
 import components.Definitions;
 import components.ShiftButton;
+import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -65,7 +67,7 @@ public class OrderWindowView extends AbstractView {
 		ShiftPanel2 northpanel = new ShiftPanel2();
 
 		// Backbutton
-		ShiftButton button = new ShiftButton("Back");
+		ShiftButtonBack button = new ShiftButtonBack();
 		sp2.add(button);
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -73,7 +75,8 @@ public class OrderWindowView extends AbstractView {
 				fireLocalUIEvent(this, UI_EVENT.PUSH_BACK_BUTTON.ordinal());
 			}
 		});
-
+		
+	
 		// northpanel
 		final JTextField textfield = new JTextField(50);
 		JLabel label = new JLabel("Auftrag");

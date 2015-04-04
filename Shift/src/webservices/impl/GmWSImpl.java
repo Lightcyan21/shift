@@ -151,6 +151,7 @@ public class GmWSImpl implements GmWS {
 		OrderDAO orderdao = new OrderDAO();
 		ApartmentDAO aptdao = new ApartmentDAO();
 		Order order = orderdao.create();
+		System.out.println(order.getId());
 		Apartment apt = aptdao.getApartment(apartmentID);
 		if (apt != null) {
 			System.out.println(typ);
@@ -160,10 +161,10 @@ public class GmWSImpl implements GmWS {
 			order.setJobName(typ);
 			order.setMieter(mieter);
 			order.setStatusWeiterleitung(false);
-			order.setStatus(0);
+			order.setStatus(1);
 			order.setStatusBestaetigung(false);
 			orderdao.persist(order);
-			System.out.println("Order gespeichert...");
+			System.out.println("Order gespeichert... ID: "+order.getId());
 			return order.getId();
 		} else {
 			return 0;
