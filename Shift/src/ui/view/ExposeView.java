@@ -22,7 +22,6 @@ import util.SpringUtilities;
 import components.Definitions;
 import components.ShiftButton;
 import components.ShiftButton2;
-import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftLabel;
 import components.ShiftPanel2;
@@ -35,7 +34,6 @@ public class ExposeView extends AbstractView {
 	private int rows;
 	private int cols;
 	private List<Component> tableentries;
-	private int number;
 	private int initX = 100;
 	private int initY = 50;
 
@@ -66,7 +64,7 @@ public class ExposeView extends AbstractView {
 
 		// Gestalten des Panels
 		ShiftPanel2 content = new ShiftPanel2();
-		ShiftButtonBack button = new ShiftButtonBack();
+//		ShiftButtonBack button = new ShiftButtonBack();
 		JScrollPane centerpanel = new JScrollPane(erzeugeTabelle());
 		ShiftButton remove = new ShiftButton("Remove");
 		ShiftPanel2 south = new ShiftPanel2();
