@@ -24,6 +24,7 @@ import util.IRow;
 import util.TableModel;
 import components.Definitions;
 import components.ShiftButton;
+import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -65,7 +66,7 @@ public class OrderWindowView extends AbstractView {
 		ShiftPanel2 northpanel = new ShiftPanel2();
 
 		// Backbutton
-		ShiftButton button = new ShiftButton("Back");
+		ShiftButtonBack button = new ShiftButtonBack();
 		sp2.add(button);
 		button.addActionListener(new ActionListener() {
 			@Override
