@@ -131,14 +131,17 @@ public class GmWSImpl implements GmWS {
 	public String checkStatus(int orderID) {
 		System.out.println("Status abrufen angefragt...");
 		OrderDAO orderdao = new OrderDAO();
-		Order order = orderdao.getById(orderID);
+		Order order = orderdao.getById(orderID); // überprüfen
 		if (order == null) {
 			return Definitions.ERROR_MESSAGE;
 		}
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
+		gs.getState(orderID);
+		
+
 		System.out.println("Status wird abgerufen...");
-		return gs.getState(orderID);
+		return "Angekommen";
 	}
 
 	@Override
@@ -150,6 +153,9 @@ public class GmWSImpl implements GmWS {
 		Order order = orderdao.create();
 		Apartment apt = aptdao.getApartment(apartmentID);
 		if (apt != null) {
+			System.out.println(typ);
+			System.out.println(apartmentID);
+			System.out.println(mieter);
 			order.setWohnungsID(apartmentID);
 			order.setJobName(typ);
 			order.setMieter(mieter);

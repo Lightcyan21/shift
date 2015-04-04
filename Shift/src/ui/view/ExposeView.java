@@ -1,22 +1,32 @@
 package ui.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.SpringLayout;
 
-import javafx.scene.layout.Border;
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
-import ui.enums.UI_EVENT;
+import persistence.dao.impl.HouseDAO;
+import persistence.entity.impl.House;
 import util.SpringUtilities;
+
 import components.Definitions;
 import components.ShiftButton;
+import components.ShiftButton2;
+import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftLabel;
 import components.ShiftPanel2;
+import components.ShiftTableEntry;
 
 public class ExposeView extends AbstractView {
 
@@ -24,6 +34,10 @@ public class ExposeView extends AbstractView {
 	private ShiftPanel2 table;
 	private int rows;
 	private int cols;
+	private List<Component> tableentries;
+	private int number;
+	private int initX = 100;
+	private int initY = 50;
 
 	public ExposeView(IModel model) {
 		super(model);
@@ -52,40 +66,128 @@ public class ExposeView extends AbstractView {
 
 		// Gestalten des Panels
 		ShiftPanel2 content = new ShiftPanel2();
-		ShiftButton button = new ShiftButton("Back");
+		ShiftButtonBack button = new ShiftButtonBack();
 		JScrollPane centerpanel = new JScrollPane(erzeugeTabelle());
+		ShiftButton remove = new ShiftButton("Remove");
+		ShiftPanel2 south = new ShiftPanel2();
 
 		button.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// fireLocalUIEvent(this, UI_EVENT.PUSH_BACK_BUTTON.ordinal());
-				refresh();
+				addRow();
 
 			}
 		});
+		remove.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				remove();
+			}
+		});
+		tableentries = new ArrayList<Component>();
 		content.setLayout(new BorderLayout());
-		content.add(button, BorderLayout.SOUTH);
+		south.add(button);
+		south.add(remove);
+		content.add(south, BorderLayout.SOUTH);
 		content.add(centerpanel, BorderLayout.CENTER);
 
 		// Layout hinzufuegen und Karte zeigen
 		frame.getContentpanel().add(content, "expose");
 		frame.getCardlayout().show(frame.getContentpanel(), "expose");
 		frame.validate();
+		// Tabelle laden
+		// loadTable();
 
 	}
 
-	protected void refresh() {
-		table.add(new JLabel("Test"));
-		table.add(new JLabel("Test2"));
-		table.add(new JLabel("Test3"));
-		table.add(new JLabel("Test4"));
-		table.add(new JLabel("Test5"));
-		table.add(new JLabel("Test6"));
-		table.add(new JLabel("Test7"));
-		table.add(new JLabel("Test8"));
+	protected void remove() {
+		table.remove(tableentries.get(0));
+		table.remove(tableentries.get(1));
+		table.remove(tableentries.get(2));
+		table.remove(tableentries.get(3));
+		table.remove(tableentries.get(4));
+		table.remove(tableentries.get(5));
+		table.remove(tableentries.get(6));
+		table.remove(tableentries.get(7));
+
+		rows--;
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, 20, 20);
+		frame.validate();
+	}
+
+	private void addRow() {
+
+		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
+		ShiftTableEntry entry2 = new ShiftTableEntry("house.getStrasse()");
+		ShiftTableEntry entry3 = new ShiftTableEntry("house.getOrt()");
+		ShiftTableEntry entry4 = new ShiftTableEntry("house.getPlz()");
+		ShiftTableEntry entry5 = new ShiftTableEntry("Double.toString(house");
+		ShiftTableEntry entry6 = new ShiftTableEntry("Double.toString(house");
+		ShiftButton2 entry7 = new ShiftButton2("Versicherung");
+		entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		ShiftButton2 entry8 = new ShiftButton2("Versicherung");
+		entry8.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		tableentries.add(entry);
+		tableentries.add(entry2);
+		tableentries.add(entry3);
+		tableentries.add(entry4);
+		tableentries.add(entry5);
+		tableentries.add(entry6);
+		tableentries.add(entry7);
+		tableentries.add(entry8);
+		table.add(entry);
+		table.add(entry2);
+		table.add(entry3);
+		table.add(entry4);
+		table.add(entry5);
+		table.add(entry6);
+		table.add(entry7);
+		table.add(entry8);
+
 		rows++;
-		SpringUtilities.makeCompactGrid(table, rows, cols, 20, 5, 20, 20);
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, 20, 20);
+		frame.validate();
+	}
+
+	private void loadTable() {
+		HouseDAO housedao = new HouseDAO();
+		List<House> houselist = housedao.findAll();
+		for (House house : houselist) {
+			if (!house.isSeen()) {
+				addRow(house);
+			}
+		}
+	}
+
+	protected void addRow(House house) {
+
+		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
+		ShiftTableEntry entry2 = new ShiftTableEntry(house.getStrasse());
+		ShiftTableEntry entry3 = new ShiftTableEntry(house.getOrt());
+		ShiftTableEntry entry4 = new ShiftTableEntry(house.getPlz());
+		ShiftTableEntry entry5 = new ShiftTableEntry(Double.toString(house
+				.getFlaeche()));
+		ShiftTableEntry entry6 = new ShiftTableEntry(Double.toString(house
+				.getGartenflaeche()));
+		ShiftButton2 entry7 = new ShiftButton2("Versicherung");
+		entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		ShiftButton2 entry8 = new ShiftButton2("Versicherung");
+		entry8.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+
+		table.add(entry);
+		table.add(entry2);
+		table.add(entry3);
+		table.add(entry4);
+		table.add(entry5);
+		table.add(entry6);
+		table.add(entry7);
+		table.add(entry8);
+
+		rows++;
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, 20, 20);
 		frame.validate();
 	}
 
@@ -113,7 +215,7 @@ public class ExposeView extends AbstractView {
 		table.add(new JLabel(""));
 		table.add(new JLabel(" "));
 
-		SpringUtilities.makeCompactGrid(table, rows, cols, 20, 5, 20, 20);
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, 20, 20);
 		return table;
 	}
 }
