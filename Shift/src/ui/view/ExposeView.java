@@ -187,7 +187,9 @@ public class ExposeView extends AbstractView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Versicherung angelegt");
-				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), 0.0F);
+				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(),
+						house.getFlaeche());
+				deleteThisRow(row);
 			}
 		});
 
