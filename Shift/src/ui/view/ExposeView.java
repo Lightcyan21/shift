@@ -14,6 +14,7 @@ import ui.enums.UI_EVENT;
 import util.SpringUtilities;
 import components.Definitions;
 import components.ShiftButton;
+import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftLabel;
 import components.ShiftPanel2;
@@ -52,7 +53,7 @@ public class ExposeView extends AbstractView {
 
 		// Gestalten des Panels
 		ShiftPanel2 content = new ShiftPanel2();
-		ShiftButton button = new ShiftButton("Back");
+		ShiftButtonBack button = new ShiftButtonBack();
 		JScrollPane centerpanel = new JScrollPane(erzeugeTabelle());
 
 		button.addActionListener(new ActionListener() {

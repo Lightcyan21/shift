@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
 
 import mvc.model.IModel;
@@ -74,7 +75,8 @@ public class OrderWindowView extends AbstractView {
 				fireLocalUIEvent(this, UI_EVENT.PUSH_BACK_BUTTON.ordinal());
 			}
 		});
-
+		
+	
 		// northpanel
 		final JTextField textfield = new JTextField(50);
 		JLabel label = new JLabel("Auftrag");

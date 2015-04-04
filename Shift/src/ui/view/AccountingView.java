@@ -7,9 +7,8 @@ import java.beans.PropertyChangeEvent;
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
-
 import components.Definitions;
-import components.ShiftButton;
+import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -44,7 +43,7 @@ public class AccountingView extends AbstractView {
 
 		// Gestalten des Panels
 		ShiftPanel2 content = new ShiftPanel2();
-		ShiftButton button = new ShiftButton("Back");
+		ShiftButtonBack button = new ShiftButtonBack();
 		content.add(button);
 
 		button.addActionListener(new ActionListener() {

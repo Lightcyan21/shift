@@ -28,9 +28,9 @@ import persistence.entity.impl.Apartment;
 import ui.enums.UI_EVENT;
 import util.IRow;
 import util.TableModel;
-
 import components.Definitions;
 import components.ShiftButton;
+import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -109,7 +109,7 @@ public class AptRequestView extends AbstractView {
 		textfield.setMaximumSize(textfieldsize);
 
 		// Untere Leiste
-		ShiftButton button = new ShiftButton("Back");
+		ShiftButtonBack button = new ShiftButtonBack();
 		button.addActionListener(new ActionListener() {
 
 			@Override

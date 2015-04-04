@@ -20,9 +20,9 @@ import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
 import util.IRow;
 import util.TableModel;
-
 import components.Definitions;
 import components.ShiftButton;
+import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -60,7 +60,7 @@ public class OrderStatusView extends AbstractView {
 		ShiftPanel2 content = new ShiftPanel2();
 		ShiftPanel2 table = new ShiftPanel2();
 		content.setLayout(new BorderLayout());
-		ShiftButton button = new ShiftButton("Back");
+		ShiftButtonBack button = new ShiftButtonBack();
 
 		mainTable = createMyTable();
 		mainTablePane = new JScrollPane(mainTable);
