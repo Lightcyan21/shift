@@ -15,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
 
 import mvc.model.IModel;
@@ -23,6 +22,7 @@ import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
 import util.IRow;
 import util.TableModel;
+
 import components.Definitions;
 import components.ShiftButton;
 import components.ShiftButtonBack;

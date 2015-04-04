@@ -20,12 +20,13 @@ import persistence.entity.impl.House;
 import util.SpringUtilities;
 
 import components.Definitions;
+import components.ShiftFrame;
+import components.ShiftPanel2;
+//github.com/Lightcyan21/shift.git
 import components.ShiftButton;
 import components.ShiftButton2;
 import components.ShiftButtonBack;
-import components.ShiftFrame;
 import components.ShiftLabel;
-import components.ShiftPanel2;
 import components.ShiftTableEntry;
 
 public class ExposeView extends AbstractView {

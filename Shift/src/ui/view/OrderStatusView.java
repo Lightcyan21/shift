@@ -20,8 +20,8 @@ import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
 import util.IRow;
 import util.TableModel;
+
 import components.Definitions;
-import components.ShiftButton;
 import components.ShiftButtonBack;
 import components.ShiftFrame;
 import components.ShiftPanel2;
@@ -235,7 +235,5 @@ public class OrderStatusView extends AbstractView {
 		public Vector<Object> toVector() {
 			return null;
 		}
-
 	}
-
 }
