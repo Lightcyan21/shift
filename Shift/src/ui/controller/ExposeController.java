@@ -1,10 +1,16 @@
 package ui.controller;
 
+import components.Definitions;
+
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
 import ui.enums.UI_EVENT;
 import ui.model.ExposeModel;
 import ui.view.ExposeView;
+import webservices.impl.BVWSImplService;
+import webservices.impl.BVWebService;
+import webservices.impl.BuchhaltungWS;
+import webservices.impl.BuchhaltungWsImplService;
 
 /**
  * hierbei handelt es sich um die Seite, die neue Exposés darstellt
@@ -27,6 +33,12 @@ public class ExposeController extends
 		if (event.getEventId() == UI_EVENT.PUSH_BACK_BUTTON.ordinal()) {
 			System.out.println("--- Wechsle zum Hauptmenu");
 			MainWindowController.getInstance();
+		}
+		if (event.getEventId() == UI_EVENT.PUSH_INSURANCE.ordinal()) {
+			BVWSImplService bankservice = new BVWSImplService();
+			BVWebService bank = bankservice.getBVWSImplPort();
+			float area = (float) event.getData();
+			bank.getGebVersicherung(Definitions.iban, area);
 		}
 	}
 

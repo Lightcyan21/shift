@@ -50,7 +50,7 @@ public class Definitions {
 	public static final double preisProEinheitStrom = 0.30;
 	public static final String ERROR_MESSAGE = "Fehler aufgetreten, bitte Eingabe ueberpruefen";
 	public static final double gewinn = 0.2;
-	public static final Color HEADLINE_COLOR = new Color(255,255,255);
-
+	public static final Color HEADLINE_COLOR = new Color(255, 255, 255);
+	public static final long iban = 683050050005L;
 
 }
