@@ -29,7 +29,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			PreparedStatement pre;
 			pre = con
 					.prepareStatement(
-							"insert into job (wohnungsID, jobName, mieter, betrag, status, statusRechnung, statusBestaetigung, statusWeiterleitung, jobID) values (?, ?, ?, ?, ?, ?, ?, ?, ?);",
+							"insert into job (wohnungsID, jobName, mieter, betrag, status, statusRechnung, statusBestaetigung, statusWeiterleitung) values (?, ?, ?, ?, ?, ?, ?, ?);",
 							Statement.RETURN_GENERATED_KEYS);
 
 			pre.setString(1, null);
@@ -40,7 +40,6 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			pre.setBoolean(6, false);
 			pre.setBoolean(7, false);
 			pre.setBoolean(8, false);
-			pre.setInt(9, 0);
 
 			pre.execute();
 
