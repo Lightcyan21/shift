@@ -17,8 +17,8 @@ public class ShiftButtonSearch extends JButton {
 	public ShiftButtonSearch(){
 		super();
 		
-		setPreferredSize(new Dimension (125, 43));
-		setIcon(new ImageIcon ("res/Search.png"));
+		setPreferredSize(new Dimension (125, 33));
+		setIcon(new ImageIcon ("res/Suchen.png"));
 		
 	}
 

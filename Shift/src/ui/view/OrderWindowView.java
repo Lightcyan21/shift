@@ -22,10 +22,10 @@ import mvc.view.abstrct.AbstractView;
 import ui.enums.UI_EVENT;
 import util.IRow;
 import util.TableModel;
-
 import components.Definitions;
 import components.ShiftButton;
 import components.ShiftButtonBack;
+import components.ShiftButtonSearch;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -92,7 +92,7 @@ public class OrderWindowView extends AbstractView {
 			}
 		});
 
-		ShiftButton gobutton = new ShiftButton("->");
+		ShiftButtonSearch gobutton = new ShiftButtonSearch();
 		gobutton.addActionListener(new ActionListener() {
 
 			@Override
