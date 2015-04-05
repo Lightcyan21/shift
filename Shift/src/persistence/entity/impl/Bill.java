@@ -10,6 +10,8 @@ public class Bill extends AbstractEntity {
 	private String rechnungsEmpfaenger;
 	private double betrag;
 	private String verwendungszweck;
+	private String rechnungsdatum;
+	private String zahlungsdatum;
 
 	public long getBillID() {
 		return billID;
@@ -60,5 +62,21 @@ public class Bill extends AbstractEntity {
 
 	public void setVerwendungszweck(String verwendungszweck) {
 		this.verwendungszweck = verwendungszweck;
+	}
+
+	public String getRechnungsdatum() {
+		return rechnungsdatum;
+	}
+
+	public void setRechnungsdatum(String rechnungsdatum) {
+		this.rechnungsdatum = rechnungsdatum;
+	}
+
+	public String getZahlungsdatum() {
+		return zahlungsdatum;
+	}
+
+	public void setZahlungsdatum(String zahlungsdatum) {
+		this.zahlungsdatum = zahlungsdatum;
 	}
 }

@@ -29,13 +29,15 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			PreparedStatement pre;
 			pre = con
 					.prepareStatement(
-							"insert into bill (rechnungssteller, rechnungsEmpfaenger, gesamtbetrag, verwendungszweck) values (?, ?, ?, ?);",
+							"insert into bill (rechnungssteller, rechnungsEmpfaenger, gesamtbetrag, verwendungszweck, rechnungsdatum, zahlungsdatum) values (?, ?, ?, ?, ?, ?);",
 							Statement.RETURN_GENERATED_KEYS);
 
 			pre.setString(1, null);
 			pre.setString(2, null);
 			pre.setDouble(3, 0);
 			pre.setString(4, null);
+			pre.setString(5, null);
+			pre.setString(6, null);
 
 			pre.execute();
 
@@ -96,6 +98,8 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 				bill.setRechnungsEmpfaenger(result
 						.getString("rechnungsempfaenger"));
 				bill.setBetrag(result.getDouble("gesamtbetrag"));
+				bill.setRechnungsdatum(result.getString("rechnungsdatum"));
+				bill.setZahlungsdatum(result.getString("zahlungsdatum"));
 
 				billList.add(bill);
 			}
@@ -134,6 +138,8 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 						.getString("rechnungsempfaenger"));
 				bill.setBetrag(result.getDouble("gesamtbetrag"));
 				bill.setVerwendungszweck(result.getString("verwendungszweck"));
+				bill.setRechnungsdatum(result.getString("rechnungsdatum"));
+				bill.setZahlungsdatum(result.getString("zahlungsdatum"));
 
 			}
 
@@ -170,6 +176,8 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 						.getString("rechnungsempfaenger"));
 				bill.setBetrag(result.getDouble("gesamtbetrag"));
 				bill.setVerwendungszweck(result.getString("verwendungszweck"));
+				bill.setRechnungsdatum(result.getString("rechnungsdatum"));
+				bill.setZahlungsdatum(result.getString("zahlungsdatum"));
 
 			}
 
@@ -194,13 +202,15 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update bill SET billID = ?, rechnungssteller = ?, rechnungsempfaenger = ?, gesamtbetrag = ?, verwendungszweck = ? WHERE billID = ?;");
+					.prepareStatement("update bill SET billID = ?, rechnungssteller = ?, rechnungsempfaenger = ?, gesamtbetrag = ?, verwendungszweck = ?, rechnungsdatum = ?, zahlungsdatum = ? WHERE billID = ?;");
 			pre.setLong(1, entity.getBillID());
 			pre.setString(2, entity.getRechnungssteller());
 			pre.setString(3, entity.getRechnungsEmpfaenger());
 			pre.setDouble(4, entity.getBetrag());
 			pre.setString(5, entity.getVerwendungszweck());
 			pre.setLong(6, entity.getBillID());
+			pre.setString(7, entity.getRechnungsdatum());
+			pre.setString(8, entity.getZahlungsdatum());
 
 			if (entity.getBillID() != 0 && entity.getRechnungssteller() != null
 					&& entity.getRechnungsEmpfaenger() != null
