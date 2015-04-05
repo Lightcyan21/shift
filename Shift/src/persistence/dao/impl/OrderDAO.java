@@ -212,6 +212,48 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			return null;
 		}
 	}
+	
+	public List<Order> getIfStatusNotSeen() {
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		List<Order> orderList = new ArrayList<>();
+
+		try {
+			PreparedStatement pre;
+			pre = con.prepareStatement("select * from job where seen = false");
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+
+				Order order = new Order();
+				order.setId(result.getLong("jobID"));
+				order.setWohnungsID(result.getString("wohnungsID"));
+				order.setJobName(result.getString("jobName"));
+				order.setMieter(result.getString("mieter"));
+				order.setBetrag(result.getDouble("betrag"));
+				order.setStatus(result.getInt("status"));
+				order.setStatusRechnung(result.getBoolean("statusRechnung"));
+				order.setStatusBestaetigung(result
+						.getBoolean("statusBestaetigung"));
+				order.setStatusWeiterleitung(result
+						.getBoolean("statusWeiterleitung"));
+				order.setSeen(result.getBoolean("seen"));
+
+				orderList.add(order);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (orderList.size() != 0) {
+			return orderList;
+		} else {
+			return null;
+		}
+	}
 
 	@Override
 	public boolean persist(Order entity) {

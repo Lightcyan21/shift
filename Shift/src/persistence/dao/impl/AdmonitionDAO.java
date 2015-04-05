@@ -143,6 +143,41 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 		}
 
 	}
+	
+	public List<Admonition> getIfSTatusNotSeen() {
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		Admonition adm = new Admonition();
+		List<Admonition> admList = new ArrayList<>();
+
+		try {
+			PreparedStatement pre;
+			pre = con.prepareStatement("select * from admonition where seen = false");
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+
+				adm.setId(result.getLong("admonitionID"));
+				adm.setJobID(result.getInt("jobID"));
+				adm.setPreis(result.getDouble("preis"));
+				adm.setSeen(result.getBoolean("seen"));
+
+				admList.add(adm);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (admList.size() != 0) {
+			return admList;
+		} else {
+			return null;
+		}
+
+	}
 
 	@Override
 	public boolean persist(Admonition entity) {

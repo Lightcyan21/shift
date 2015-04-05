@@ -2,6 +2,7 @@ package ui;
 
 import persistence.dao.impl.AdmonitionDAO;
 import persistence.entity.impl.Admonition;
+import persistence.entity.impl.House;
 
 public class LauncherData {
 
@@ -51,5 +52,18 @@ public class LauncherData {
 	// houseDao.delete(houseDao.getById(2));
 	// System.out.println(houseDao.getById(3));
 	// System.out.println(houseDao.findAll());
+	
+//	House house = new House();
+//	house.setId((long) 8);
+//	house.setPlz("11111");
+//	house.setStrasse("teststrasse");
+//	house.setOrt("testort");
+//	house.setHausnr("12");
+//	house.setStockwerke(2);
+//	house.setAnzahlWohnungen(7);
+//	house.setGartenflaeche(370);
+//	house.setFlaeche(720);
+//	house.setSeen(true);
+//	houseDao.persist(house);
 
 }

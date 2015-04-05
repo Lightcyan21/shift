@@ -164,6 +164,47 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 
 	}
 
+	public List<House> getIfStatusNotSeen() {
+		
+		Connection con;
+		con = DBUtil.getConnection();
+
+		List<House> houseList = new ArrayList<>();
+
+		try {
+			PreparedStatement pre;
+			pre = con.prepareStatement("select * from house where seen = false");
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+
+				House house = new House();
+				house.setId(result.getLong("houseID"));
+				house.setPlz(result.getString("plz"));
+				house.setStrasse(result.getString("strasse"));
+				house.setOrt(result.getString("ort"));
+				house.setHausnr(result.getString("hausnr"));
+				house.setStockwerke(result.getInt("stockwerke"));
+				house.setAnzahlWohnungen(result.getInt("anzahlWohnungen"));
+				house.setGartenflaeche(result.getDouble("gartenflaeche"));
+				house.setFlaeche(result.getDouble("flaeche"));
+				house.setSeen(result.getBoolean("seen"));
+
+				houseList.add(house);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (houseList.size() != 0) {
+			return houseList;
+		} else {
+			return null;
+		}
+
+	}
+
 	@Override
 	public boolean persist(House entity) {
 
@@ -185,8 +226,9 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 			pre.setInt(7, entity.getAnzahlWohnungen());
 			pre.setDouble(8, entity.getGartenflaeche());
 			pre.setDouble(9, entity.getFlaeche());
-			pre.setLong(10, entity.getId());
-			pre.setBoolean(11, entity.isSeen());
+			pre.setBoolean(10, entity.isSeen());
+			pre.setLong(11, entity.getId());
+			
 
 			if (entity.getId() != 0 && entity.getPlz() != null
 					&& entity.getStrasse() != null && entity.getOrt() != null
