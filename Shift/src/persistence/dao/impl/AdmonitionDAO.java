@@ -33,7 +33,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 					Statement.RETURN_GENERATED_KEYS);
 
 			pre.setDouble(1, 0);
-
+			
 			pre.execute();
 
 			ResultSet rs = pre.getGeneratedKeys();

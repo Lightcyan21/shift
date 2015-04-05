@@ -180,7 +180,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ?, seen = ? WHERE assetID = ?;");
+					.prepareStatement("update house SET houseID = ?, plz = ?, strasse = ?, ort = ?, hausnr = ?, stockwerke = ?, anzahlWohnungen = ?, gartenflaeche = ?, flaeche = ?, seen = ? WHERE houseID = ?;");
 
 			pre.setLong(1, entity.getId());
 			pre.setString(2, entity.getPlz());
