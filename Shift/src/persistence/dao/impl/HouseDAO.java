@@ -109,8 +109,6 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 				houseList.add(house);
 			}
 
-			// pre.execute(); //notwendig? oder doppelt?
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -158,11 +156,7 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (house.getId() != 0 && house.getPlz() != null
-				& house.getStrasse() != null && house.getOrt() != null
-				&& house.getHausnr() != null && house.getStockwerke() != 0
-				&& house.getAnzahlWohnungen() != 0
-				&& house.getGartenflaeche() != 0 && house.getFlaeche() != 0) {
+		if (house.getId() != 0) {
 			return house;
 		} else {
 			return null;

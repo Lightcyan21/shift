@@ -136,7 +136,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (adm.getId() != 0 && adm.getJobID() != 0 && adm.getPreis() != 0) {
+		if (adm.getId() != 0) {
 			return adm;
 		} else {
 			return null;

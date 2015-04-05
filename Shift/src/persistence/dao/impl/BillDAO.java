@@ -100,8 +100,6 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 				billList.add(bill);
 			}
 
-			// pre.execute(); //notwendig? oder doppelt?
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -143,9 +141,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			e.printStackTrace();
 		}
 
-		if (bill.getBillID() != 0 && bill.getRechnungssteller() != null
-				&& bill.getRechnungsEmpfaenger() != null
-				&& bill.getBetrag() != 0 && bill.getVerwendungszweck() != null) {
+		if (bill.getBillID() != 0) {
 			return bill;
 		} else {
 			return null;
@@ -181,9 +177,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			e.printStackTrace();
 		}
 
-		if (bill.getBillID() != 0 && bill.getRechnungssteller() != null
-				&& bill.getRechnungsEmpfaenger() != null
-				&& bill.getBetrag() != 0 && bill.getVerwendungszweck() != null) {
+		if (bill.getVerwendungszweck() != null) {
 			return bill;
 		} else {
 			return null;

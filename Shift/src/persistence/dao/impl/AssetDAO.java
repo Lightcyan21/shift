@@ -97,8 +97,6 @@ public class AssetDAO extends AbstractDAO<Asset> implements DAO<Asset> {
 				assetList.add(asset);
 			}
 
-			// pre.execute(); //notwendig? oder doppelt?
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -135,14 +133,10 @@ public class AssetDAO extends AbstractDAO<Asset> implements DAO<Asset> {
 
 			}
 
-			// pre.execute();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (asset.getId() != 0 && asset.getBillID() != 0
-				&& asset.getEinzelpreis() != 0
-				&& asset.getBezeichnung() != null) {
+		if (asset.getId() != 0) {
 			return asset;
 		} else {
 			return null;

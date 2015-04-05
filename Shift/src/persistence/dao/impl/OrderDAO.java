@@ -154,8 +154,6 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 				orderList.add(order);
 			}
 
-			// pre.execute(); //notwendig? oder doppelt?
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -204,15 +202,11 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
 			}
 
-			// pre.execute();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		if (order.getId() != 0 && order.getWohnungsID() != null
-				&& order.getJobName() != null && order.getMieter() != null
-				&& order.getBetrag() != 0 && order.getStatus() != 0) {
+		if (order.getId() != 0) {
 			return order;
 		} else {
 			return null;
