@@ -1,13 +1,17 @@
 package ui.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
@@ -16,6 +20,7 @@ import mvc.view.abstrct.AbstractView;
 import persistence.dao.impl.HouseDAO;
 import persistence.entity.impl.House;
 import ui.enums.UI_EVENT;
+import util.SpringTable;
 import util.SpringUtilities;
 
 import components.Definitions;
@@ -28,7 +33,7 @@ import components.ShiftTableEntry;
 
 //github.com/Lightcyan21/shift.git
 
-public class ExposeView extends AbstractView {
+public class ExposeView extends AbstractView implements SpringTable {
 
 	private ShiftFrame frame;
 	private ShiftPanel2 table;
@@ -50,6 +55,8 @@ public class ExposeView extends AbstractView {
 	private ShiftLabel wohn = new ShiftLabel("Wohnfläche");
 	private ShiftLabel versicherung = new ShiftLabel("Versicherung");
 	private ShiftLabel noversicherung = new ShiftLabel("keine Versicherung");
+	private SpringLayout layout;
+	private JLabel noEntries;
 
 	public ExposeView(IModel model) {
 		super(model);
@@ -59,8 +66,8 @@ public class ExposeView extends AbstractView {
 	@Override
 	public Object getMainSurface() {
 		entries.clear();
+		table.removeAll();
 		rows = 1;
-		headlinesSetzen();
 		loadTable();
 		frame.getCardlayout().show(frame.getContentpanel(), "expose");
 		frame.setHeadline(Definitions.HOUSES);
@@ -84,7 +91,7 @@ public class ExposeView extends AbstractView {
 		// Gestalten des Panels
 		ShiftPanel2 content = new ShiftPanel2();
 		ShiftButtonBack button = new ShiftButtonBack();
-		JScrollPane centerpanel = new JScrollPane(erzeugeTabelle());
+		JScrollPane centerpanel = new JScrollPane(loadTable());
 		centerpanel.setOpaque(true);
 		ShiftPanel2 south = new ShiftPanel2();
 
@@ -107,29 +114,44 @@ public class ExposeView extends AbstractView {
 		frame.getContentpanel().add(content, "expose");
 		frame.getCardlayout().show(frame.getContentpanel(), "expose");
 		frame.validate();
-
-		// Tabelle laden
-		loadTable();
-
 	}
 
 	private void initGlobals() {
 		entries = new HashMap<String, House>();
+		table = new ShiftPanel2();
+		layout = new SpringLayout();
+		noEntries = new JLabel(
+				"<html><body><center>keine neuen Einträge</body></html>");
+		rows = 1;
+
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void deleteThisRow(int i) {
-
+	public void deleteThisRow(int i) {
 		table.removeAll();
-		entries.remove(Integer.toString(i));
+		House deleted = entries.remove(Integer.toString(i));
+		if (deleted == null) {
+			System.out.println("Null: Error");
+		} else {
+			System.out.println("Haus in der " + deleted.getStrasse()
+					+ " gelöscht");
+		}
+
+		rows = 1;
+		// HashMap<String, House> housescopy = (HashMap<String, House>) entries
+		// .clone();
+		List<House> toadd = new ArrayList<House>();
+		for (House house : entries.values()) {
+			toadd.add(house);
+		}
+		if (toadd.size() == 0) {
+			noEntries();
+			return;
+		}
+		entries.clear();
 
 		// headlines setzen
 		headlinesSetzen();
-		rows = 1;
-		HashMap<String, House> housescopy = (HashMap<String, House>) entries
-				.clone();
-
-		for (House house : housescopy.values()) {
+		for (House house : toadd) {
 			addRow(house);
 		}
 
@@ -141,7 +163,10 @@ public class ExposeView extends AbstractView {
 		frame.repaint();
 	}
 
-	private void headlinesSetzen() {
+	/**
+	 * setzt die Überschriften
+	 */
+	public void headlinesSetzen() {
 		table.add(nr);
 		table.add(street);
 		table.add(ort);
@@ -153,16 +178,53 @@ public class ExposeView extends AbstractView {
 		table.add(noversicherung);
 	}
 
-	private void loadTable() {
+	/**
+	 * lädt initial die Tabelle
+	 */
+	public ShiftPanel2 loadTable() {
 		HouseDAO housedao = new HouseDAO();
-		List<House> houselist = housedao.findAll();
-		for (House house : houselist) {
-			if (!house.isSeen()) {
+		List<House> houses = housedao.getIfStatusNotSeen();
+		System.out.println("Lade Gebäude");
+		if (houses != null) {
+			table.setLayout(layout);
+			headlinesSetzen();
+
+			for (House house : houses) {
 				addRow(house);
 			}
+		} else {
+			noEntries();
+
 		}
+		return table;
 	}
 
+	/**
+	 * wird aufgerufen wenn keine Einträge vorhanden sind
+	 */
+	public void noEntries() {
+
+		// verhindern dass noEntries mehrfach hinzugefügt wird
+		for (Component comp : table.getComponents()) {
+			if (comp.equals(noEntries)) {
+				return;
+			}
+		}
+
+		table.setLayout(new FlowLayout());
+		table.add(noEntries);
+		frame.repaint();
+		frame.validate();
+		table.validate();
+
+	}
+
+	/**
+	 * fügt eine neue Zeile zur Tabelle hinzu
+	 * 
+	 * @param house
+	 *            neues anzuzueigendes Element
+	 */
 	protected void addRow(House house) {
 
 		int row = rows;
@@ -172,24 +234,32 @@ public class ExposeView extends AbstractView {
 		ShiftTableEntry entry2 = new ShiftTableEntry(house.getStrasse());
 		ShiftTableEntry entry3 = new ShiftTableEntry(house.getOrt());
 		ShiftTableEntry entry4 = new ShiftTableEntry(house.getPlz());
-		ShiftTableEntry entry5 = new ShiftTableEntry(Double.toString(house
-				.getFlaeche()));
-		ShiftTableEntry entry6 = new ShiftTableEntry(Double.toString(house
-				.getGartenflaeche()));
-		ShiftTableEntry entry65 = new ShiftTableEntry(Double.toString(house
-				.getFlaeche() / house.getAnzahlWohnungen()));
+		ShiftTableEntry entry5 = new ShiftTableEntry(Double.toString(Math
+				.round(house.getFlaeche() * 100d) / 100d));
+		ShiftTableEntry entry6 = new ShiftTableEntry(Double.toString(Math
+				.round(house.getGartenflaeche() * 100d) / 100d));
+		ShiftTableEntry entry65 = new ShiftTableEntry(
+				Double.toString(Math.round((house.getFlaeche() / house
+						.getAnzahlWohnungen()) * 100d) / 100d));
 		ShiftButton2 entry7 = new ShiftButton2("");
 		entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
 		ShiftButton2 entry8 = new ShiftButton2("");
 		entry8.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		final double area = house.getFlaeche();
+		final int rowdel = row;
+		final Long id = house.getId();
+
 		entry7.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Versicherung angelegt");
-				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(),
-						house.getFlaeche());
-				deleteThisRow(row);
+				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), area);
+				HouseDAO housedao = new HouseDAO();
+				House house = housedao.getById(id);
+				deleteThisRow(rowdel);
+				house.setSeen(true);
+				housedao.persist(house);
 			}
 		});
 
@@ -198,8 +268,12 @@ public class ExposeView extends AbstractView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Keine Versicherung beauftragt");
-				System.out.println("Lösche Reihe: " + row);
-				deleteThisRow(row);
+				System.out.println("Lösche Reihe: " + rowdel);
+				HouseDAO housedao = new HouseDAO();
+				House house = housedao.getById(id);
+				deleteThisRow(rowdel);
+				house.setSeen(true);
+				housedao.persist(house);
 			}
 		});
 
@@ -219,15 +293,8 @@ public class ExposeView extends AbstractView {
 		frame.validate();
 	}
 
-	private ShiftPanel2 erzeugeTabelle() {
-		table = new ShiftPanel2();
-		rows = 1;
-		table.setLayout(new SpringLayout());
-
-		headlinesSetzen();
-
-		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
-				yPad);
-		return table;
+	@Override
+	public void addRow() {
+		// unused
 	}
 }

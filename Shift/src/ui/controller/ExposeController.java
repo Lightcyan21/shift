@@ -37,8 +37,8 @@ public class ExposeController extends
 		if (event.getEventId() == UI_EVENT.PUSH_INSURANCE.ordinal()) {
 			BVWSImplService bankservice = new BVWSImplService();
 			BVWebService bank = bankservice.getBVWSImplPort();
-			float area = (float) event.getData();
-			bank.getGebVersicherung(Definitions.iban, area);
+			Double area = (Double) event.getData();
+			bank.getGebVersicherung(Definitions.iban, area.floatValue());
 		}
 	}
 

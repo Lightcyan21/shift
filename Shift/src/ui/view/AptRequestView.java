@@ -31,6 +31,7 @@ import util.TableModel;
 import components.Definitions;
 import components.ShiftButton;
 import components.ShiftButtonBack;
+import components.ShiftButtonSearch;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -94,7 +95,7 @@ public class AptRequestView extends AbstractView {
 			}
 		});
 
-		ShiftButton gobutton = new ShiftButton("►");
+		ShiftButtonSearch gobutton = new ShiftButtonSearch();
 		gobutton.addActionListener(new ActionListener() {
 
 			@Override

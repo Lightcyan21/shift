@@ -2,12 +2,13 @@ package ui.controller;
 
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
-import persistence.dao.impl.ApartmentDAO;
-import persistence.entity.impl.Apartment;
-import persistence.entity.impl.House;
+import persistence.dao.impl.OrderDAO;
+import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
 import ui.model.OrderStatusModel;
 import ui.view.OrderStatusView;
+import webservices.ServiceWS;
+import webservices.ServiceWSImplService;
 
 /**
  * hierbei handelt es sich um die Seite, die den Status der Aufträge darstellt
@@ -44,36 +45,21 @@ public class OrderStatusController extends
 			MainWindowController.getInstance();
 		}
 
-		if (event.getEventId() == UI_EVENT.ORDER_SEND.ordinal()) {
-			event.getSource();
-			ApartmentDAO aptdao = new ApartmentDAO();
-			Apartment apt = aptdao.getApartment("1.1.1");
-			House house = apt.getHouse();
-			int size = 0;
-			switch ("Treppenreinigung") {
-			case "Treppenreinigung":
-				size = house.getStockwerke();
-				break;
-			case "Instandhaltung":
-				size = house.getAnzahlWohnungen();
-				break;
-			case "Schlüsseldienst":
-				size = 1;
-				break;
-			case "Installationen":
-				size = house.getAnzahlWohnungen();
-				break;
-			case "Reparaturen":
-				size = 1;
-				break;
-			case "Hecke schneiden":
-				size = 1;
-				break;
-			default:
-				return;
-			}
+		if (event.getEventId() == UI_EVENT.SEARCH.ordinal()) {
+			System.out.println("starte suche...");
+			ServiceWSImplService gsservice = new ServiceWSImplService();
+			ServiceWS gs = gsservice.getServiceWSImplPort();
+			OrderDAO orderdao = new OrderDAO();
+			String id = (String) event.getData();
+			System.out.println("ID: " + id);
+			Order order = orderdao.getById(Long.parseLong(id));
+			if (order != null) {
+				registeredViews.get(0).showStatus(order.getId(),
+						gs.getState(order.getId()));
 
+			} else {
+				registeredViews.get(0).incorrectInput();
+			}
 		}
 	}
-
 }

@@ -123,7 +123,6 @@ public class GmWSImpl implements GmWS {
 			String[] error = { Definitions.ERROR_MESSAGE };
 			return error;
 		}
-
 	}
 
 	@Override
@@ -138,7 +137,6 @@ public class GmWSImpl implements GmWS {
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
 		gs.getState(orderID);
-		
 
 		System.out.println("Status wird abgerufen...");
 		return "Angekommen";
@@ -164,7 +162,7 @@ public class GmWSImpl implements GmWS {
 			order.setStatus(1);
 			order.setStatusBestaetigung(false);
 			orderdao.persist(order);
-			System.out.println("Order gespeichert... ID: "+order.getId());
+			System.out.println("Order gespeichert... ID: " + order.getId());
 			return order.getId();
 		} else {
 			return 0;

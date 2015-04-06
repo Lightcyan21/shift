@@ -3,15 +3,20 @@ package ui.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Vector;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -23,6 +28,7 @@ import util.TableModel;
 
 import components.Definitions;
 import components.ShiftButtonBack;
+import components.ShiftButtonSearch;
 import components.ShiftFrame;
 import components.ShiftPanel2;
 
@@ -31,6 +37,7 @@ public class OrderStatusView extends AbstractView {
 	private JScrollPane mainTablePane;
 	private MyTableModel tableModel;
 	private JTable mainTable;
+	private JTextField textfield;
 
 	public OrderStatusView(IModel model) {
 		super(model);
@@ -58,17 +65,50 @@ public class OrderStatusView extends AbstractView {
 
 		// Gestalten des Panels
 		ShiftPanel2 content = new ShiftPanel2();
-		ShiftPanel2 table = new ShiftPanel2();
+		ShiftPanel2 northpanel = new ShiftPanel2();
+		ShiftPanel2 southpanel = new ShiftPanel2();
+
 		content.setLayout(new BorderLayout());
 		ShiftButtonBack button = new ShiftButtonBack();
 
+		// Obere Leiste
+		JLabel label = new JLabel("Auftrag");
+		textfield = new JTextField(50);
+		textfield.setBackground(Definitions.BG_COLOR_CONTENT);
+		textfield.setOpaque(true);
+		textfield.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				fireLocalUIEvent(this, UI_EVENT.SEARCH.ordinal(),
+						textfield.getText());
+			}
+		});
+
+		ShiftButtonSearch gobutton = new ShiftButtonSearch();
+		gobutton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				fireLocalUIEvent(this, UI_EVENT.SEARCH.ordinal(),
+						textfield.getText());
+			}
+		});
+
+		Dimension textfieldsize = new Dimension((int) Toolkit
+				.getDefaultToolkit().getScreenSize().getWidth(), 25);
+		textfield.setPreferredSize(textfieldsize);
+		textfield.setMaximumSize(textfieldsize);
+
 		mainTable = createMyTable();
 		mainTablePane = new JScrollPane(mainTable);
-
-		table.add(mainTablePane);
-
-		content.add(table, BorderLayout.CENTER);
-		content.add(button, BorderLayout.SOUTH);
+		southpanel.add(button);
+		northpanel.add(label);
+		northpanel.add(textfield);
+		northpanel.add(gobutton);
+		content.add(northpanel, BorderLayout.NORTH);
+		content.add(mainTablePane, BorderLayout.CENTER);
+		content.add(southpanel, BorderLayout.SOUTH);
 
 		button.addActionListener(new ActionListener() {
 
@@ -82,6 +122,7 @@ public class OrderStatusView extends AbstractView {
 		frame.getContentpanel().add(content, "checkStatus");
 		frame.getCardlayout().show(frame.getContentpanel(), "checkStatus");
 		frame.validate();
+		textfield.requestFocus();
 
 	}
 
@@ -108,8 +149,8 @@ public class OrderStatusView extends AbstractView {
 		return table;
 	}
 
-	public void addZeile(long id, String text) {
-		tableModel.addRow(new MyRow(id, text));
+	public void addZeile(long id, long orderid, String state) {
+		tableModel.addRow(new MyRow(id, orderid, state));
 		tableModel.fireTableDataChanged();
 	}
 
@@ -161,9 +202,10 @@ public class OrderStatusView extends AbstractView {
 
 		private static final long serialVersionUID = -5574999980921824807L;
 
-		private static Class[] columnClass = { Long.class, String.class, };
+		private static Class[] columnClass = { Long.class, Long.class,
+				String.class };
 
-		private static String[] columnNames = { "Meine-ID", "Der Text", };
+		private static String[] columnNames = { "Nr.", "OrderID", "Status" };
 
 		public MyTableModel() {
 			super(columnClass, columnNames);
@@ -181,7 +223,9 @@ public class OrderStatusView extends AbstractView {
 			case 0:
 				return row.getId();
 			case 1:
-				return row.getText();
+				return row.getOrderID();
+			case 2:
+				return row.getState();
 			}
 			return null;
 		}
@@ -192,8 +236,10 @@ public class OrderStatusView extends AbstractView {
 			switch (columnIndex) {
 			case 0:
 				row.setId((long) value);
+			case 2:
+				row.setState((String) value);
 			case 1:
-				row.setText((String) value);
+				row.setOrderID((long) value);
 
 				fireTableCellUpdated(rowIndex, columnIndex);
 			}
@@ -202,12 +248,22 @@ public class OrderStatusView extends AbstractView {
 
 	class MyRow implements IRow {
 
-		private long id;
-		private String text;
+		public long getOrderID() {
+			return orderID;
+		}
 
-		public MyRow(long id, String text) {
+		public void setOrderID(long orderID) {
+			this.orderID = orderID;
+		}
+
+		private long id;
+		private long orderID;
+		private String state;
+
+		public MyRow(long id, long orderID, String state) {
 			this.id = id;
-			this.text = text;
+			this.orderID = orderID;
+			this.state = state;
 		}
 
 		public long getId() {
@@ -218,12 +274,12 @@ public class OrderStatusView extends AbstractView {
 			this.id = id;
 		}
 
-		public String getText() {
-			return text;
+		public String getState() {
+			return state;
 		}
 
-		public void setText(String text) {
-			this.text = text;
+		public void setState(String state) {
+			this.state = state;
 		}
 
 		@Override
@@ -235,5 +291,13 @@ public class OrderStatusView extends AbstractView {
 		public Vector<Object> toVector() {
 			return null;
 		}
+	}
+
+	public void showStatus(long orderid, String state) {
+		addZeile(1, orderid, state);
+	}
+
+	public void incorrectInput() {
+		JOptionPane.showMessageDialog(new JFrame(), "Auftrag nicht gefunden");
 	}
 }

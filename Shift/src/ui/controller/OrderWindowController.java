@@ -32,16 +32,7 @@ public class OrderWindowController extends
 			System.out.println("--- Wechsle zum Hauptmenu");
 			MainWindowController.getInstance();
 		}
-		if (event.getEventId() == UI_EVENT.AUFTRAG_ERTEILEN.ordinal()) {
-			System.out.println("Auftrag erhalten");
-			System.out.println(event.getData());
-			ServiceWSImplService gsservice = new ServiceWSImplService();
-			ServiceWS gs = gsservice.getServiceWSImplPort();
-			OrderDAO orderdao = new OrderDAO();
-			Order order = orderdao.create();
-			System.out.println(gs.sendOrderToFm(event.getData().toString(),
-					"1.1.1", 1, order.getId()));
-		}
+		
 	}
 
 	public static OrderWindowController getInstance() {
