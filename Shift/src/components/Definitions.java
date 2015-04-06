@@ -52,5 +52,16 @@ public class Definitions {
 	public static final double gewinn = 0.2;
 	public static final Color HEADLINE_COLOR = new Color(255, 255, 255);
 	public static final long iban = 683050050005L;
+	/*
+	 * "Pruefung" - 0 "Angekommen" - 1 "In Arbeit" - 2
+	 * "Erledigt + Rechnung versendet" - 3 "Abgelehnt" - 4 "Rechnung bezahlt" -
+	 * 5
+	 */
+	public static final int PRUEFUNG = 0;
+	public static final int ANGEKOMMEN = 1;
+	public static final int IN_ARBEIT = 2;
+	public static final int ERLEDIGT = 3;
+	public static final int ABGELEHNT = 4;
+	public static final int RECHNUNG_BEZAHLT = 5;
 
 }

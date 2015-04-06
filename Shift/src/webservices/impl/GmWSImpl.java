@@ -1,6 +1,5 @@
 package webservices.impl;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.jws.WebMethod;
@@ -21,6 +20,7 @@ import webservices.GmWS;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 import baldoapp.Zeitsprung;
+
 import components.Definitions;
 
 @WebService(endpointInterface = "webservices.GmWS")
@@ -136,10 +136,29 @@ public class GmWSImpl implements GmWS {
 		}
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
-		gs.getState(orderID);
-
 		System.out.println("Status wird abgerufen...");
-		return "Angekommen";
+
+		String status = gs.getState(orderID);
+		switch (status) {
+		case "Angekommen":
+			order.setStatus(Definitions.ANGEKOMMEN);
+			break;
+		case "In Arbeit":
+			order.setStatus(Definitions.IN_ARBEIT);
+			break;
+		case "Erledigt":
+			order.setStatus(Definitions.ERLEDIGT);
+			break;
+		case "Abgelehnt":
+			order.setStatus(Definitions.ABGELEHNT);
+			break;
+		case "Bezahlt":
+			order.setStatus(Definitions.RECHNUNG_BEZAHLT);
+			break;
+		}
+		orderdao.persist(order);
+		System.out.println("Status: " + status);
+		return status;
 	}
 
 	@Override
@@ -159,11 +178,16 @@ public class GmWSImpl implements GmWS {
 			order.setJobName(typ);
 			order.setMieter(mieter);
 			order.setStatusWeiterleitung(false);
-			order.setStatus(1);
+			order.setStatus(Definitions.ANGEKOMMEN);
 			order.setStatusBestaetigung(false);
-			orderdao.persist(order);
-			System.out.println("Order gespeichert... ID: " + order.getId());
-			return order.getId();
+			if (orderdao.persist(order)) {
+				System.out.println("Order gespeichert... ID: " + order.getId());
+
+				return order.getId();
+			} else {
+				System.out.println("error");
+				return 0;
+			}
 		} else {
 			return 0;
 		}

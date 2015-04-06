@@ -167,14 +167,13 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update appartment SET WohnID = ?, wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnID = ?;");
+					.prepareStatement("update apartment SET wohnflaeche = ?, zimmeranzahl = ?, mieteranzahl = ? WHERE wohnungsID = ?;");
 			// TODO ueberarbeiten da wohnid (aptid) String sein muss (Form:
 			// "1.1.1")
-			pre.setString(1, entity.getAptID());
-			pre.setDouble(2, entity.getWohnflaeche());
-			pre.setInt(3, entity.getZimmeranzahl());
-			pre.setInt(4, entity.getMieteranzahl());
-			pre.setString(5, entity.getAptID());
+			pre.setDouble(1, entity.getWohnflaeche());
+			pre.setInt(2, entity.getZimmeranzahl());
+			pre.setInt(3, entity.getMieteranzahl());
+			pre.setString(4, entity.getAptID());
 
 			if (entity.getAptID() != null && entity.getWohnflaeche() != 0
 					&& entity.getZimmeranzahl() != 0
