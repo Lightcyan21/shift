@@ -203,14 +203,14 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			PreparedStatement pre;
 			pre = con
 					.prepareStatement("update bill SET billID = ?, rechnungssteller = ?, rechnungsempfaenger = ?, gesamtbetrag = ?, verwendungszweck = ?, rechnungsdatum = ?, zahlungsdatum = ? WHERE billID = ?;");
-			pre.setLong(1, entity.getBillID());
-			pre.setString(2, entity.getRechnungssteller());
-			pre.setString(3, entity.getRechnungsEmpfaenger());
-			pre.setDouble(4, entity.getBetrag());
-			pre.setString(5, entity.getVerwendungszweck());
-			pre.setLong(6, entity.getBillID());
-			pre.setString(7, entity.getRechnungsdatum());
-			pre.setString(8, entity.getZahlungsdatum());
+			pre.setString(1, entity.getRechnungssteller());
+			pre.setString(2, entity.getRechnungsEmpfaenger());
+			pre.setDouble(3, entity.getBetrag());
+			pre.setString(4, entity.getVerwendungszweck());
+			pre.setString(5, entity.getRechnungsdatum());
+			pre.setString(6, entity.getZahlungsdatum());
+			pre.setLong(7, entity.getBillID());
+
 
 			if (entity.getBillID() != 0 && entity.getRechnungssteller() != null
 					&& entity.getRechnungsEmpfaenger() != null
