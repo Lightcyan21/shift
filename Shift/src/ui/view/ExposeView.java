@@ -195,12 +195,13 @@ public class ExposeView extends AbstractView implements SpringTable {
 			for (House house : houses) {
 				addRow(house);
 			}
+			SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
+					yPad);
 		} else {
 			noEntries();
 
 		}
-		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
-				yPad);
+		
 		frame.validate();
 		return table;
 	}

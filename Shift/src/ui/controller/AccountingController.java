@@ -1,10 +1,16 @@
 package ui.controller;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 import ui.enums.UI_EVENT;
 import ui.model.AccountingModel;
 import ui.view.AccountingView;
+import webservices.impl.BuchhaltungWS;
+import webservices.impl.BuchhaltungWsImplService;
 
 /**
  * hierbei handelt es sich um die Seite, die Informationen der Buchhaltung
@@ -28,6 +34,22 @@ public class AccountingController extends
 		if (event.getEventId() == UI_EVENT.PUSH_BACK_BUTTON.ordinal()) {
 			System.out.println("--- Wechsle zum Hauptmenu");
 			MainWindowController.getInstance();
+		}
+		if (event.getEventId() == UI_EVENT.PUSH_MAHNUNG.ordinal()) {
+			String data = (String) event.getData();
+			String vz = data.substring(0, 10);
+			int rowdel = Integer.parseInt(data.substring(11));
+
+			System.out.println("Mahnung senden...");
+			BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
+			BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
+			String result = bh.uebergabeMahnauftrag(vz);
+			System.out.println(result);
+			if(result != "Mahnauftrag erhalten"){
+				JOptionPane.showMessageDialog(new JFrame(), result);
+			} else {
+				this.registeredViews.get(0).deleteThisRow(rowdel);
+			}
 		}
 	}
 
