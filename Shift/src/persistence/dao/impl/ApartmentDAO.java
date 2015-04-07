@@ -81,7 +81,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("select * from apartment");
+			pre = con.prepareStatement("select * from apartment;");
 
 			ResultSet result = pre.executeQuery();
 
@@ -96,7 +96,43 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 				aptList.add(apt);
 			}
 
-			// pre.execute(); //notwendig? oder doppelt?
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (aptList.size() != 0) {
+			return aptList;
+		} else {
+			return null;
+		}
+
+	}
+
+	public List<Apartment> listWhenStartsWith(String teilID) {
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		List<Apartment> aptList = new ArrayList<>();
+
+		try {
+			PreparedStatement pre;
+			pre = con
+					.prepareStatement("select * from apartment where wohnungsID like ?;");
+			
+			pre.setString(1, teilID + ".%");
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+
+				Apartment apt = new Apartment();
+				apt.setAptID(result.getString("wohnungsID"));
+				apt.setMieteranzahl(result.getInt("mieteranzahl"));
+				apt.setZimmeranzahl(result.getInt("zimmeranzahl"));
+				apt.setWohnflaeche(result.getDouble("wohnflaeche"));
+
+				aptList.add(apt);
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -149,7 +185,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (apt.getAptID() != null ){
+		if (apt.getAptID() != null) {
 			return apt;
 		} else {
 			return null;
