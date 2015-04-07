@@ -5,6 +5,8 @@ import mvc.event.LocalUIEvent;
 import ui.enums.UI_EVENT;
 import ui.model.OrderWindowModel;
 import ui.view.OrderWindowView;
+import webservices.ServiceWS;
+import webservices.ServiceWSImplService;
 
 /**
  * hierbei handelt es sich um die Seite, die Aufträge darstellt
@@ -27,6 +29,13 @@ public class OrderWindowController extends
 		if (event.getEventId() == UI_EVENT.PUSH_BACK_BUTTON.ordinal()) {
 			System.out.println("--- Wechsle zum Hauptmenu");
 			MainWindowController.getInstance();
+		}
+		if (event.getEventId() == UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal()) {
+			System.out.println("--- Auftrag wird weiter geleitet");
+			ServiceWSImplService gebaeudeservice = new ServiceWSImplService();
+			ServiceWS gebaeude = gebaeudeservice.getServiceWSImplPort();
+			gebaeude.sendOrderToFm(arg0, arg1, arg2, arg3);
+			
 		}
 		
 	}
