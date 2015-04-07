@@ -33,7 +33,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 	private ShiftFrame frame;
 	private ShiftPanel2 table;
 	private int rows;
-	private int cols = 7;
+	private int cols = 8;
 	private int initX = 10;
 	private int initY = 0;
 	private int xPad = 30;
@@ -48,6 +48,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 	private ShiftLabel weiterleitung = new ShiftLabel("Weiterleitung");
 	private ShiftLabel bestaetigung = new ShiftLabel("Bestätigung");
 	private ShiftLabel rechnung = new ShiftLabel("Rechnung");
+	private ShiftLabel löschen = new ShiftLabel("Löschen");
 
 	public OrderWindowView(IModel model) {
 		super(model);
@@ -90,36 +91,6 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 				fireLocalUIEvent(this, UI_EVENT.PUSH_BACK_BUTTON.ordinal());
 			}
 		});
-
-		// // northpanel
-		// final JTextField textfield = new JTextField(50);
-		// JLabel label = new JLabel("Auftrag");
-		// textfield.setBackground(Definitions.BG_COLOR_CONTENT);
-		// textfield.setOpaque(true);
-		// textfield.addActionListener(new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// System.out.println("Auftrag init...");
-		// fireLocalUIEvent(this, UI_EVENT.AUFTRAG_ERTEILEN.ordinal(),
-		// textfield.getText());
-		// }
-		// });
-		//
-		// ShiftButtonSearch gobutton = new ShiftButtonSearch();
-		// gobutton.addActionListener(new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent arg0) {
-		// System.out.println("Auftrag init...");
-		// fireLocalUIEvent(this, UI_EVENT.AUFTRAG_ERTEILEN.ordinal(),
-		// textfield.getText());
-		//
-		// }
-		// });
-		// northpanel.add(label);
-		// northpanel.add(textfield);
-		// northpanel.add(gobutton);
 
 		// add
 		contentpanel.setLayout(new BorderLayout());
@@ -165,57 +136,46 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		ShiftTableEntry entry3 = new ShiftTableEntry(order.getJobName());
 		ShiftTableEntry entry4 = new ShiftTableEntry(order.getWohnungsID());
 		ShiftButton2 entry5 = new ShiftButton2("");
-		ShiftTableEntry entry6 = null;
-		ShiftTableEntry entry7 = null;
+		ShiftButton2 entry6 = new ShiftButton2("");
+		ShiftButton2 entry7 = new ShiftButton2("");
+		ShiftButton2 entry8 = new ShiftButton2("");
 
 		entry5.setIcon(new ImageIcon("res/WohnungsInfo.png"));
 		entry5.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fireLocalUIEvent(this, UI_EVENT.WEITERLEITEN.ordinal());
+				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal());
+				//Objekt/Liste/ect..  mitgeben, um den WS zu befüllen [...ordinal(), <>]
 			}
 		});
 
-		// ShiftTableEntry entry5 = new ShiftTableEntry(Double.toString(Math
-		// .round(house.getFlaeche() * 100d) / 100d));
-		// ShiftTableEntry entry6 = new ShiftTableEntry(Double.toString(Math
-		// .round(house.getGartenflaeche() * 100d) / 100d));
-		// ShiftTableEntry entry65 = new ShiftTableEntry(
-		// Double.toString(Math.round((house.getFlaeche() / house
-		// .getAnzahlWohnungen()) * 100d) / 100d));
-		// ShiftButton2 entry7 = new ShiftButton2("");
-		// entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
-		// ShiftButton2 entry8 = new ShiftButton2("");
-		// entry8.setIcon(new ImageIcon("res/WohnungsInfo.png"));
-		//
-		// entry7.addActionListener(new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// System.out.println("Versicherung angelegt");
-		// fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), area);
-		// HouseDAO housedao = new HouseDAO();
-		// House house = housedao.getById(id);
-		// deleteThisRow(rowdel);
-		// house.setSeen(true);
-		// housedao.persist(house);
-		// }
-		// });
-		//
-		// entry8.addActionListener(new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// System.out.println("Keine Versicherung beauftragt");
-		// System.out.println("Lösche Reihe: " + rowdel);
-		// HouseDAO housedao = new HouseDAO();
-		// House house = housedao.getById(id);
-		// deleteThisRow(rowdel);
-		// house.setSeen(true);
-		// housedao.persist(house);
-		// }
-		// });
+		entry6.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		entry6.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fireLocalUIEvent(this, UI_EVENT.BESTAETIGUNG_SENDEN.ordinal());
+			}
+		});
+
+		entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		entry7.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fireLocalUIEvent(this, UI_EVENT.RECHNUNG_SENDEN.ordinal());
+			}
+		});
+
+		entry8.setIcon(new ImageIcon("res/Loeschen.png"));
+		entry8.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fireLocalUIEvent(this, UI_EVENT.REMOVE_ORDER.ordinal());
+			}
+		});
 
 		table.add(entry);
 		table.add(entry2);
@@ -224,7 +184,13 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		table.add(entry5);
 		table.add(entry6);
 		table.add(entry7);
+		table.add(entry8);
 		rows++;
+
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
+				yPad);
+		frame.validate();
+
 	}
 
 	@Override
@@ -241,6 +207,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		table.add(weiterleitung);
 		table.add(bestaetigung);
 		table.add(rechnung);
+		table.add(löschen);
 	}
 
 	@Override
