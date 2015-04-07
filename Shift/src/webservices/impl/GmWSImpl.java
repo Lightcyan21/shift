@@ -20,8 +20,9 @@ import webservices.GmWS;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 import baldoapp.Zeitsprung;
-
 import components.Definitions;
+import components.ShiftFrame;
+import components.ShiftLabel;
 
 @WebService(endpointInterface = "webservices.GmWS")
 public class GmWSImpl implements GmWS {
@@ -205,6 +206,8 @@ public class GmWSImpl implements GmWS {
 		bill.setRechnungsEmpfaenger(rechnungsempfaenger);
 		bill.setRechnungssteller(rechnungsersteller);
 		bill.setVerwendungszweck(verwendungszweck);
+		bill.setRechnungsdatum(rechnungsdatum);
+		bill.setZahlungsdatum(zahlungsdatum);
 		billdao.persist(bill);
 
 		// Order Rechnung zuweisen
@@ -239,61 +242,72 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public int pushDate(int year, int month, int day) {
+		TimeChange timechange = TimeChange.getInstance();
 		System.out.println("Zeitsprung erhalten...");
-		Date localDate = TimeChange.getInstance().getTime();
-		Zeitsprung zeitsprung = new Zeitsprung(localDate);
-		System.out.println("localDate - zu Beginn der Methode: "
-				+ localDate.getDate() + "." + (localDate.getMonth() + 1) + "."
-				+ localDate.getYear());
-
-		Date sprungDate = new Date(year, month, day);
-		String sprungArt = null;
+		Date localDate = timechange.getTime();
 		int returncode = 100;
-		Object o = zeitsprung.bestimmeVorgehen(sprungDate);
-		if (o instanceof Integer) {
-			returncode = (Integer) o;
+		if (localDate.equals(new Date(0))) {
+			System.out.println("Zeitinitialiserung... auf den " + day + "."
+					+ month + "." + (year + 1900));
+			timechange.setTime(new Date(year, month, day));
+			ShiftFrame.getInstance().setDatum();
+			returncode = 101;
+		} else {
 
-		} else if (o instanceof String) {
-			sprungArt = (String) o;
-			switch (sprungArt) {
-			case "day":
-				break;
-			case "halfMonth":
-				break;
-			case "month":
-				/*
-				 * Abarbeitung der erforderlichen Anwendungsschritte bei einem
-				 * Monatssprung - in der Methode
-				 */
-				System.out.println("Monatssprung...");
-				TimeChange.getInstance().month(month);
-				break;
-			case "year":
-				/*
-				 * Abarbeitung der erforderlichen Anwendungsschritte bei einem
-				 * Jahressprung - in der Methode
-				 */
-				System.out.println("Jahressprung...");
-				TimeChange.getInstance().year();
-				break;
+			Zeitsprung zeitsprung = new Zeitsprung(localDate);
+			System.out.println("localDate - zu Beginn der Methode: "
+					+ localDate.getDate() + "." + (localDate.getMonth() + 1)
+					+ "." + (localDate.getYear()));
+			Date sprungDate = new Date(year, month, day);
+			String sprungArt = null;
 
-			default:
-				/* Defaulthandling */
-				returncode = 401;
+			Object o = zeitsprung.bestimmeVorgehen(sprungDate);
+			if (o instanceof Integer) {
+				returncode = (Integer) o;
+
+			} else if (o instanceof String) {
+				sprungArt = (String) o;
+				switch (sprungArt) {
+				case "day":
+					break;
+				case "halfMonth":
+					break;
+				case "month":
+					/*
+					 * Abarbeitung der erforderlichen Anwendungsschritte bei
+					 * einem Monatssprung - in der Methode
+					 */
+					System.out.println("Monatssprung...");
+					timechange.month(month);
+					break;
+				case "year":
+					/*
+					 * Abarbeitung der erforderlichen Anwendungsschritte bei
+					 * einem Jahressprung - in der Methode
+					 */
+					System.out.println("Jahressprung...");
+					timechange.month(month);
+					break;
+
+				default:
+					/* Defaulthandling */
+					returncode = 401;
+				}
+
+			} else {
+				// Object o ist weder vom Typ Integer noch von String
+				returncode = 402;
 			}
 
-		} else {
-			// Object o ist weder vom Typ Integer noch von String
-			returncode = 402;
+			System.out.println("Object: " + o.toString());
+			System.out.println("sprungArt: " + sprungArt);
+			System.out.println("returncode: " + returncode);
+			timechange.setTime(new Date(year, month, day));
+			ShiftFrame.getInstance().setDatum();
+
+			System.out.println("aktuelles localDate - nach der Methode: " + day
+					+ "." + (month + 1) + "." + year);
 		}
-
-		System.out.println("Object: " + o.toString());
-		System.out.println("sprungArt: " + sprungArt);
-		System.out.println("returncode: " + returncode);
-		TimeChange.getInstance().setTime(new Date(year, month, day));
-
-		System.out.println("aktuelles localDate - nach der Methode: " + day
-				+ "." + (month + 1) + "." + year);
 
 		return returncode;
 	}

@@ -177,7 +177,7 @@ public class ShiftFrame extends JFrame {
 	}
 
 	public void setDatum() {
-		SimpleDateFormat sdf = new SimpleDateFormat();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		datum.setText(sdf.format(TimeChange.getInstance().getTime()));
 		instance.validate();
 	}

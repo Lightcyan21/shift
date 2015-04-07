@@ -10,6 +10,7 @@ public class DBUtil {
 	private static final String MYSQL_URL = "jdbc:mysql://10.10.10.0/PrjGManage";
 	private static final String MYSQL_USER = "PrjGManage";
 	private static final String MYSQL_PASSWORD = "PrjGManage";
+	private static Connection connection = null;
 	
 	/**
 	 * Opens a database connection to mysql database.
@@ -17,16 +18,19 @@ public class DBUtil {
 	 * @return database connection yeah!
 	 */
 	public static Connection getConnection(){
-		Connection conn = null;
-		try {
-			Class.forName(MYSQL_DRIVER);
-			conn = DriverManager.getConnection(MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		if (connection == null){
+			try {
+				Class.forName(MYSQL_DRIVER);
+				connection = DriverManager.getConnection(MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
-		return conn;
+//		Connection conn = null;
+
+		return connection;
 	}
 }
 

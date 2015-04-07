@@ -1,7 +1,5 @@
 package ui.controller;
 
-import components.Definitions;
-
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
 import ui.enums.UI_EVENT;
@@ -9,8 +7,8 @@ import ui.model.ExposeModel;
 import ui.view.ExposeView;
 import webservices.impl.BVWSImplService;
 import webservices.impl.BVWebService;
-import webservices.impl.BuchhaltungWS;
-import webservices.impl.BuchhaltungWsImplService;
+
+import components.Definitions;
 
 /**
  * hierbei handelt es sich um die Seite, die neue Exposés darstellt

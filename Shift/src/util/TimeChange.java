@@ -17,7 +17,6 @@ import webservices.impl.BuchhaltungWS;
 import webservices.impl.BuchhaltungWsImplService;
 import webservices.impl.VerwaltungWS;
 import webservices.impl.VerwaltungWSImplService;
-
 import components.Definitions;
 
 public class TimeChange {
@@ -25,7 +24,11 @@ public class TimeChange {
 	private static TimeChange instance;
 	private Date localDate;
 
+	@SuppressWarnings("deprecation")
 	public void month(int month) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		BillDAO billdao = new BillDAO();
+		int betrag = 0;
 
 		// monatliche Auftraege generieren
 		monatlicheOrdersBeauftragen(month);
@@ -36,12 +39,13 @@ public class TimeChange {
 		VerwaltungWS ws = vwservice.getVerwaltungWSImplPort();
 		ws.getInvoice(0, 0);
 
-		BillDAO billdao = new BillDAO();
-
 		// Rechnung erstellen
 		Bill bill = billdao.create();
 		bill.setRechnungsEmpfaenger("VW");
 		bill.setRechnungssteller("GM");
+		Date date = TimeChange.getInstance().getTime();
+		bill.setRechnungsdatum(sdf.format(date).toString());
+		bill.setZahlungsdatum(sdf.format(new Date(date.getYear(),date.getMonth()+1,date.getDay())));
 
 		// Definition des Verwendungszwecks
 		String verwendungszweck = "GM";
@@ -53,23 +57,27 @@ public class TimeChange {
 
 		// Berechnen des Rechnungsbetrags
 		List<Bill> billlist = billdao.findAll();
-		Bill billbh = billlist.get(billlist.size() - 2);
-		Bill billgs = billlist.get(billlist.size() - 1);
-		bill.setBetrag((billbh.getBetrag() + billgs.getBetrag())
-				* Definitions.gewinn);
+
+		// Mapping auf Month
+		for (Bill bill2 : billlist) {
+			if (month == (Integer.parseInt(bill2.getRechnungsdatum().substring(
+					3, 5))) - 2) {
+				betrag += bill2.getBetrag();
+			}
+		}
+
+		bill.setBetrag(betrag * Definitions.gewinn);
 
 		// speichern
 		billdao.persist(bill);
 
 		// Buchhaltungsrechnung + gezahlte Aufträge + gewinn
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
 		BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
-		bh.erfasseRechnung(bill.getVerwendungszweck(), "GM", bill
-				.getRechnungssteller(), bill.getRechnungsEmpfaenger(), bill
-				.getBetrag(), sdf.format(TimeChange.getInstance().getTime())
-				.toString(), sdf.format(TimeChange.getInstance().getTime())
-				.toString());
+		bh.erfasseRechnung(bill.getVerwendungszweck(), "GM",
+				bill.getRechnungssteller(), bill.getRechnungsEmpfaenger(),
+				bill.getBetrag(), bill.getRechnungsdatum(),
+				bill.getZahlungsdatum());
 	}
 
 	private void monatlicheOrdersBeauftragen(int month) {

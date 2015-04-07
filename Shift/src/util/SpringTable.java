@@ -32,5 +32,10 @@ public interface SpringTable {
 	 * als Übergabeparameter überschreiben
 	 */
 	abstract void addRow();
+	
+	/**
+	 * zum initialisieren der notwendigen gloablen Variablen der Tablle
+	 */
+	abstract void initGlobals();
 
 }

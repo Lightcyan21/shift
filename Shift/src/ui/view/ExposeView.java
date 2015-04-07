@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -22,7 +23,6 @@ import persistence.entity.impl.House;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
 import util.SpringUtilities;
-
 import components.Definitions;
 import components.ShiftButton2;
 import components.ShiftButtonBack;
@@ -42,7 +42,7 @@ public class ExposeView extends AbstractView implements SpringTable {
 	private int initX = 10;
 	private int initY = 0;
 	private int xPad = 30;
-	private int yPad = 0;
+	private int yPad = 20;
 	private HashMap<String, House> entries;
 	private ShiftLabel nr = new ShiftLabel("Nr.");
 	private ShiftLabel street = new ShiftLabel("Straﬂe");
@@ -57,6 +57,8 @@ public class ExposeView extends AbstractView implements SpringTable {
 	private ShiftLabel noversicherung = new ShiftLabel("keine Versicherung");
 	private SpringLayout layout;
 	private JLabel noEntries;
+	private Icon versicherungsicon;
+	private Icon noversicherungsicon;
 
 	public ExposeView(IModel model) {
 		super(model);
@@ -116,13 +118,14 @@ public class ExposeView extends AbstractView implements SpringTable {
 		frame.validate();
 	}
 
-	private void initGlobals() {
+	public void initGlobals() {
 		entries = new HashMap<String, House>();
 		table = new ShiftPanel2();
 		layout = new SpringLayout();
-		noEntries = new JLabel(
-				"<html><body><center>keine neuen Eintr‰ge</body></html>");
+		noEntries = Definitions.NO_ENTRY;
 		rows = 1;
+		versicherungsicon = new ImageIcon("res/WohnungsInfo.png");
+		noversicherungsicon = new ImageIcon("res/WohnungsInfo.png");
 
 	}
 
@@ -196,6 +199,9 @@ public class ExposeView extends AbstractView implements SpringTable {
 			noEntries();
 
 		}
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
+				yPad);
+		frame.validate();
 		return table;
 	}
 
@@ -242,9 +248,9 @@ public class ExposeView extends AbstractView implements SpringTable {
 				Double.toString(Math.round((house.getFlaeche() / house
 						.getAnzahlWohnungen()) * 100d) / 100d));
 		ShiftButton2 entry7 = new ShiftButton2("");
-		entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		entry7.setIcon(versicherungsicon);
 		ShiftButton2 entry8 = new ShiftButton2("");
-		entry8.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		entry8.setIcon(noversicherungsicon);
 		final double area = house.getFlaeche();
 		final int rowdel = row;
 		final Long id = house.getId();
@@ -288,9 +294,10 @@ public class ExposeView extends AbstractView implements SpringTable {
 		table.add(entry8);
 
 		rows++;
+		System.out.println("tablecount:" + table.getComponentCount()
+				+ " rows: " + rows + " cols:" + cols);
 		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
 				yPad);
-		frame.validate();
 	}
 
 	@Override

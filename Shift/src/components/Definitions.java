@@ -2,6 +2,8 @@ package components;
 
 import java.awt.Color;
 
+import javax.swing.JLabel;
+
 public class Definitions {
 	public static final String WINDOW_TITLE = "SHIFT - GEBÄUDEMANAGEMENT";
 	public static final String TITLE = "Shift";
@@ -63,5 +65,7 @@ public class Definitions {
 	public static final int ERLEDIGT = 3;
 	public static final int ABGELEHNT = 4;
 	public static final int RECHNUNG_BEZAHLT = 5;
+	public static final JLabel NO_ENTRY = new JLabel(
+			"<html><body><center>keine neuen Einträge</body></html>");
 
 }

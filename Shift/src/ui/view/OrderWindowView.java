@@ -1,40 +1,53 @@
 package ui.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.List;
 
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.SpringLayout;
 
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
+import persistence.dao.impl.OrderDAO;
+import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
-import util.IRow;
-import util.TableModel;
-import components.Definitions;
-import components.ShiftButton;
-import components.ShiftButtonBack;
-import components.ShiftButtonSearch;
-import components.ShiftFrame;
-import components.ShiftPanel2;
+import util.SpringTable;
+import util.SpringUtilities;
 
-public class OrderWindowView extends AbstractView {
+import components.Definitions;
+import components.ShiftButton2;
+import components.ShiftButtonBack;
+import components.ShiftFrame;
+import components.ShiftLabel;
+import components.ShiftPanel2;
+import components.ShiftTableEntry;
+
+public class OrderWindowView extends AbstractView implements SpringTable {
 
 	private ShiftFrame frame;
-	private JScrollPane mainTablePane;
-	private MyTableModel tableModel;
-	private JTable mainTable;
+	private ShiftPanel2 table;
+	private int rows;
+	private int cols = 7;
+	private int initX = 10;
+	private int initY = 0;
+	private int xPad = 30;
+	private int yPad = 0;
+	private HashMap<String, Order> entries;
+	private SpringLayout layout;
+	private JLabel noEntries;
+	private ShiftLabel nr = new ShiftLabel("Nr.");
+	private ShiftLabel auftragsid = new ShiftLabel("AuftragsID");
+	private ShiftLabel auftragstyp = new ShiftLabel("Auftragsart");
+	private ShiftLabel wohnungsid = new ShiftLabel("WohnungsID");
+	private ShiftLabel weiterleitung = new ShiftLabel("Weiterleitung");
+	private ShiftLabel bestaetigung = new ShiftLabel("Bestätigung");
+	private ShiftLabel rechnung = new ShiftLabel("Rechnung");
 
 	public OrderWindowView(IModel model) {
 		super(model);
@@ -59,61 +72,60 @@ public class OrderWindowView extends AbstractView {
 		// initialisieren der Variablen
 		frame = ShiftFrame.getInstance();
 		frame.setHeadline(Definitions.ORDERS);
-
+		initGlobals();
 		// Gestalten des Panels
 		ShiftPanel2 contentpanel = new ShiftPanel2();
-		// ShiftPanel2 centerpanel = new ShiftPanel2();
-		ShiftPanel2 sp2 = new ShiftPanel2();
-		ShiftPanel2 northpanel = new ShiftPanel2();
+		ShiftPanel2 backbutton = new ShiftPanel2();
+		// ShiftPanel2 northpanel = new ShiftPanel2();
+		JScrollPane centerpanel = new JScrollPane(loadTable());
+		centerpanel.setOpaque(true);
+		contentpanel.setOpaque(true);
 
 		// Backbutton
 		ShiftButtonBack button = new ShiftButtonBack();
-		sp2.add(button);
+		backbutton.add(button);
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				fireLocalUIEvent(this, UI_EVENT.PUSH_BACK_BUTTON.ordinal());
 			}
 		});
-		
-	
-		// northpanel
-		final JTextField textfield = new JTextField(50);
-		JLabel label = new JLabel("Auftrag");
-		textfield.setBackground(Definitions.BG_COLOR_CONTENT);
-		textfield.setOpaque(true);
-		textfield.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Auftrag init...");
-				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_ERTEILEN.ordinal(),
-						textfield.getText());
-			}
-		});
-
-		ShiftButtonSearch gobutton = new ShiftButtonSearch();
-		gobutton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Auftrag init...");
-				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_ERTEILEN.ordinal(),
-						textfield.getText());
-
-			}
-		});
-		mainTable = createMyTable();
-		mainTablePane = new JScrollPane(mainTable);
-		northpanel.add(label);
-		northpanel.add(textfield);
-		northpanel.add(gobutton);
+		// // northpanel
+		// final JTextField textfield = new JTextField(50);
+		// JLabel label = new JLabel("Auftrag");
+		// textfield.setBackground(Definitions.BG_COLOR_CONTENT);
+		// textfield.setOpaque(true);
+		// textfield.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// System.out.println("Auftrag init...");
+		// fireLocalUIEvent(this, UI_EVENT.AUFTRAG_ERTEILEN.ordinal(),
+		// textfield.getText());
+		// }
+		// });
+		//
+		// ShiftButtonSearch gobutton = new ShiftButtonSearch();
+		// gobutton.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent arg0) {
+		// System.out.println("Auftrag init...");
+		// fireLocalUIEvent(this, UI_EVENT.AUFTRAG_ERTEILEN.ordinal(),
+		// textfield.getText());
+		//
+		// }
+		// });
+		// northpanel.add(label);
+		// northpanel.add(textfield);
+		// northpanel.add(gobutton);
 
 		// add
 		contentpanel.setLayout(new BorderLayout());
-		contentpanel.add(northpanel, BorderLayout.NORTH);
-		contentpanel.add(sp2, BorderLayout.SOUTH);
-		contentpanel.add(mainTablePane, BorderLayout.CENTER);
+		// contentpanel.add(northpanel, BorderLayout.NORTH);
+		contentpanel.add(backbutton, BorderLayout.SOUTH);
+		contentpanel.add(centerpanel, BorderLayout.CENTER);
 
 		// Layout hinzufuegen und Karte zeigen
 		frame.getContentpanel().add(contentpanel, "page");
@@ -121,157 +133,137 @@ public class OrderWindowView extends AbstractView {
 		frame.validate();
 	}
 
-	private JTable createMyTable() {
-		tableModel = new MyTableModel();
-		JTable table = new JTable(tableModel);
-		table.setFont(new Font("Arial", Font.PLAIN, 16));
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		table.setDoubleBuffered(true);
-		table.setRowSelectionAllowed(true);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setShowGrid(true);
-		table.setFillsViewportHeight(true);
-		table.setDragEnabled(false);
-		table.setGridColor(Color.BLACK);
-		table.setSelectionBackground(Color.gray);
-		table.setSelectionForeground(Color.WHITE);
+	@Override
+	public ShiftPanel2 loadTable() {
+		OrderDAO orderdao = new OrderDAO();
+		List<Order> orders = orderdao.getIfStatusNotSeen();
+		System.out.println("Lade Gebäude");
+		if (orders != null) {
+			table.setLayout(layout);
+			headlinesSetzen();
 
-		table.getColumnModel().getColumn(0).setPreferredWidth(25);
+			for (Order order : orders) {
+				addRow(order);
+			}
+		} else {
+			noEntries();
 
-		table.getTableHeader().resizeAndRepaint();
-		table.setDefaultRenderer(Object.class, new TableRowRenderer(tableModel));
-		table.setDefaultRenderer(Long.class, new TableRowRenderer(tableModel));
+		}
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
+				yPad);
+		frame.validate();
 		return table;
 	}
 
-	public void addZeile(long id, String text) {
-		tableModel.addRow(new MyRow(id, text));
-		tableModel.fireTableDataChanged();
-	}
+	private void addRow(Order order) {
+		int row = rows;
 
-	public void deleteZeile(long id) {
-		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			MyRow r = (MyRow) tableModel.getRow(i);
-			if (r.getId() == id)
-				tableModel.removeRow(i);
-		}
-		tableModel.fireTableDataChanged();
-	}
+		entries.put(Integer.toString(rows), order);
+		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
+		ShiftTableEntry entry2 = new ShiftTableEntry(Long.toString(order
+				.getId()));
+		ShiftTableEntry entry3 = new ShiftTableEntry(order.getJobName());
+		ShiftTableEntry entry4 = new ShiftTableEntry(order.getWohnungsID());
+		ShiftButton2 entry5 = new ShiftButton2("");
+		ShiftTableEntry entry6 = null;
+		ShiftTableEntry entry7 = null;
 
-	class TableRowRenderer extends JLabel implements TableCellRenderer {
+		entry5.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		entry5.addActionListener(new ActionListener() {
 
-		private static final long serialVersionUID = 1L;
-		private MyTableModel tableModel;
-
-		public TableRowRenderer(MyTableModel tableModel) {
-			this.tableModel = tableModel;
-			setOpaque(true);
-		}
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int col) {
-
-			setForeground(Color.BLACK);
-			setBackground(Color.white);
-			if (value != null)
-				setText(value.toString());
-			if (hasFocus || isSelected) {
-				Font font = new Font(this.getFont().getFamily(), Font.BOLD,
-						this.getFont().getSize());
-				this.setFont(font);
-				setBackground(Color.darkGray);
-				setForeground(Color.white);
-			} else {
-				Font font = new Font(this.getFont().getFamily(), Font.PLAIN,
-						this.getFont().getSize());
-				this.setFont(font);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fireLocalUIEvent(this, UI_EVENT.WEITERLEITEN.ordinal());
 			}
+		});
 
-			return this;
-		}
+		// ShiftTableEntry entry5 = new ShiftTableEntry(Double.toString(Math
+		// .round(house.getFlaeche() * 100d) / 100d));
+		// ShiftTableEntry entry6 = new ShiftTableEntry(Double.toString(Math
+		// .round(house.getGartenflaeche() * 100d) / 100d));
+		// ShiftTableEntry entry65 = new ShiftTableEntry(
+		// Double.toString(Math.round((house.getFlaeche() / house
+		// .getAnzahlWohnungen()) * 100d) / 100d));
+		// ShiftButton2 entry7 = new ShiftButton2("");
+		// entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		// ShiftButton2 entry8 = new ShiftButton2("");
+		// entry8.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		//
+		// entry7.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// System.out.println("Versicherung angelegt");
+		// fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), area);
+		// HouseDAO housedao = new HouseDAO();
+		// House house = housedao.getById(id);
+		// deleteThisRow(rowdel);
+		// house.setSeen(true);
+		// housedao.persist(house);
+		// }
+		// });
+		//
+		// entry8.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// System.out.println("Keine Versicherung beauftragt");
+		// System.out.println("Lösche Reihe: " + rowdel);
+		// HouseDAO housedao = new HouseDAO();
+		// House house = housedao.getById(id);
+		// deleteThisRow(rowdel);
+		// house.setSeen(true);
+		// housedao.persist(house);
+		// }
+		// });
+
+		table.add(entry);
+		table.add(entry2);
+		table.add(entry3);
+		table.add(entry4);
+		table.add(entry5);
+		table.add(entry6);
+		table.add(entry7);
+		rows++;
 	}
 
-	static class MyTableModel extends TableModel {
+	@Override
+	public void noEntries() {
+		// TODO Auto-generated method stub
 
-		private static final long serialVersionUID = -5574999980921824807L;
-
-		private static Class[] columnClass = { Long.class, String.class,
-				String.class, JButton.class, };
-
-		private static String[] columnNames = { "Auftrags ID", "Auftragsart",
-				"WohnungsID", "Weiterleitung", "Bestätigung", "Rechnung" };
-
-		public MyTableModel() {
-			super(columnClass, columnNames);
-		}
-
-		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return false;
-		}
-
-		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			MyRow row = (MyRow) dataVector.elementAt(rowIndex);
-
-			switch (columnIndex) {
-			case 0:
-				return row.getId();
-			case 1:
-				return row.getText();
-			}
-			return null;
-		}
-
-		public void setValue(Object value, int rowIndex, int columnIndex) {
-			MyRow row = (MyRow) dataVector.elementAt(rowIndex);
-
-			switch (columnIndex) {
-			case 0:
-				row.setId((long) value);
-			case 1:
-				row.setText((String) value);
-
-				fireTableCellUpdated(rowIndex, columnIndex);
-			}
-		}
 	}
 
-	class MyRow implements IRow {
-
-		private long id;
-		private String text;
-
-		public MyRow(long id, String text) {
-			this.id = id;
-			this.text = text;
-		}
-
-		public long getId() {
-			return id;
-		}
-
-		public void setId(long id) {
-			this.id = id;
-		}
-
-		public String getText() {
-			return text;
-		}
-
-		public void setText(String text) {
-			this.text = text;
-		}
-
-		@Override
-		public IRow copyRow() {
-			return null;
-		}
-
-		@Override
-		public Vector<Object> toVector() {
-			return null;
-		}
+	@Override
+	public void headlinesSetzen() {
+		table.add(nr);
+		table.add(auftragsid);
+		table.add(auftragstyp);
+		table.add(wohnungsid);
+		table.add(weiterleitung);
+		table.add(bestaetigung);
+		table.add(rechnung);
 	}
+
+	@Override
+	public void deleteThisRow(int i) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void addRow() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void initGlobals() {
+		entries = new HashMap<String, Order>();
+		table = new ShiftPanel2();
+		layout = new SpringLayout();
+		noEntries = Definitions.NO_ENTRY;
+		rows = 1;
+
+	}
+
 }

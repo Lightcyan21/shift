@@ -1,5 +1,6 @@
 package ui;
 
+import persistence.DBUtil;
 import ui.controller.MainWindowController;
 import util.Publisher;
 import util.TimeChange;
@@ -14,6 +15,7 @@ public class Launcher {
 		TimeChange.getInstance().initTime();
 		MainWindowController.getInstance();
 		Publisher.getInstance();
+		DBUtil.getConnection();
 
 	}
 
