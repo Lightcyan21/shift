@@ -67,5 +67,6 @@ public class Definitions {
 	public static final int RECHNUNG_BEZAHLT = 5;
 	public static final JLabel NO_ENTRY = new JLabel(
 			"<html><body><center>keine neuen Einträge</body></html>");
+	public static final String VERSICHERUNG_STRING = "Versicherung";
 
 }

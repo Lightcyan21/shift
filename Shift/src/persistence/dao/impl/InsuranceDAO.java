@@ -94,7 +94,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			return null;
 		}
 	}
-
+	@Deprecated
 	@Override
 	public Insurance getById(long id) {
 		// wird nicht verwendet - Substitut = houseID
