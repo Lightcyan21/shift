@@ -45,7 +45,6 @@ public class AssetDAO extends AbstractDAO<Asset> implements DAO<Asset> {
 			asset.setId((long) key);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

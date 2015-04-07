@@ -3,7 +3,7 @@ package persistence.entity.impl;
 import persistence.entity.AbstractEntity;
 
 public class Bill extends AbstractEntity {
-	
+
 	private static final long serialVersionUID = -4535878538723747602L;
 	private long billID;
 	private String rechnungssteller;
@@ -12,14 +12,6 @@ public class Bill extends AbstractEntity {
 	private String verwendungszweck;
 	private String rechnungsdatum;
 	private String zahlungsdatum;
-	
-	public long getBillID() {
-		return billID;
-	}
-
-	public void setBillID(long billID) {
-		this.billID = billID;
-	}
 
 	public String getRechnungssteller() {
 		return rechnungssteller;
@@ -44,16 +36,15 @@ public class Bill extends AbstractEntity {
 	public void setBetrag(double betrag) {
 		this.betrag = betrag;
 	}
-	@Deprecated
+
 	@Override
 	public Long getId() {
-		// nicht genutzt, da RechnungsID String ist.
-		return null;
+		return billID;
 	}
-	@Deprecated
+
 	@Override
 	public void setId(Long id) {
-		// nicht genutzt, da RechnungsID String ist.
+		billID = id;
 	}
 
 	public String getVerwendungszweck() {

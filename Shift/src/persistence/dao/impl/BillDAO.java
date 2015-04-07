@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Statement;
-
 import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
 import persistence.entity.impl.Bill;
+
+import com.mysql.jdbc.Statement;
 
 public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 
@@ -49,7 +49,6 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			bill.setId((long) key);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -66,7 +65,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			PreparedStatement pre;
 			pre = con.prepareStatement("delete from bill where billID = ?;");
 
-			pre.setLong(1, entity.getBillID());
+			pre.setLong(1, entity.getId());
 
 			pre.execute();
 
@@ -93,7 +92,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			while (result.next()) {
 
 				Bill bill = new Bill();
-				bill.setBillID(result.getLong("billID"));
+				bill.setId(result.getLong("billID"));
 				bill.setRechnungssteller(result.getString("rechnungssteller"));
 				bill.setRechnungsEmpfaenger(result
 						.getString("rechnungsempfaenger"));
@@ -132,7 +131,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			ResultSet result = pre.executeQuery();
 
 			while (result.next()) {
-				bill.setBillID(result.getLong("billID"));
+				bill.setId(result.getLong("billID"));
 				bill.setRechnungssteller(result.getString("rechnungssteller"));
 				bill.setRechnungsEmpfaenger(result
 						.getString("rechnungsempfaenger"));
@@ -147,7 +146,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			e.printStackTrace();
 		}
 
-		if (bill.getBillID() != 0) {
+		if (bill.getId() != 0) {
 			return bill;
 		} else {
 			return null;
@@ -170,7 +169,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			ResultSet result = pre.executeQuery();
 
 			while (result.next()) {
-				bill.setBillID(result.getLong("billID"));
+				bill.setId(result.getLong("billID"));
 				bill.setRechnungssteller(result.getString("rechnungssteller"));
 				bill.setRechnungsEmpfaenger(result
 						.getString("rechnungsempfaenger"));
@@ -209,10 +208,10 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			pre.setString(4, entity.getVerwendungszweck());
 			pre.setString(5, entity.getRechnungsdatum());
 			pre.setString(6, entity.getZahlungsdatum());
-			pre.setLong(7, entity.getBillID());
+			pre.setLong(7, entity.getId());
 
 
-			if (entity.getBillID() != 0 && entity.getRechnungssteller() != null
+			if (entity.getId() != 0 && entity.getRechnungssteller() != null
 					&& entity.getRechnungsEmpfaenger() != null
 					&& entity.getBetrag() != 0
 					&& entity.getVerwendungszweck() != null) {

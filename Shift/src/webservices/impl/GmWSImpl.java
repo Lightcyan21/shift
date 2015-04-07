@@ -20,9 +20,9 @@ import webservices.GmWS;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 import baldoapp.Zeitsprung;
+
 import components.Definitions;
 import components.ShiftFrame;
-import components.ShiftLabel;
 
 @WebService(endpointInterface = "webservices.GmWS")
 public class GmWSImpl implements GmWS {
