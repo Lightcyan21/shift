@@ -89,7 +89,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 			while (result.next()) {
 
 				adm.setId(result.getLong("admonitionID"));
-				adm.setJobID(result.getInt("jobID"));
+				adm.setRechnungsVerwendungszweck(result.getString("rechnungsVerwendungszweck"));
 				adm.setPreis(result.getDouble("preis"));
 				adm.setSeen(result.getBoolean("seen"));
 
@@ -127,7 +127,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 			while (result.next()) {
 
 				adm.setId(result.getLong("admonitionID"));
-				adm.setJobID(result.getInt("jobID"));
+				adm.setRechnungsVerwendungszweck(result.getString("rechnungsVerwendungszweck"));
 				adm.setPreis(result.getDouble("preis"));
 				adm.setSeen(result.getBoolean("seen"));
 
@@ -161,7 +161,7 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 			while (result.next()) {
 
 				adm.setId(result.getLong("admonitionID"));
-				adm.setJobID(result.getInt("jobID"));
+				adm.setRechnungsVerwendungszweck(result.getString("rechnungsVerwenungszweck"));
 				adm.setPreis(result.getDouble("preis"));
 				adm.setSeen(result.getBoolean("seen"));
 
@@ -192,12 +192,12 @@ public class AdmonitionDAO extends AbstractDAO<Admonition> implements
 					.prepareStatement("update admonition SET admonitionID = ?, jobID = ?, preis = ?, seen =? WHERE admonitionID = ?;");
 
 			pre.setLong(1, entity.getId());
-			pre.setLong(2, entity.getJobID());
+			pre.setString(2, entity.getRechnungsVerwendungszweck());
 			pre.setDouble(3, entity.getPreis());
 			pre.setLong(4, entity.getId());
 			pre.setBoolean(5, entity.isSeen());
 
-			if (entity.getId() != 0 && entity.getJobID() != 0
+			if (entity.getId() != 0 && entity.getRechnungsVerwendungszweck() != null
 					&& entity.getPreis() != 0) {
 				pre.executeUpdate();
 				rt = true;
