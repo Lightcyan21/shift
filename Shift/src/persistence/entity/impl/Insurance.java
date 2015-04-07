@@ -27,16 +27,14 @@ public class Insurance extends AbstractEntity {
 	public void setBetrag(double betrag) {
 		this.betrag = betrag;
 	}
-
+	@Deprecated
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Deprecated
 	@Override
 	public void setId(Long id) {
-		// TODO Auto-generated method stub
 		
 	}
 
