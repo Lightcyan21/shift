@@ -166,27 +166,36 @@ public class GmWSImpl implements GmWS {
 	@WebMethod
 	public long sendOrder(String typ, String apartmentID, String mieter) {
 		System.out.println("Order erhalten...");
-		OrderDAO orderdao = new OrderDAO();
-		ApartmentDAO aptdao = new ApartmentDAO();
-		Order order = orderdao.create();
-		System.out.println(order.getId());
-		Apartment apt = aptdao.getApartment(apartmentID);
-		if (apt != null) {
-			System.out.println(typ);
-			System.out.println(apartmentID);
-			System.out.println(mieter);
-			order.setWohnungsID(apartmentID);
-			order.setJobName(typ);
-			order.setMieter(mieter);
-			order.setStatusWeiterleitung(false);
-			order.setStatus(Definitions.ANGEKOMMEN);
-			order.setStatusBestaetigung(false);
-			if (orderdao.persist(order)) {
-				System.out.println("Order gespeichert... ID: " + order.getId());
+		if (typ != Definitions.GARTENPFLEGE_STRING
+				|| typ != Definitions.RASEN_MAEHEN_STRING
+				|| typ != Definitions.FUSSWEG_RAEUMEN_STRING
+				|| typ != Definitions.INSTALLATION_STRING
+				|| typ != Definitions.INSTANDHALTUNG_STRING
+				|| typ != Definitions.HECKE_SCHNEIDEN_STRING
+				|| typ != Definitions.TREPPENREINIGUNG_STRING
+				|| typ != Definitions.FENSTERREINIGUNG_STRING
+				|| typ != Definitions.SCHLUESSELDIENST_STRING
+				|| typ != Definitions.REPARATUR_STRING) {
 
+			OrderDAO orderdao = new OrderDAO();
+			ApartmentDAO aptdao = new ApartmentDAO();
+			Order order = orderdao.create();
+			System.out.println(order.getId());
+			Apartment apt = aptdao.getApartment(apartmentID);
+			if (apt != null) {
+				System.out.println(typ);
+				System.out.println(apartmentID);
+				System.out.println(mieter);
+				order.setWohnungsID(apartmentID);
+				order.setJobName(typ);
+				order.setMieter(mieter);
+				order.setStatusWeiterleitung(false);
+				order.setStatus(Definitions.ANGEKOMMEN);
+				order.setStatusBestaetigung(false);
+				orderdao.persist(order);
+				System.out.println("Order gespeichert... ID: " + order.getId());
 				return order.getId();
 			} else {
-				System.out.println("error");
 				return 0;
 			}
 		} else {
@@ -220,10 +229,10 @@ public class GmWSImpl implements GmWS {
 
 			OrderDAO orderdao = new OrderDAO();
 			Order order = orderdao.getById(Long.parseLong(id));
+			order.setBetrag(betrag);
 			order.setStatusRechnung(true);
 			orderdao.persist(order);
 		}
-		;
 		System.out.println("Rechnung an BH senden...");
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
 		BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
@@ -316,13 +325,14 @@ public class GmWSImpl implements GmWS {
 	public int mahnungEmpfangen(String verwendungszweck) {
 		// Return 0 - hat geklappt, 1- hat nicht geklappt
 		AdmonitionDAO admdao = new AdmonitionDAO();
+		BillDAO billdao = new BillDAO();
+		Bill bill = billdao.getByVerwendungszweck(verwendungszweck);
 		Admonition adm = admdao.create();
-		adm.setJobID(0);
-		// adm.setVerwendungszweck(verwendungszweck);
+		adm.setRechnungsVerwendungszweck(verwendungszweck);
+		adm.setPreis(bill.getBetrag());
 		if (admdao.persist(adm)) {
 			return 1;
 		}
-
 		return 0;
 	}
 }
