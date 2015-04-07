@@ -150,8 +150,9 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			pre = con
 					.prepareStatement("update insurance SET houseID = ?, betrag = ? WHERE houseID = ?;");
 
-			pre.setDouble(1, entity.getHouseID());
+			pre.setLong(1, entity.getHouseID());
 			pre.setDouble(2, entity.getBetrag());
+			pre.setLong(3, entity.getHouseID());
 
 			if (entity.getHouseID() != 0 && entity.getBetrag() != 0) {
 				pre.executeUpdate();
