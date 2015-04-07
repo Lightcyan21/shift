@@ -2,7 +2,6 @@ package persistence.entity.impl;
 
 import persistence.entity.AbstractEntity;
 
-
 public class Insurance extends AbstractEntity {
 
 	/**
@@ -12,13 +11,6 @@ public class Insurance extends AbstractEntity {
 	private long houseID;
 	private double betrag;
 
-	public long getHouseID() {
-		return houseID;
-	}
-
-	public void setHouseID(long houseID) {
-		this.houseID = houseID;
-	}
 
 	public double getBetrag() {
 		return betrag;
@@ -30,14 +22,12 @@ public class Insurance extends AbstractEntity {
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return houseID;
 	}
 
 	@Override
 	public void setId(Long id) {
-		// TODO Auto-generated method stub
-		
+		houseID = id;
 	}
 
 }

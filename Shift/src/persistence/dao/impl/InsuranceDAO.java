@@ -37,7 +37,6 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			insu.setId((long) key);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -54,7 +53,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			pre = con
 					.prepareStatement("delete from insurance where houseID = ?;");
 
-			pre.setLong(1, entity.getHouseID());
+			pre.setLong(1, entity.getId());
 
 			pre.execute();
 
@@ -81,7 +80,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			while (result.next()) {
 
 				Insurance insu = new Insurance();
-				insu.setHouseID(result.getLong("houseID"));
+				insu.setId(result.getLong("houseID"));
 
 				insuList.add(insu);
 			}
@@ -121,7 +120,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			ResultSet result = pre.executeQuery();
 
 			while (result.next()) {
-				insu.setHouseID(result.getLong("houseID"));
+				insu.setId(result.getLong("houseID"));
 				insu.setBetrag(result.getDouble("betrag"));
 
 				insuList.add(insu);
@@ -130,7 +129,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (insu.getHouseID() != 0) {
+		if (insu.getId() != 0) {
 			return insu;
 		} else {
 			return null;
@@ -150,11 +149,11 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			pre = con
 					.prepareStatement("update insurance SET houseID = ?, betrag = ? WHERE houseID = ?;");
 
-			pre.setLong(1, entity.getHouseID());
+			pre.setLong(1, entity.getId());
 			pre.setDouble(2, entity.getBetrag());
-			pre.setLong(3, entity.getHouseID());
+			pre.setLong(3, entity.getId());
 
-			if (entity.getHouseID() != 0 && entity.getBetrag() != 0) {
+			if (entity.getId() != 0 && entity.getBetrag() != 0) {
 				pre.executeUpdate();
 				rt = true;
 			} else {
@@ -175,19 +174,16 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 
 	@Override
 	public void reload(Insurance entity) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void detach(Insurance entity) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void flush() {
-		// TODO Auto-generated method stub
 
 	}
 

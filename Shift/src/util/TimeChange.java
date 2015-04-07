@@ -46,14 +46,13 @@ public class TimeChange {
 		Date date = TimeChange.getInstance().getTime();
 		bill.setRechnungsdatum(sdf.format(date).toString());
 		bill.setZahlungsdatum(sdf.format(new Date(date.getYear(),date.getMonth()+1,date.getDay())));
-
 		// Definition des Verwendungszwecks
 		String verwendungszweck = "GM";
-		for (int i = 8; i > Long.toString(bill.getBillID()).length(); i--) {
+		for (int i = 8; i > Long.toString(bill.getId()).length(); i--) {
 			verwendungszweck += "0";
 		}
 		bill.setVerwendungszweck(verwendungszweck.concat(Long.toString(bill
-				.getBillID())));
+				.getId())));
 
 		// Berechnen des Rechnungsbetrags
 		List<Bill> billlist = billdao.findAll();

@@ -28,8 +28,8 @@ import persistence.entity.impl.Apartment;
 import ui.enums.UI_EVENT;
 import util.IRow;
 import util.TableModel;
+
 import components.Definitions;
-import components.ShiftButton;
 import components.ShiftButtonBack;
 import components.ShiftButtonSearch;
 import components.ShiftFrame;

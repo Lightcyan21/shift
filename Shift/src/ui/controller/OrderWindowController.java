@@ -1,14 +1,10 @@
 package ui.controller;
 
-import persistence.dao.impl.OrderDAO;
-import persistence.entity.impl.Order;
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
 import ui.enums.UI_EVENT;
 import ui.model.OrderWindowModel;
 import ui.view.OrderWindowView;
-import webservices.ServiceWS;
-import webservices.ServiceWSImplService;
 
 /**
  * hierbei handelt es sich um die Seite, die Aufträge darstellt

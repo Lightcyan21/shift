@@ -1,10 +1,5 @@
 package ui;
 
-import persistence.dao.impl.OrderDAO;
-import persistence.entity.impl.Order;
-import components.Definitions;
-import webservices.ServiceWS;
-import webservices.ServiceWSImplService;
 
 public class Schnittstellentester {
 

@@ -50,7 +50,6 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			order.setId((long) key);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return order;

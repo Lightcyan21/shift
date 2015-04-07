@@ -1,8 +1,5 @@
 package ui;
 
-import persistence.dao.impl.AdmonitionDAO;
-import persistence.entity.impl.Admonition;
-import persistence.entity.impl.House;
 
 public class LauncherData {
 

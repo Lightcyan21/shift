@@ -51,7 +51,6 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 			house.setId((long) key);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

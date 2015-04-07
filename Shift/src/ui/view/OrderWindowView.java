@@ -229,7 +229,6 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 	@Override
 	public void noEntries() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -246,13 +245,11 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 	@Override
 	public void deleteThisRow(int i) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void addRow() {
-		// TODO Auto-generated method stub
 
 	}
 

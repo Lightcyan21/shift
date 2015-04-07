@@ -52,13 +52,13 @@ public class Apartment extends AbstractEntity {
 	public void setMieteranzahl(int mieteranzahl) {
 		this.mieteranzahl = mieteranzahl;
 	}
-
+	@Deprecated
 	@Override
 	public Long getId() {
 		// nicht in Verwendung da Apartment keine Long ID verwendet
 		return null;
 	}
-
+	@Deprecated
 	@Override
 	public void setId(Long id) {
 		// nicht in Verwendung da Apartment keine Long ID verwendet
