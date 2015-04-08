@@ -1,5 +1,6 @@
 package webservices.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,11 +56,10 @@ public class GmWSImpl implements GmWS {
 			System.out.println("Haus eingetragen...");
 			ApartmentDAO aptdao = new ApartmentDAO();
 			Apartment apt;
-			apt = aptdao.createNew(house.getId() + ".0.0");
-			aptdao.persist(apt);
 
 			for (int i = 0; i < apartmentArea.length; i++) {
-				apt = aptdao.createNew(house.getId() + "." + lvl[i] + "." + i);
+				apt = aptdao.createNew(house.getId() + "." + lvl[i] + "."
+						+ (i + 1));
 				apt.setWohnflaeche(apartmentArea[i]);
 				apt.setZimmeranzahl(roomNumbers[i]);
 				aptdao.persist(apt);
@@ -255,13 +255,14 @@ public class GmWSImpl implements GmWS {
 	@WebMethod
 	public int pushDate(int year, int month, int day) {
 		TimeChange timechange = TimeChange.getInstance();
-		System.out.println("Zeitsprung erhalten...");
+		System.out.println("Zeitsprung erhalten..." + day + "." + month + "."
+				+ year);
 		Date localDate = timechange.getTime();
 		int returncode = 100;
 		if (localDate.equals(new Date(0))) {
 			System.out.println("Zeitinitialiserung... auf den " + day + "."
 					+ month + "." + (year + 1900));
-			timechange.setTime(new Date(year, month, day));
+			timechange.setTime(new Date(year, month-1, day));
 			ShiftFrame.getInstance().setDatum();
 			returncode = 101;
 		} else {
@@ -314,7 +315,7 @@ public class GmWSImpl implements GmWS {
 			System.out.println("Object: " + o.toString());
 			System.out.println("sprungArt: " + sprungArt);
 			System.out.println("returncode: " + returncode);
-			timechange.setTime(new Date(year, month, day));
+			timechange.setTime(new Date(year, month-1, day));
 			ShiftFrame.getInstance().setDatum();
 
 			System.out.println("aktuelles localDate - nach der Methode: " + day
@@ -344,25 +345,42 @@ public class GmWSImpl implements GmWS {
 		System.out.println("Leere Apartments angefragt...");
 		HouseDAO housedao = new HouseDAO();
 		House house = null;
-		Map<String,String> map = new HashMap<String, String>();
+		List<Long> longlist = new ArrayList<Long>();
+		List<House> houselist = new ArrayList<House>();
+		Map<String, String> map = new HashMap<String, String>();
 		ApartmentDAO aptdao = new ApartmentDAO();
-		List<Apartment> apts= aptdao.findAll();
+		List<Apartment> apts = aptdao.listWhenEmpty();
 		for (Apartment apartment : apts) {
-			if(apartment.getMieteranzahl()== 0){
+			String[] arr = apartment.getAptID().split("\\.");
+			if (!longlist.contains(arr[0])) {
+				longlist.add(Long.parseLong(arr[0]));
+			}
+		}
+
+		for (Long zahl : longlist) {
+			house = housedao.getById(zahl);
+			houselist.add(house);
+		}
+
+		for (Apartment apartment : apts) {
+			if (apartment.getMieteranzahl() == 0) {
 				// add to List
-				Map<String,String> infos = new HashMap<String, String>();
-				infos.put("WohnungsID", apartment.getAptID());
-				infos.put("Zimmeranzahl", Integer.toString(apartment.getZimmeranzahl()));
-				infos.put("Wohnflaeche", Double.toString(apartment.getWohnflaeche()));
 				String[] arr = apartment.getAptID().split("\\.");
-				house = housedao.getById(Long.parseLong(arr[0]));
+				house = houselist.get(Integer.parseInt(arr[0]) - 1);
+				Map<String, String> infos = new HashMap<String, String>();
+				infos.put("WohnungsID", apartment.getAptID());
+				infos.put("Zimmeranzahl",
+						Integer.toString(apartment.getZimmeranzahl()));
+				infos.put("Wohnflaeche",
+						Double.toString(apartment.getWohnflaeche()));
 				infos.put("PLZ", house.getPlz());
 				infos.put("Ort", house.getOrt());
-				infos.put("Strasse",house.getStrasse());
+				infos.put("Strasse", house.getStrasse());
 				infos.put("Hausnummer", house.getHausnr());
 				infos.put("Etage", arr[1]);
-				
-				map.put(apartment.getAptID(), ProjektXMLParser.mapToXMLString(infos));
+
+				map.put("_" + apartment.getAptID(),
+						ProjektXMLParser.mapToXMLString(infos));
 			}
 		}
 		return ProjektXMLParser.mapToXMLString(map);

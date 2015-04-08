@@ -179,9 +179,11 @@ public class AptRequestView extends AbstractView implements SpringTable {
 				frame.validate();
 				frame.repaint();
 			} else {
-				JOptionPane.showMessageDialog(new JFrame(),
-						"Haus nicht gefunden!", "Fehler",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								new JFrame(),
+								"Das Gebäude mit der eingegebenen GebäudeID kann nicht gefunden werden. Bitte geben Sie die korrekte GebäudeID erneut ein.",
+								"Fehler", JOptionPane.ERROR_MESSAGE);
 				noEntries();
 			}
 		} else {
@@ -196,8 +198,11 @@ public class AptRequestView extends AbstractView implements SpringTable {
 				frame.validate();
 				frame.repaint();
 			} else {
-				JOptionPane.showMessageDialog(new JFrame(),
-						"Apartment nicht gefunden!","Fehler",JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								new JFrame(),
+								"Die Wohnung mit der eingegebenen WohnungsID kann nicht gefunden werden. Bitte geben Sie die korrekte WohnungsID erneut ein.",
+								"Fehler", JOptionPane.ERROR_MESSAGE);
 				noEntries();
 			}
 		}
