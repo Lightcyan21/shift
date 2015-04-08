@@ -68,5 +68,9 @@ public class Definitions {
 	public static final JLabel NO_ENTRY = new JLabel(
 			"<html><body><center>keine neuen Einträge</body></html>");
 	public static final String VERSICHERUNG_STRING = "Versicherung";
+	public static final int initX = 10;
+	public static final int initY = 0;
+	public static final int xPad = 30;
+	public static final int yPad = 20;
 
 }

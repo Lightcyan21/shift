@@ -46,10 +46,10 @@ public class AccountingView extends AbstractView implements SpringTable {
 	private ShiftPanel2 table;
 	private int rows;
 	private int cols = 7;
-	private int initX = 10;
-	private int initY = 0;
-	private int xPad = 30;
-	private int yPad = 20;
+	private int initX = Definitions.initX;
+	private int initY = Definitions.initY;
+	private int xPad = Definitions.xPad;
+	private int yPad = Definitions.yPad;
 	private HashMap<String, Bill> entries;
 	private Map<String, String> forderungslisteMap;
 	private ShiftLabel nr = new ShiftLabel("Nr.");
