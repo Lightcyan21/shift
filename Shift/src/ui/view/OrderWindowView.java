@@ -4,17 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
+import persistence.dao.impl.HouseDAO;
 import persistence.dao.impl.OrderDAO;
+import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
@@ -141,6 +145,8 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		ShiftButton2 entry8 = new ShiftButton2("");
 
 		final Order ord = order;
+		final int rowdel = row;
+		final Long id = ord.getId();
 
 		entry5.setIcon(new ImageIcon("res/WohnungsInfo.png"));
 		entry5.addActionListener(new ActionListener() {
@@ -152,24 +158,25 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			}
 		});
 
-		final String res;
+		final String res6;
 
 		if (ord.isStatusWeiterleitung() == true) {
-			res = "res/WohnungsInfo.png";
+			res6 = "res/WohnungsInfo.png";
 		} else {
-			res = "res/WohnungsInfo.png";
+			res6 = "res/WohnungsInfo.png";
 		}
 
-		entry6.setIcon(new ImageIcon(res));
+		entry6.setIcon(new ImageIcon(res6));
+		
+		String res7;
+		
+		if (ord.isStatusRechnung() == true) {
+			res7 = "res/WohnungsInfo.png";
+		}else {
+			res7 = "res/WohnungsInfo.png";
+		}
 
-		entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
-		entry7.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fireLocalUIEvent(this, UI_EVENT.RECHNUNG_SENDEN.ordinal());
-			}
-		});
+		entry7.setIcon(new ImageIcon(res7));
 
 		entry8.setIcon(new ImageIcon("res/Loeschen.png"));
 		entry8.addActionListener(new ActionListener() {
@@ -177,6 +184,12 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fireLocalUIEvent(this, UI_EVENT.REMOVE_ORDER.ordinal());
+				OrderDAO orderdao = new OrderDAO();
+				Order order = orderdao.getById(id);
+				deleteThisRow(rowdel);
+				order.setSeen(true);
+				JOptionPane.showMessageDialog(frame, "Auftrag gelöscht");
+				orderdao.persist(order);
 			}
 		});
 
@@ -215,7 +228,40 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 	@Override
 	public void deleteThisRow(int i) {
+		table.removeAll();
+		Order deleted = entries.remove(Integer.toString(i));
+		if (deleted == null) {
+			System.out.println("Null: Error");
+		} else {
+			System.out.println("Order mit der ID " + deleted.getId()
+					+ " gelöscht");
+		}
 
+		rows = 1;
+		// HashMap<String, House> housescopy = (HashMap<String, House>) entries
+		// .clone();
+		List<Order> toadd = new ArrayList<Order>();
+		for (Order order : entries.values()) {
+			toadd.add(order);
+		}
+		if (toadd.size() == 0) {
+			noEntries();
+			return;
+		}
+		entries.clear();
+
+		// headlines setzen
+		headlinesSetzen();
+		for (Order order : toadd) {
+			addRow(order);
+		}
+
+		System.out.println("tablecount:" + table.getComponentCount()
+				+ " rows: " + rows + " cols:" + cols);
+		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
+				yPad);
+		table.validate();
+		frame.repaint();
 	}
 
 	@Override

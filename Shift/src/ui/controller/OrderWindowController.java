@@ -62,11 +62,9 @@ public class OrderWindowController extends
 			gebaeude.sendOrderToFm(name, apartmentID, flaeche, orderID);
 
 		}
-		if (event.getEventId() == UI_EVENT.RECHNUNG_SENDEN.ordinal()) {
-			System.out.println("--- Rechnung senden");
-			OrderDAO ordD = new OrderDAO();
-			Order ord = new Order();
-			ord.isStatusRechnung();
+		if (event.getEventId() == UI_EVENT.REMOVE_ORDER.ordinal()) {
+			System.out.println("--- Auftrag löschen");
+			
 
 		}
 
