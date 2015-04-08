@@ -32,10 +32,10 @@ import util.SpringUtilities;
 import webservices.impl.BuchhaltungWS;
 import webservices.impl.BuchhaltungWsImplService;
 import baldoapp.ProjektXMLParser;
-
 import components.Definitions;
 import components.ShiftButton2;
 import components.ShiftButtonBack;
+import components.ShiftButtonBestaetigung;
 import components.ShiftFrame;
 import components.ShiftLabel;
 import components.ShiftPanel2;
@@ -193,10 +193,10 @@ public class AccountingView extends AbstractView implements SpringTable {
 				bill.getRechnungsEmpfaenger());
 		ShiftTableEntry entry4 = new ShiftTableEntry(Double.toString(bill
 				.getBetrag()));
-		ShiftButton2 entry5 = new ShiftButton2("");
-		entry5.setIcon(mahnungsicon);
-		ShiftButton2 entry6 = new ShiftButton2("");
-		entry6.setIcon(nomahnungsicon);
+		ShiftButtonBestaetigung entry5 = new ShiftButtonBestaetigung();
+		entry5.setIcon(new ImageIcon ("res/Mahnung.png"));
+		ShiftButtonBestaetigung entry6 = new ShiftButtonBestaetigung();
+		entry6.setIcon(new ImageIcon ("res/VerzichtaufZahlung.png"));
 		final int rowdel = row;
 		final String id = bill.getVerwendungszweck();
 
@@ -307,8 +307,8 @@ public class AccountingView extends AbstractView implements SpringTable {
 		layout = new SpringLayout();
 		noEntries = Definitions.NO_ENTRY;
 		rows = 1;
-		mahnungsicon = new ImageIcon("res/WohnungsInfo.png");
-		nomahnungsicon = new ImageIcon("res/WohnungsInfo.png");
+		mahnungsicon = new ImageIcon("res/Mahnung.png");
+		nomahnungsicon = new ImageIcon("res/VerzichtaufZahlung.png");
 	}
 
 }

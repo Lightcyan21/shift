@@ -124,8 +124,8 @@ public class ExposeView extends AbstractView implements SpringTable {
 		layout = new SpringLayout();
 		noEntries = Definitions.NO_ENTRY;
 		rows = 1;
-		versicherungsicon = new ImageIcon("res/WohnungsInfo.png");
-		noversicherungsicon = new ImageIcon("res/WohnungsInfo.png");
+		versicherungsicon = new ImageIcon("res/Versicherung.png");
+		noversicherungsicon = new ImageIcon("res/keineVersicherung.png");
 
 	}
 
