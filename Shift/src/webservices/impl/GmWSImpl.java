@@ -1,6 +1,9 @@
 package webservices.impl;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -19,8 +22,8 @@ import util.TimeChange;
 import webservices.GmWS;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
+import baldoapp.ProjektXMLParser;
 import baldoapp.Zeitsprung;
-
 import components.Definitions;
 import components.ShiftFrame;
 
@@ -334,5 +337,34 @@ public class GmWSImpl implements GmWS {
 			return 1;
 		}
 		return 0;
+	}
+
+	@Override
+	public String getEmptyApartments() {
+		System.out.println("Leere Apartments angefragt...");
+		HouseDAO housedao = new HouseDAO();
+		House house = null;
+		Map<String,String> map = new HashMap<String, String>();
+		ApartmentDAO aptdao = new ApartmentDAO();
+		List<Apartment> apts= aptdao.findAll();
+		for (Apartment apartment : apts) {
+			if(apartment.getMieteranzahl()== 0){
+				// add to List
+				Map<String,String> infos = new HashMap<String, String>();
+				infos.put("WohnungsID", apartment.getAptID());
+				infos.put("Zimmeranzahl", Integer.toString(apartment.getZimmeranzahl()));
+				infos.put("Wohnflaeche", Double.toString(apartment.getWohnflaeche()));
+				String[] arr = apartment.getAptID().split("\\.");
+				house = housedao.getById(Long.parseLong(arr[0]));
+				infos.put("PLZ", house.getPlz());
+				infos.put("Ort", house.getOrt());
+				infos.put("Strasse",house.getStrasse());
+				infos.put("Hausnummer", house.getHausnr());
+				infos.put("Etage", arr[1]);
+				
+				map.put(apartment.getAptID(), ProjektXMLParser.mapToXMLString(infos));
+			}
+		}
+		return ProjektXMLParser.mapToXMLString(map);
 	}
 }

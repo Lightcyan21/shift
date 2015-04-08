@@ -160,12 +160,23 @@ public interface GmWS {
 	 */
 	@WebMethod
 	int pushDate(int year, int month, int day);
-	
+
 	/**
 	 * you can use this webservice to send us a admonition
-	 * @param verwendungszweck Verwendungszweck der Rechnung
+	 * 
+	 * @param verwendungszweck
+	 *            Verwendungszweck der Rechnung
 	 * @return an int
 	 */
-	@WebMethod int mahnungEmpfangen(String verwendungszweck); 
+	@WebMethod
+	int mahnungEmpfangen(String verwendungszweck);
 
+	/**
+	 * @return String, XML Datei, ‰uﬂere HashMap: Apartments mit ID, innere
+	 *         HashMap Informationen zu den einzelnen Wohnung mit den keys:
+	 *         "WohnungsID", "Zimmeranzahl", "Wohnflaeche", "Etage", "PLZ",
+	 *         "Ort", "Strasse", "Hausnummer"
+	 */
+	@WebMethod
+	String getEmptyApartments();
 }

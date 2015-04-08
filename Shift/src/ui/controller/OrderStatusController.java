@@ -1,5 +1,7 @@
 package ui.controller;
 
+import javax.swing.JOptionPane;
+
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
 import persistence.dao.impl.OrderDAO;
@@ -54,8 +56,13 @@ public class OrderStatusController extends
 			System.out.println("ID: " + id);
 			Order order = orderdao.getById(Long.parseLong(id));
 			if (order != null) {
-				registeredViews.get(0).showStatus(order.getId(),
-						gs.getState(order.getId()));
+				System.out.println("test" + gs.getState(order.getId())+"test");
+				if (gs.getState(order.getId()) != "") {
+					registeredViews.get(0).showStatus(order.getId(),
+							gs.getState(order.getId()));
+				}else{
+				registeredViews.get(0).incorrectInput();
+				}
 
 			} else {
 				registeredViews.get(0).incorrectInput();

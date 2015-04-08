@@ -39,9 +39,8 @@ public class AptRequestController extends
 		if (event.getEventId() == UI_EVENT.PUSH_DETAILS.ordinal()) {
 			System.out.println("---Details zeigen");
 			Apartment apt = (Apartment) event.getData();
-			System.out.println(apt.getAptID());
+			System.out.println("Zeige Informationen zu Apartment "+apt.getAptID()+" an...");
 			String[] arr = apt.getAptID().split("\\.");
-			System.out.println(arr.length);
 
 			HouseDAO housedao = new HouseDAO();
 			System.out.println(Long.parseLong(arr[0]));
