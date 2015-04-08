@@ -107,7 +107,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 	}
 
-	public List<Apartment> listWhenEmpty(String teilID) {
+	public List<Apartment> listWhenEmpty() {
 
 		Connection con;
 		con = DBUtil.getConnection();

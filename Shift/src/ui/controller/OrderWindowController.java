@@ -64,6 +64,9 @@ public class OrderWindowController extends
 		}
 		if (event.getEventId() == UI_EVENT.RECHNUNG_SENDEN.ordinal()) {
 			System.out.println("--- Rechnung senden");
+			OrderDAO ordD = new OrderDAO();
+			Order ord = new Order();
+			ord.isStatusRechnung();
 
 		}
 
