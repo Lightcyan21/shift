@@ -1,5 +1,9 @@
 package ui.controller;
 
+import persistence.dao.impl.HouseDAO;
+import persistence.dao.impl.OrderDAO;
+import persistence.entity.impl.House;
+import persistence.entity.impl.Order;
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
 import ui.enums.UI_EVENT;
@@ -34,10 +38,30 @@ public class OrderWindowController extends
 			System.out.println("--- Auftrag wird weiter geleitet");
 			ServiceWSImplService gebaeudeservice = new ServiceWSImplService();
 			ServiceWS gebaeude = gebaeudeservice.getServiceWSImplPort();
-			gebaeude.sendOrderToFm(arg0, arg1, arg2, arg3);
-			
+			OrderDAO orderdao = new OrderDAO();
+			String id = (String) event.getData();
+			System.out.println("ID: " + id);
+			Order order = orderdao.getById(Long.parseLong(id));
+			String name = order.getJobName();
+			String apartmentID = order.getWohnungsID();
+			String[] arr = apartmentID.split(".");
+			Long houseID = Long.parseLong(arr[0]);
+			HouseDAO housedao = new HouseDAO();
+			House house = housedao.getById(houseID);
+			int flaeche = 0;
+			if (order.getJobName() == "Test") {
+				flaeche = (int) house.getFlaeche(); // in db ist Fläche ein int.
+													// evtl ändern
+			} else {
+				flaeche = (int) house.getGartenflaeche(); // in db ist
+															// gartenflaeche ein
+															// int. evtl ändern
+			}
+			long orderID = order.getId(); // javadoc verlangt long als datentyp
+			gebaeude.sendOrderToFm(name, apartmentID, flaeche, orderID);
+
 		}
-		
+
 	}
 
 	public static OrderWindowController getInstance() {
