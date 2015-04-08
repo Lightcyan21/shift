@@ -46,7 +46,7 @@ public class AccountingController extends
 			String result = bh.uebergabeMahnauftrag(vz);
 			System.out.println(result);
 			if(result != "Mahnauftrag erhalten"){
-				JOptionPane.showMessageDialog(new JFrame(), result);
+				JOptionPane.showMessageDialog(new JFrame(), result,"Fehler!",JOptionPane.ERROR_MESSAGE);
 			} else {
 				this.registeredViews.get(0).deleteThisRow(rowdel);
 			}

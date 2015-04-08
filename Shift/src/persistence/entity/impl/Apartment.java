@@ -10,11 +10,12 @@ public class Apartment extends AbstractEntity {
 	private double wohnflaeche;
 	private int zimmeranzahl;
 	private int mieteranzahl;
+	@Deprecated
 	private long houseID;
 	
 	public Apartment(){
 	}
-
+	@Deprecated
 	public House getHouse() {
 		HouseDAO housedao = new HouseDAO();
 		House house = housedao.getById(houseID);

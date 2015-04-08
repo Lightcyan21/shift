@@ -6,6 +6,7 @@ import java.util.List;
 
 import persistence.dao.impl.ApartmentDAO;
 import persistence.dao.impl.BillDAO;
+import persistence.dao.impl.HouseDAO;
 import persistence.dao.impl.InsuranceDAO;
 import persistence.dao.impl.OrderDAO;
 import persistence.entity.impl.Apartment;
@@ -19,7 +20,6 @@ import webservices.impl.BuchhaltungWS;
 import webservices.impl.BuchhaltungWsImplService;
 import webservices.impl.VerwaltungWS;
 import webservices.impl.VerwaltungWSImplService;
-
 import components.Definitions;
 
 public class TimeChange {
@@ -86,13 +86,16 @@ public class TimeChange {
 	private void monatlicheOrdersBeauftragen(int month) {
 		ApartmentDAO aptdao = new ApartmentDAO();
 		OrderDAO orderdao = new OrderDAO();
+		HouseDAO housedao = new HouseDAO();
+
 		House house = null;
 		Order order = null;
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
 		List<Apartment> list = aptdao.findAll();
 		for (Apartment apartment : list) {
-			house = apartment.getHouse();
+			String[] arr = apartment.getAptID().split("\\.");
+			house = housedao.getById(Long.parseLong(arr[0]));
 			String aptID = apartment.getAptID();
 
 			if (month > 2 && month < 10) {
@@ -118,7 +121,7 @@ public class TimeChange {
 				// Gartenpflege
 				order = orderdao.create();
 				if (gs.sendOrderToFm(Definitions.GARTENPFLEGE_STRING, aptID, 1,
-						order.getId()) != "") {	
+						order.getId()) != "") {
 					order.setWohnungsID(aptID);
 					order.setStatusBestaetigung(true);
 					order.setStatus(Definitions.ANGEKOMMEN);
@@ -198,6 +201,7 @@ public class TimeChange {
 		ApartmentDAO aptdao = new ApartmentDAO();
 		InsuranceDAO insudao = new InsuranceDAO();
 		OrderDAO orderdao = new OrderDAO();
+		HouseDAO housedao = new HouseDAO();
 
 		List<Apartment> allApt = aptdao.findAll();
 		int zaehlerstandGas = 0;
@@ -227,7 +231,8 @@ public class TimeChange {
 		for (int i = 0; i < allApt.size(); i++) {
 			apt = allApt.get(i);
 			aptID = allApt.get(i).getAptID();
-			house = apt.getHouse();
+			String[] arr = aptID.split("\\.");
+			house = housedao.getById(Long.parseLong(arr[0]));
 
 			// 0 - wasser3000-5000, 1-strom 200-300, 2-gas,1000-1500
 			zaehlerstandWasserEK = gs.getValue(0);
