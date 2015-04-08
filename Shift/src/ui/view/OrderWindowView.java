@@ -23,10 +23,11 @@ import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
 import util.SpringUtilities;
-
 import components.Definitions;
 import components.ShiftButton2;
 import components.ShiftButtonBack;
+import components.ShiftButtonBestaetigung;
+import components.ShiftButtonWeiterleiten;
 import components.ShiftFrame;
 import components.ShiftLabel;
 import components.ShiftPanel2;
@@ -139,16 +140,16 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 				.getId()));
 		ShiftTableEntry entry3 = new ShiftTableEntry(order.getJobName());
 		ShiftTableEntry entry4 = new ShiftTableEntry(order.getWohnungsID());
-		ShiftButton2 entry5 = new ShiftButton2("");
-		ShiftButton2 entry6 = new ShiftButton2("");
-		ShiftButton2 entry7 = new ShiftButton2("");
-		ShiftButton2 entry8 = new ShiftButton2("");
+		ShiftButtonWeiterleiten entry5 = new ShiftButtonWeiterleiten();
+		ShiftButtonBestaetigung entry6 = new ShiftButtonBestaetigung();
+		ShiftButtonBestaetigung entry7 = new ShiftButtonBestaetigung();
+		ShiftButtonBestaetigung entry8 = new ShiftButtonBestaetigung();
 
 		final Order ord = order;
 		final int rowdel = row;
 		final Long id = ord.getId();
 
-		entry5.setIcon(new ImageIcon("res/WohnungsInfo.png"));
+		//entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
 		entry5.addActionListener(new ActionListener() {
 
 			@Override
@@ -159,11 +160,11 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		});
 
 		final String res6;
-
+//true= Bestaetigung gesendet, else nicht
 		if (ord.isStatusWeiterleitung() == true) {
-			res6 = "res/WohnungsInfo.png";
+			res6 = "res/Bestaetigung.png";
 		} else {
-			res6 = "res/WohnungsInfo.png";
+			res6 = "res/keineBestaetigung.png";
 		}
 
 		entry6.setIcon(new ImageIcon(res6));
@@ -171,14 +172,14 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		String res7;
 		
 		if (ord.isStatusRechnung() == true) {
-			res7 = "res/WohnungsInfo.png";
+			res7 = "res/Rechnung.png";
 		}else {
-			res7 = "res/WohnungsInfo.png";
+			res7 = "res/keineRechnung.png";
 		}
 
 		entry7.setIcon(new ImageIcon(res7));
 
-		entry8.setIcon(new ImageIcon("res/Loeschen.png"));
+		entry8.setIcon(new ImageIcon("res/Loeschen2.png"));
 		entry8.addActionListener(new ActionListener() {
 
 			@Override
