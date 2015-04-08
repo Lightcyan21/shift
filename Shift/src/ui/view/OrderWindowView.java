@@ -140,24 +140,27 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		ShiftButton2 entry7 = new ShiftButton2("");
 		ShiftButton2 entry8 = new ShiftButton2("");
 
+		final Order ord = order;
+
 		entry5.setIcon(new ImageIcon("res/WohnungsInfo.png"));
 		entry5.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal());
-				//Objekt/Liste/ect..  mitgeben, um den WS zu befüllen [...ordinal(), <>]
+				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal(),
+						ord);
 			}
 		});
 
-		entry6.setIcon(new ImageIcon("res/WohnungsInfo.png"));
-		entry6.addActionListener(new ActionListener() {
+		final String res;
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fireLocalUIEvent(this, UI_EVENT.BESTAETIGUNG_SENDEN.ordinal());
-			}
-		});
+		if (ord.isStatusWeiterleitung() == true) {
+			res = "res/WohnungsInfo.png";
+		} else {
+			res = "res/WohnungsInfo.png";
+		}
+
+		entry6.setIcon(new ImageIcon(res));
 
 		entry7.setIcon(new ImageIcon("res/WohnungsInfo.png"));
 		entry7.addActionListener(new ActionListener() {

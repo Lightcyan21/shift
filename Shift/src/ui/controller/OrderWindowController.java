@@ -36,20 +36,21 @@ public class OrderWindowController extends
 		}
 		if (event.getEventId() == UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal()) {
 			System.out.println("--- Auftrag wird weiter geleitet");
+			Order ord = (Order) event.getData();
 			ServiceWSImplService gebaeudeservice = new ServiceWSImplService();
 			ServiceWS gebaeude = gebaeudeservice.getServiceWSImplPort();
 			OrderDAO orderdao = new OrderDAO();
 			String id = (String) event.getData();
 			System.out.println("ID: " + id);
-			Order order = orderdao.getById(Long.parseLong(id));
-			String name = order.getJobName();
-			String apartmentID = order.getWohnungsID();
-			String[] arr = apartmentID.split(".");
+			ord = orderdao.getById(Long.parseLong(id));
+			String name = ord.getJobName();
+			String apartmentID = ord.getWohnungsID();
+			String[] arr = apartmentID.split("\\.");
 			Long houseID = Long.parseLong(arr[0]);
 			HouseDAO housedao = new HouseDAO();
 			House house = housedao.getById(houseID);
 			int flaeche = 0;
-			if (order.getJobName() == "Test") {
+			if (ord.getJobName() == "Test") {
 				flaeche = (int) house.getFlaeche(); // in db ist Fläche ein int.
 													// evtl ändern
 			} else {
@@ -57,8 +58,12 @@ public class OrderWindowController extends
 															// gartenflaeche ein
 															// int. evtl ändern
 			}
-			long orderID = order.getId(); // javadoc verlangt long als datentyp
+			long orderID = ord.getId(); // javadoc verlangt long als datentyp
 			gebaeude.sendOrderToFm(name, apartmentID, flaeche, orderID);
+
+		}
+		if (event.getEventId() == UI_EVENT.RECHNUNG_SENDEN.ordinal()) {
+			System.out.println("--- Rechnung senden");
 
 		}
 

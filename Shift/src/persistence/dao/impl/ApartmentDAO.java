@@ -107,6 +107,42 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 
 	}
 
+	public List<Apartment> listWhenEmpty(String teilID) {
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		List<Apartment> aptList = new ArrayList<>();
+
+		try {
+			PreparedStatement pre;
+			pre = con
+					.prepareStatement("select * from apartment where mieteranzahl = 0;");
+
+			ResultSet result = pre.executeQuery();
+
+			while (result.next()) {
+
+				Apartment apt = new Apartment();
+				apt.setAptID(result.getString("wohnungsID"));
+				apt.setMieteranzahl(result.getInt("mieteranzahl"));
+				apt.setZimmeranzahl(result.getInt("zimmeranzahl"));
+				apt.setWohnflaeche(result.getDouble("wohnflaeche"));
+
+				aptList.add(apt);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (aptList.size() != 0) {
+			return aptList;
+		} else {
+			return null;
+		}
+
+	}
+
 	public List<Apartment> listWhenStartsWith(String teilID) {
 
 		Connection con;
@@ -118,7 +154,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 			PreparedStatement pre;
 			pre = con
 					.prepareStatement("select * from apartment where wohnungsID like ?;");
-			
+
 			pre.setString(1, teilID + ".%");
 
 			ResultSet result = pre.executeQuery();
