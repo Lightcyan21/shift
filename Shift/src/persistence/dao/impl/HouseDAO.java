@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.mysql.jdbc.Statement;
@@ -163,8 +164,59 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 
 	}
 
+	public HashMap<Long, House> getHouseWithEmptyApts(List<Long> list) {
+
+		HashMap<Long, House> houseHM = new HashMap<>();
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		for (Long long1 : list) {
+
+			try {
+				PreparedStatement pre;
+				pre = con
+						.prepareStatement("select * from house where houseID = ?;");
+				
+				pre.setLong(1, long1);
+				
+				ResultSet result = pre.executeQuery();
+				
+				while(result.next()) {
+					House house = new House();
+					house.setId(result.getLong("houseID"));
+					house.setPlz(result.getString("plz"));
+					house.setStrasse(result.getString("strasse"));
+					house.setOrt(result.getString("ort"));
+					house.setHausnr(result.getString("hausnr"));
+					house.setStockwerke(result.getInt("stockwerke"));
+					house.setAnzahlWohnungen(result.getInt("anzahlWohnungen"));
+					house.setGartenflaeche(result.getDouble("gartenflaeche"));
+					house.setFlaeche(result.getDouble("flaeche"));
+					house.setSeen(result.getBoolean("seen"));
+					
+					houseHM.put(long1, house);
+					
+				}
+				
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (houseHM.size() != 0) {
+				return houseHM;
+			} else {
+				return null;
+			}
+
+		}
+
+		return houseHM;
+
+	}
+
 	public List<House> getIfStatusNotSeen() {
-		
+
 		Connection con;
 		con = DBUtil.getConnection();
 
@@ -172,7 +224,8 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 
 		try {
 			PreparedStatement pre;
-			pre = con.prepareStatement("select * from house where seen = false");
+			pre = con
+					.prepareStatement("select * from house where seen = false;");
 
 			ResultSet result = pre.executeQuery();
 
@@ -227,7 +280,6 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 			pre.setDouble(9, entity.getFlaeche());
 			pre.setBoolean(10, entity.isSeen());
 			pre.setLong(11, entity.getId());
-			
 
 			if (entity.getId() != 0 && entity.getPlz() != null
 					&& entity.getStrasse() != null && entity.getOrt() != null
