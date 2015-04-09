@@ -174,11 +174,14 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		// true= Bestaetigung gesendet, else nicht
 		if (ord.isStatusWeiterleitung() == true) {
 			res6 = "res/Bestaetigung.png";
-		} else {
+		} if (ord.isStatusBestaetigung() == false) {
 			res6 = "res/keineBestaetigung.png";
+		}else {
+			System.out.println("Fehler?");
 		}
 
 		entry6.setIcon(new ImageIcon(res6));
+		
 		if (ord.isStatusRechnung() == true) {
 			res7 = "res/Rechnung.png";
 		} else {
