@@ -38,14 +38,16 @@ public class ExposeView extends AbstractView implements SpringTable {
 	private ShiftFrame frame;
 	private ShiftPanel2 table;
 	private int rows;
-	private int cols = 9;
+	private int cols = 11;
 	private int initX = Definitions.initX;
 	private int initY = Definitions.initY;
 	private int xPad = Definitions.xPad;
 	private int yPad = Definitions.yPad;
 	private HashMap<String, House> entries;
 	private ShiftLabel nr = new ShiftLabel("Nr.");
+	private ShiftLabel houseid = new ShiftLabel("HausID");
 	private ShiftLabel street = new ShiftLabel("Straﬂe");
+	private ShiftLabel hausnr = new ShiftLabel("Hausnr.");
 	private ShiftLabel ort = new ShiftLabel("Ort");
 	private ShiftLabel plz = new ShiftLabel("PLZ");
 	private ShiftLabel area = new ShiftLabel(
@@ -171,9 +173,11 @@ public class ExposeView extends AbstractView implements SpringTable {
 	 */
 	public void headlinesSetzen() {
 		table.add(nr);
-		table.add(street);
-		table.add(ort);
+		table.add(houseid);
 		table.add(plz);
+		table.add(ort);
+		table.add(street);
+		table.add(hausnr);
 		table.add(area);
 		table.add(garden);
 		table.add(wohn);
@@ -197,11 +201,12 @@ public class ExposeView extends AbstractView implements SpringTable {
 			}
 			SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
 					yPad);
-		} else {
+		} else {	
 			noEntries();
 
 		}
-		
+		table.validate();
+		frame.repaint();
 		frame.validate();
 		return table;
 	}
@@ -237,12 +242,12 @@ public class ExposeView extends AbstractView implements SpringTable {
 		int row = rows;
 
 		entries.put(Integer.toString(rows), house);
-		ShiftTableEntry entry = new ShiftTableEntry(Long.toString(house.getId()));
-		ShiftTableEntry entry1 = new ShiftTableEntry(Integer.toString(rows));
-		ShiftTableEntry entry2 = new ShiftTableEntry(house.getStrasse());
-		ShiftTableEntry entry3 = new ShiftTableEntry(house.getHausnr());
-		ShiftTableEntry entry4 = new ShiftTableEntry(house.getOrt());
-		ShiftTableEntry entry5 = new ShiftTableEntry(house.getPlz());
+		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
+		ShiftTableEntry entry1 = new ShiftTableEntry(Long.toString(house.getId()));
+		ShiftTableEntry entry2 = new ShiftTableEntry(house.getPlz());
+		ShiftTableEntry entry3 = new ShiftTableEntry(house.getOrt());
+		ShiftTableEntry entry4 = new ShiftTableEntry(house.getStrasse());
+		ShiftTableEntry entry5 = new ShiftTableEntry(house.getHausnr());
 		ShiftTableEntry entry6 = new ShiftTableEntry(Double.toString(Math
 				.round(house.getFlaeche() * 100d) / 100d));
 		ShiftTableEntry entry7 = new ShiftTableEntry(Double.toString(Math
@@ -263,12 +268,12 @@ public class ExposeView extends AbstractView implements SpringTable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Versicherung angelegt");
-				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), area);
-				HouseDAO housedao = new HouseDAO();
-				House house = housedao.getById(id);
-				deleteThisRow(rowdel);
-				house.setSeen(true);
-				housedao.persist(house);
+				List<Object> data = new ArrayList<Object>();
+				data.add(area);
+				data.add(rowdel);
+				data.add(id);
+				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), data);
+				
 			}
 		});
 
