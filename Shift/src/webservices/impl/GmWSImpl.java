@@ -266,8 +266,10 @@ public class GmWSImpl implements GmWS {
 					rechnungsdatum, zahlungsdatum);
 			System.out.println(ergebnis);
 			if (ergebnis.equals("Rechnung angekommen")) {
+				System.out.println("Rechnung angekommen...");
 				return "Rechnung angekommen";
 			} else {
+				System.out.println("Rechnnung nicht angekommen...");
 				return Definitions.ERROR_MESSAGE;
 			}
 
