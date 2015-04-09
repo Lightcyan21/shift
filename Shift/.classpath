@@ -8,8 +8,8 @@
 	<classpathentry kind="lib" path="lib/project_util-1_2.jar"/>
 	<classpathentry kind="lib" path="lib/gs-1_5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6.jar"/>
-	<classpathentry kind="lib" path="lib/vw-1_17.jar"/>
 	<classpathentry kind="lib" path="lib/bh-1_8.jar"/>
+	<classpathentry kind="lib" path="lib/vw-1_18.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

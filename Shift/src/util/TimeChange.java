@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.java.dev.jaxb.array.StringArray;
 import net.java.dev.jaxb.array.StringArrayArray;
-import net.java.dev.jaxb.array.StringArrayArrayArray;
 import persistence.dao.impl.ApartmentDAO;
 import persistence.dao.impl.BillDAO;
 import persistence.dao.impl.HouseDAO;
@@ -45,6 +44,7 @@ public class TimeChange {
 		StringArrayArray invoice = getUtilities(month);
 		VerwaltungWSImplService vwservice = new VerwaltungWSImplService();
 		VerwaltungWS ws = vwservice.getVerwaltungWSImplPort();
+	
 		try {
 			if (ws.sendNebenkosten(invoice) == 0) {
 				System.out.println("Nebenkosten nicht angekommen!");
@@ -225,7 +225,7 @@ public class TimeChange {
 		}
 	}
 
-	private StringArrayArrayArray getUtilities(int month) {
+	private StringArrayArray getUtilities(int month) {
 		// DAOs initialisieren
 		ApartmentDAO aptdao = new ApartmentDAO();
 		InsuranceDAO insudao = new InsuranceDAO();
@@ -259,7 +259,6 @@ public class TimeChange {
 		List<StringArray> abrechnung = saa.getItem();
 		StringArray sa = null;
 		List<String> wohnungsnk = null;
-		String[][][] result = new String[allApt.size()][13][2];
 		for (int i = 0; i < allApt.size(); i++) {
 			sa = new StringArray();
 			wohnungsnk = sa.getItem();

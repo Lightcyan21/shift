@@ -119,7 +119,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 	public ShiftPanel2 loadTable() {
 		OrderDAO orderdao = new OrderDAO();
 		List<Order> orders = orderdao.getIfStatusNotSeen();
-		System.out.println("Lade Gebäude");
+		System.out.println("Lade Aufträge");
 		if (orders != null) {
 			table.setLayout(layout);
 			headlinesSetzen();
@@ -127,12 +127,14 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			for (Order order : orders) {
 				addRow(order);
 			}
+			SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY,
+					xPad, yPad);
 		} else {
 			noEntries();
 
 		}
-		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
-				yPad);
+		table.validate();
+		frame.repaint();
 		frame.validate();
 		return table;
 	}

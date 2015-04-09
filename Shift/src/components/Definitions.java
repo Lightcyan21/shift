@@ -45,7 +45,7 @@ public class Definitions {
 	public static final String INSTALLATION_STRING = "Installation";
 	public static final String REPARATUR_STRING = "Reparatur";
 	public static final double ableseservicegas = 9.99;
-	public static final double ableseserviceWasser =1.99;
+	public static final double ableseserviceWasser = 1.99;
 	public static final double ableseserviceStrom = 1.99;
 	public static final double preisProEinheitGas = 0.07;
 	public static final double preisProEinheitWaser = 0.002;
@@ -75,6 +75,6 @@ public class Definitions {
 	public static final Object NO_CONNECTION_GS = "Der Gebäudeservice ist derzeit nicht verfügbar. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.";
 	public static final Object NO_CONNECTION_BH = "Die Buchhaltung ist derzeit nicht verfügbar. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.";
 	public static final String ERROR_TITLE = "Verbindungsaufbau fehlgeschlagen";
-	public static final Object NO_CONNECTION_BANK = null;
+	public static final Object NO_CONNECTION_BANK = "Die Bank ist derzeit nicht verfügbar. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.";
 
 }
