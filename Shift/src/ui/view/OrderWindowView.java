@@ -1,6 +1,8 @@
 package ui.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -61,7 +63,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 	}
 
 	@Override
-	public Object getMainSurface() {		
+	public Object getMainSurface() {
 		entries.clear();
 		table.removeAll();
 		rows = 1;
@@ -137,6 +139,8 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 	private void addRow(Order order) {
 		int row = rows;
+		String res6 = null;
+		String res7 = null;
 
 		entries.put(Integer.toString(rows), order);
 		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
@@ -145,15 +149,15 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		ShiftTableEntry entry3 = new ShiftTableEntry(order.getJobName());
 		ShiftTableEntry entry4 = new ShiftTableEntry(order.getWohnungsID());
 		ShiftButtonWeiterleiten entry5 = new ShiftButtonWeiterleiten();
-		ShiftButtonBestaetigung entry6 = new ShiftButtonBestaetigung();
-		ShiftButtonBestaetigung entry7 = new ShiftButtonBestaetigung();
+		ShiftLabel entry6 = new ShiftLabel(res6);
+		ShiftLabel entry7 = new ShiftLabel(res7);
 		ShiftButtonBestaetigung entry8 = new ShiftButtonBestaetigung();
 
 		final Order ord = order;
 		final int rowdel = row;
 		final Long id = ord.getId();
 
-		//entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
+		// entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
 		entry5.addActionListener(new ActionListener() {
 
 			@Override
@@ -163,8 +167,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			}
 		});
 
-		final String res6;
-//true= Bestaetigung gesendet, else nicht
+		// true= Bestaetigung gesendet, else nicht
 		if (ord.isStatusWeiterleitung() == true) {
 			res6 = "res/Bestaetigung.png";
 		} else {
@@ -172,12 +175,10 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		}
 
 		entry6.setIcon(new ImageIcon(res6));
-		
-		String res7;
-		
+
 		if (ord.isStatusRechnung() == true) {
 			res7 = "res/Rechnung.png";
-		}else {
+		} else {
 			res7 = "res/keineRechnung.png";
 		}
 
@@ -194,7 +195,8 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 				order = ord;
 				deleteThisRow(rowdel);
 				order.setSeen(true);
-				JOptionPane.showMessageDialog(frame, "Auftrag in der Reihe " + rowdel + " gelöscht.");
+				JOptionPane.showMessageDialog(frame, "Auftrag in der Reihe "
+						+ rowdel + " gelöscht.");
 				orderdao.persist(order);
 			}
 		});
@@ -218,6 +220,19 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 	@Override
 	public void noEntries() {
 
+		// verhindern dass noEntries mehrfach hinzugefügt wird
+		for (Component comp : table.getComponents()) {
+			if (comp.equals(noEntries)) {
+				return;
+			}
+		}
+
+		table.setLayout(new FlowLayout());
+		table.add(noEntries);
+		frame.repaint();
+		frame.validate();
+		table.validate();
+
 	}
 
 	@Override
@@ -239,12 +254,12 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		if (deleted == null) {
 			System.out.println("Null: Error");
 		} else {
-//			deleted.setSeen(true);
-//			OrderDAO ordDao = new OrderDAO();
-//			ordDao.persist(deleted);			
+			// deleted.setSeen(true);
+			// OrderDAO ordDao = new OrderDAO();
+			// ordDao.persist(deleted);
 			System.out.println("Order mit der ID " + deleted.getId()
 					+ " gelöscht");
-			
+
 		}
 
 		rows = 1;
