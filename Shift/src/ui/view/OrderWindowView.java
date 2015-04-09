@@ -191,11 +191,10 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 				fireLocalUIEvent(this, UI_EVENT.REMOVE_ORDER.ordinal());
 				OrderDAO orderdao = new OrderDAO();
 				Order order = new Order();
-//				order = orderdao.getById(id);
 				order = ord;
 				deleteThisRow(rowdel);
 				order.setSeen(true);
-				JOptionPane.showMessageDialog(frame, "Auftrag gelöscht in der Reihe " + rowdel + " gelöscht.");
+				JOptionPane.showMessageDialog(frame, "Auftrag in der Reihe " + rowdel + " gelöscht.");
 				orderdao.persist(order);
 			}
 		});

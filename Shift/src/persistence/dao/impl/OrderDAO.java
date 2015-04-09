@@ -278,6 +278,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			pre.setBoolean(6, entity.isStatusRechnung());
 			pre.setBoolean(7, entity.isStatusBestaetigung());
 			pre.setBoolean(8, entity.isStatusWeiterleitung());
+			System.out.println(entity.isSeen());
 			pre.setBoolean(9, entity.isSeen());
 			pre.setString(10, entity.getDatum());
 			pre.setLong(11, entity.getId());
@@ -285,11 +286,18 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			if (entity.getId() != 0 && entity.getWohnungsID() != null
 					&& entity.getJobName() != null
 					&& entity.getMieter() != null
-					// && entity.getBetrag() != 0
-					&& entity.getStatus() != 0) {
+					&& entity.getBetrag() != 0
+//					&& entity.getStatus() != 0
+					) {
+				System.out.println(entity.getId());
+				System.out.println(entity.getWohnungsID());
+				System.out.println(entity.getJobName());
+				System.out.println(entity.getMieter());
 				pre.executeUpdate();
 				rt = true;
+				System.out.println("execute bool: " + rt);
 			} else {
+				System.out.println("else bool: " + rt);
 				rt = false;
 			}
 

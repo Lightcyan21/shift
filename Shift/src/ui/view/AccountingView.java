@@ -26,6 +26,9 @@ import mvc.view.abstrct.AbstractView;
 
 import org.jdom2.JDOMException;
 
+import persistence.dao.impl.AdmonitionDAO;
+import persistence.dao.impl.BillDAO;
+import persistence.entity.impl.Admonition;
 import persistence.entity.impl.Bill;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
@@ -63,7 +66,7 @@ public class AccountingView extends AbstractView implements SpringTable {
 	private ShiftLabel name = new ShiftLabel("Schuldner");
 	private ShiftLabel betrag = new ShiftLabel("Betrag");
 	private ShiftLabel mahnung = new ShiftLabel("Mahnung");
-	private ShiftLabel nomahnung = new ShiftLabel("Verzicht auf Mahnung");
+	private ShiftLabel nomahnung = new ShiftLabel("Verzicht auf Zahlung");
 
 	public AccountingView(IModel model) {
 		super(model);
@@ -165,18 +168,19 @@ public class AccountingView extends AbstractView implements SpringTable {
 								"Fehlerhafte Daten der Buchhaltung",
 								JOptionPane.ERROR_MESSAGE);
 					}
-					bill.setRechnungssteller(forderungen
-							.get("rechnungsersteller"));
-					bill.setRechnungsEmpfaenger(forderungen
-							.get("rechnungsempfaenger"));
-					bill.setBetrag(Double.parseDouble(forderungen.get("betrag")));
-					bill.setZahlungsdatum(forderungen.get("zahlungsdatum"));
-					bill.setVerwendungszweck(forderungen
+					BillDAO billDao = new BillDAO();
+
+					bill = billDao.getByVerwendungszweck(forderungen
 							.get("verwendungszweck"));
-					bill.setRechnungsdatum(forderungen.get("rechnungsdatum"));
-					addRow(bill);
-					SpringUtilities.makeCompactGrid(table, rows, cols, initX,
-							initY, xPad, yPad);
+					if (bill == null) {
+						System.out
+								.println("Rechnung nicht im System vorhanden");
+					} else {
+						addRow(bill);
+						SpringUtilities.makeCompactGrid(table, rows, cols,
+								initX, initY, xPad, yPad);
+					}
+
 				}
 			} else {
 				noEntries();
@@ -200,6 +204,7 @@ public class AccountingView extends AbstractView implements SpringTable {
 		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
 		ShiftTableEntry entry2 = new ShiftTableEntry(
 				Long.toString(bill.getId()));
+		System.out.println(bill.getId());
 		ShiftTableEntry entry25 = new ShiftTableEntry(
 				bill.getVerwendungszweck());
 		ShiftTableEntry entry3 = new ShiftTableEntry(
@@ -229,7 +234,12 @@ public class AccountingView extends AbstractView implements SpringTable {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Keine Mahnung beauftragt...");
 				System.out.println("Lösche Reihe: " + rowdel);
+				BillDAO billDao = new BillDAO();
+				Bill bill = billDao.getByVerwendungszweck(id);
 				deleteThisRow(rowdel);
+				JOptionPane.showMessageDialog(frame, "Rechnung in der Reihe "
+						+ rowdel + " gelöscht.");
+				billDao.persist(bill);
 			}
 		});
 
