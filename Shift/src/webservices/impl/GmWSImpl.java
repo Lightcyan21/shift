@@ -54,7 +54,12 @@ public class GmWSImpl implements GmWS {
 			house.setAnzahlWohnungen(numberFlat);
 			house.setGartenflaeche(gardenarea);
 			house.setFlaeche(totalArea);
-			housedao.persist(house);
+			if (!housedao.persist(house)) {
+				result = new String[1];
+				result[0] = Definitions.ERROR_MESSAGE;
+				System.out.println("Fehler beim Eitnragen der Wohnung.");
+				return result;
+			}
 			System.out.println("Haus eingetragen...");
 			ApartmentDAO aptdao = new ApartmentDAO();
 			Apartment apt;
@@ -191,7 +196,6 @@ public class GmWSImpl implements GmWS {
 			OrderDAO orderdao = new OrderDAO();
 			ApartmentDAO aptdao = new ApartmentDAO();
 			Order order = orderdao.create();
-			System.out.println(order.getId());
 			Apartment apt = aptdao.getApartment(apartmentID);
 			if (apt != null) {
 				System.out.println(typ);
@@ -204,7 +208,6 @@ public class GmWSImpl implements GmWS {
 				order.setStatus(Definitions.ANGEKOMMEN);
 				order.setStatusBestaetigung(false);
 				orderdao.persist(order);
-				
 				System.out.println("Order gespeichert... ID: " + order.getId());
 				return order.getId();
 			} else {
@@ -272,14 +275,14 @@ public class GmWSImpl implements GmWS {
 	@WebMethod
 	public int pushDate(int year, int month, int day) {
 		TimeChange timechange = TimeChange.getInstance();
-		System.out.println("Zeitsprung erhalten..." + day + "." + month + "."
-				+ year);
+		System.out.println("Zeitsprung erhalten..." + day + "." + (month + 1)
+				+ "." + year);
 		Date localDate = timechange.getTime();
 		int returncode = 100;
 		if (localDate.equals(new Date(0))) {
 			System.out.println("Zeitinitialiserung... auf den " + day + "."
-					+ month + "." + (year + 1900));
-			timechange.setTime(new Date(year, month - 1, day));
+					+ (month + 1) + "." + (year + 1900));
+			timechange.setTime(new Date(year, month, day));
 			ShiftFrame.getInstance().setDatum();
 			returncode = 101;
 		} else {
@@ -332,7 +335,7 @@ public class GmWSImpl implements GmWS {
 			System.out.println("Object: " + o.toString());
 			System.out.println("sprungArt: " + sprungArt);
 			System.out.println("returncode: " + returncode);
-			timechange.setTime(new Date(year, month - 1, day));
+			timechange.setTime(new Date(year, month, day));
 			ShiftFrame.getInstance().setDatum();
 
 			System.out.println("aktuelles localDate - nach der Methode: " + day

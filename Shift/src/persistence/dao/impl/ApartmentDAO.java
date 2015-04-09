@@ -246,8 +246,7 @@ public class ApartmentDAO extends AbstractDAO<Apartment> implements
 			pre.setString(4, entity.getAptID());
 
 			if (entity.getAptID() != null && entity.getWohnflaeche() != 0
-					&& entity.getZimmeranzahl() != 0
-					&& entity.getMieteranzahl() != 0) {
+					&& entity.getZimmeranzahl() != 0) {
 				pre.executeUpdate();
 				rt = true;
 			} else {

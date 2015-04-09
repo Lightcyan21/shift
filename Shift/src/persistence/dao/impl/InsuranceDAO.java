@@ -27,7 +27,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("insert into insurance (houseID, betrag) values (?, ?));");
+					.prepareStatement("insert into insurance (houseID, betrag) values (?, ?);");
 
 			pre.setString(1, null);
 			pre.setDouble(2, 0);

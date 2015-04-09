@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import net.java.dev.jaxb.array.StringArray;
+import net.java.dev.jaxb.array.StringArrayArray;
+import net.java.dev.jaxb.array.StringArrayArrayArray;
 import persistence.dao.impl.ApartmentDAO;
 import persistence.dao.impl.BillDAO;
 import persistence.dao.impl.HouseDAO;
@@ -39,12 +42,16 @@ public class TimeChange {
 		monatlicheOrdersBeauftragen(month);
 
 		// Nebenkosten berechnen und an Verwaltung senden
-		String[][][] invoice = getUtilities(month);
+		StringArrayArray invoice = getUtilities(month);
 		VerwaltungWSImplService vwservice = new VerwaltungWSImplService();
 		VerwaltungWS ws = vwservice.getVerwaltungWSImplPort();
 		try {
-			ws.getInvoice(0, 0);
-
+			if (ws.sendNebenkosten(invoice) == 0) {
+				System.out.println("Nebenkosten nicht angekommen!");
+				return;
+			} else {
+				System.out.println("Nebenkosten angekommen!");
+			}
 		} catch (ClientTransportException e) {
 			System.out.println("Fehler bei Uebergabe der Nebenkosten an VW: "
 					+ e.getMessage());
@@ -218,7 +225,8 @@ public class TimeChange {
 		}
 	}
 
-	private String[][][] getUtilities(int month) {
+	private StringArrayArrayArray getUtilities(int month) {
+		// DAOs initialisieren
 		ApartmentDAO aptdao = new ApartmentDAO();
 		InsuranceDAO insudao = new InsuranceDAO();
 		OrderDAO orderdao = new OrderDAO();
@@ -247,9 +255,15 @@ public class TimeChange {
 		// Ableseservice beauftragen
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
-
+		StringArrayArray saa = new StringArrayArray();
+		List<StringArray> abrechnung = saa.getItem();
+		StringArray sa = null;
+		List<String> wohnungsnk = null;
 		String[][][] result = new String[allApt.size()][13][2];
 		for (int i = 0; i < allApt.size(); i++) {
+			sa = new StringArray();
+			wohnungsnk = sa.getItem();
+
 			apt = allApt.get(i);
 			aptID = allApt.get(i).getAptID();
 			String[] arr = aptID.split("\\.");
@@ -261,29 +275,7 @@ public class TimeChange {
 			zaehlerstandStromEK = gs.getValue(1);
 			zaehlerstandStromGMK = gs.getValue(1);
 			zaehlerstandGas = gs.getValue(2);
-
-			// Gas GMK
-			result[i][0][0] = aptID + "#Gas";
-			result[i][0][1] = Double.toString(((Definitions.preisProEinheitGas
-					* zaehlerstandGas + Definitions.ableseservicegas) / house
-						.getFlaeche()) * apt.getWohnflaeche());
-			// Wasser EK+GMK
-			result[i][1][0] = aptID + "#Wasser";
-			result[i][1][1] = Double
-					.toString((Definitions.preisProEinheitWaser
-							* zaehlerstandWasserEK + Definitions.ableseserviceWasser)
-
-							+ (Definitions.preisProEinheitWaser
-									* zaehlerstandWasserGMK + Definitions.ableseserviceWasser)
-							/ house.getAnzahlWohnungen());
-			// Strom EK + GMK
-			result[i][2][0] = aptID + "#Strom";
-			result[i][2][1] = Double
-					.toString((Definitions.preisProEinheitStrom
-							* zaehlerstandStromEK + Definitions.ableseserviceStrom)
-							+ (Definitions.preisProEinheitStrom
-									* zaehlerstandStromGMK + Definitions.ableseserviceStrom)
-							/ house.getAnzahlWohnungen());
+			//
 			// aufträge abrufen
 			List<Order> orderlist = orderdao.getOrderByRequester(allApt.get(i)
 					.getAptID());
@@ -331,62 +323,136 @@ public class TimeChange {
 					default:
 						break;
 					}
-
-					// Rasen maehen
-					result[i][3][0] = aptID + "#"
-							+ Definitions.RASEN_MAEHEN_STRING;
-					result[i][3][1] = Double.toString(rasen);
-
-					// Salz streuen
-					result[i][4][0] = aptID + "#"
-							+ Definitions.SALZ_STREUEN_STRING;
-					result[i][4][1] = Double.toString(salz);
-
-					// Fensterreinigung
-					result[i][5][0] = aptID + "#"
-							+ Definitions.FENSTERREINIGUNG_STRING;
-					result[i][5][1] = Double.toString(fensterreinigung);
-
-					// Treppenreinigung
-					result[i][6][0] = aptID + "#"
-							+ Definitions.TREPPENREINIGUNG_STRING;
-					result[i][6][1] = Double.toString(treppe);
-
-					// Hecke schneiden
-					result[i][7][0] = aptID + "#"
-							+ Definitions.HECKE_SCHNEIDEN_STRING;
-					result[i][7][1] = Double.toString(hecke);
-
-					// Instandhaltung
-					result[i][8][0] = aptID + "#"
-							+ Definitions.INSTANDHALTUNG_STRING;
-					result[i][8][1] = Double.toString(instandhaltung);
-
-					// Schlüsseldienst
-					result[i][9][0] = aptID + "#"
-							+ Definitions.SCHLUESSELDIENST_STRING;
-					result[i][9][1] = Double.toString(schluessel);
-
-					// Installation
-					result[i][10][0] = aptID + "#"
-							+ Definitions.INSTALLATION_STRING;
-					result[i][10][1] = Double.toString(installation);
-
-					// Reparatur
-					result[i][11][0] = aptID + "#"
-							+ Definitions.REPARATUR_STRING;
-					result[i][11][1] = Double.toString(reparatur);
-
-					// Versicherung
 					insurance = insudao.getByHouseID(house.getId());
-					result[i][12][0] = aptID + "#"
-							+ Definitions.VERSICHERUNG_STRING;
-					result[i][12][1] = Double.toString(insurance.getBetrag()
-							/ house.getAnzahlWohnungen());
+
+					// hinzufuegen
+					wohnungsnk.add(aptID);
+					// Gas
+					wohnungsnk
+							.add(Double
+									.toString(((Definitions.preisProEinheitGas
+											* zaehlerstandGas + Definitions.ableseservicegas) / house
+												.getFlaeche())
+											* apt.getWohnflaeche()));
+					// Wasser
+					wohnungsnk
+							.add(Double
+									.toString((Definitions.preisProEinheitWaser
+											* zaehlerstandWasserEK + Definitions.ableseserviceWasser)
+											+ (Definitions.preisProEinheitWaser
+													* zaehlerstandWasserGMK + Definitions.ableseserviceWasser)
+											/ house.getAnzahlWohnungen()));
+					// Strom
+					wohnungsnk
+							.add(Double
+									.toString((Definitions.preisProEinheitStrom
+											* zaehlerstandStromEK + Definitions.ableseserviceStrom)
+											+ (Definitions.preisProEinheitStrom
+													* zaehlerstandStromGMK + Definitions.ableseserviceStrom)
+											/ house.getAnzahlWohnungen()));
+					// rasen maehen
+					wohnungsnk.add(Double.toString(rasen));
+					// salz streuen
+					wohnungsnk.add(Double.toString(salz));
+					// fensterreinigung
+					wohnungsnk.add(Double.toString(fensterreinigung));
+					// treppe
+					wohnungsnk.add(Double.toString(treppe));
+					// hecke
+					wohnungsnk.add(Double.toString(hecke));
+					// instandhaltung
+					wohnungsnk.add(Double.toString(instandhaltung));
+					// schluessel
+					wohnungsnk.add(Double.toString(schluessel));
+					// installation
+					wohnungsnk.add(Double.toString(installation));
+					// reparatur
+					wohnungsnk.add(Double.toString(reparatur));
+					// verischerung
+					wohnungsnk.add(Double.toString(insurance.getBetrag()
+							/ house.getAnzahlWohnungen()));
+
+					abrechnung.add(sa);
+
+					// Gas GMK
+					// result[i][0][0] = aptID + "#Gas";
+					// result[i][0][1] =
+					// Double.toString(((Definitions.preisProEinheitGas
+					// * zaehlerstandGas + Definitions.ableseservicegas) / house
+					// .getFlaeche()) * apt.getWohnflaeche());
+					// // Wasser EK+GMK
+					// result[i][1][0] = aptID + "#Wasser";
+					// result[i][1][1] = Double
+					// .toString((Definitions.preisProEinheitWaser
+					// * zaehlerstandWasserEK + Definitions.ableseserviceWasser)
+					//
+					// + (Definitions.preisProEinheitWaser
+					// * zaehlerstandWasserGMK +
+					// Definitions.ableseserviceWasser)
+					// / house.getAnzahlWohnungen());
+					// // Strom EK + GMK
+					// result[i][2][0] = aptID + "#Strom";
+					// result[i][2][1] = Double
+					// .toString((Definitions.preisProEinheitStrom
+					// * zaehlerstandStromEK + Definitions.ableseserviceStrom)
+					// + (Definitions.preisProEinheitStrom
+					// * zaehlerstandStromGMK + Definitions.ableseserviceStrom)
+					// / house.getAnzahlWohnungen());
+					// Rasen maehen
+					// result[i][3][0] = aptID + "#"
+					// + Definitions.RASEN_MAEHEN_STRING;
+					// result[i][3][1] = Double.toString(rasen);
+					//
+					// // Salz streuen
+					// result[i][4][0] = aptID + "#"
+					// + Definitions.SALZ_STREUEN_STRING;
+					// result[i][4][1] = Double.toString(salz);
+					//
+					// // Fensterreinigung
+					// result[i][5][0] = aptID + "#"
+					// + Definitions.FENSTERREINIGUNG_STRING;
+					// result[i][5][1] = Double.toString(fensterreinigung);
+					//
+					// // Treppenreinigung
+					// result[i][6][0] = aptID + "#"
+					// + Definitions.TREPPENREINIGUNG_STRING;
+					// result[i][6][1] = Double.toString(treppe);
+					//
+					// // Hecke schneiden
+					// result[i][7][0] = aptID + "#"
+					// + Definitions.HECKE_SCHNEIDEN_STRING;
+					// result[i][7][1] = Double.toString(hecke);
+					//
+					// // Instandhaltung
+					// result[i][8][0] = aptID + "#"
+					// + Definitions.INSTANDHALTUNG_STRING;
+					// result[i][8][1] = Double.toString(instandhaltung);
+					//
+					// // Schlüsseldienst
+					// result[i][9][0] = aptID + "#"
+					// + Definitions.SCHLUESSELDIENST_STRING;
+					// result[i][9][1] = Double.toString(schluessel);
+					//
+					// // Installation
+					// result[i][10][0] = aptID + "#"
+					// + Definitions.INSTALLATION_STRING;
+					// result[i][10][1] = Double.toString(installation);
+					//
+					// // Reparatur
+					// result[i][11][0] = aptID + "#"
+					// + Definitions.REPARATUR_STRING;
+					// result[i][11][1] = Double.toString(reparatur);
+					//
+					// // Versicherung
+					// insurance = insudao.getByHouseID(house.getId());
+					// result[i][12][0] = aptID + "#"
+					// + Definitions.VERSICHERUNG_STRING;
+					// result[i][12][1] = Double.toString(insurance.getBetrag()
+					// / house.getAnzahlWohnungen());
 				}
 			}
 		}
-		return result;
+		return saa;
 
 	}
 
