@@ -125,6 +125,7 @@ public class AccountingView extends AbstractView implements SpringTable {
 
 	@Override
 	public ShiftPanel2 loadTable() {
+		table.removeAll();
 		System.out.println("Lade Mahnungen von Buchhaltung...");
 		Bill bill = new Bill();
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
@@ -142,7 +143,6 @@ public class AccountingView extends AbstractView implements SpringTable {
 			if (forderungslisteMap.size() != 0) {
 				table.setLayout(layout);
 				headlinesSetzen();
-
 				Set<Entry<String, String>> rechnungen = forderungslisteMap
 						.entrySet();
 
@@ -174,9 +174,15 @@ public class AccountingView extends AbstractView implements SpringTable {
 						System.out
 								.println("Rechnung nicht im System vorhanden");
 					} else {
+						table.setLayout(layout);
+						headlinesSetzen();
+
 						addRow(bill);
 						SpringUtilities.makeCompactGrid(table, rows, cols,
 								initX, initY, xPad, yPad);
+					}
+					if(table.getComponents().length== 0){
+						noEntries();
 					}
 
 				}
