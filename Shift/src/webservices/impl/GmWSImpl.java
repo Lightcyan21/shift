@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import com.sun.xml.internal.ws.client.ClientTransportException;
+
 import persistence.dao.impl.AdmonitionDAO;
 import persistence.dao.impl.ApartmentDAO;
 import persistence.dao.impl.BillDAO;
@@ -142,27 +144,33 @@ public class GmWSImpl implements GmWS {
 		ServiceWS gs = gsservice.getServiceWSImplPort();
 		System.out.println("Status wird abgerufen...");
 
-		String status = gs.getState(orderID);
-		switch (status) {
-		case "Angekommen":
-			order.setStatus(Definitions.ANGEKOMMEN);
-			break;
-		case "In Arbeit":
-			order.setStatus(Definitions.IN_ARBEIT);
-			break;
-		case "Erledigt":
-			order.setStatus(Definitions.ERLEDIGT);
-			break;
-		case "Abgelehnt":
-			order.setStatus(Definitions.ABGELEHNT);
-			break;
-		case "Bezahlt":
-			order.setStatus(Definitions.RECHNUNG_BEZAHLT);
-			break;
+		try {
+			String status = gs.getState(orderID);
+			switch (status) {
+			case "Angekommen":
+				order.setStatus(Definitions.ANGEKOMMEN);
+				break;
+			case "In Arbeit":
+				order.setStatus(Definitions.IN_ARBEIT);
+				break;
+			case "Erledigt":
+				order.setStatus(Definitions.ERLEDIGT);
+				break;
+			case "Abgelehnt":
+				order.setStatus(Definitions.ABGELEHNT);
+				break;
+			case "Bezahlt":
+				order.setStatus(Definitions.RECHNUNG_BEZAHLT);
+				break;
+			}
+			orderdao.persist(order);
+			System.out.println("Status: " + status);
+			return status;
+		} catch (ClientTransportException e) {
+			System.out
+					.println("Fehler bei der Datenabfrage: " + e.getMessage());
+			return Definitions.ERROR_MESSAGE;
 		}
-		orderdao.persist(order);
-		System.out.println("Status: " + status);
-		return status;
 	}
 
 	@Override
@@ -196,6 +204,7 @@ public class GmWSImpl implements GmWS {
 				order.setStatus(Definitions.ANGEKOMMEN);
 				order.setStatusBestaetigung(false);
 				orderdao.persist(order);
+				
 				System.out.println("Order gespeichert... ID: " + order.getId());
 				return order.getId();
 			} else {
@@ -239,15 +248,23 @@ public class GmWSImpl implements GmWS {
 		System.out.println("Rechnung an BH senden...");
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
 		BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
-		String ergebnis = bh.erfasseRechnung(verwendungszweck, "GM",
-				rechnungsersteller, rechnungsempfaenger, betrag,
-				rechnungsdatum, zahlungsdatum);
-		System.out.println(ergebnis);
-		if (ergebnis.equals("Rechnung angekommen")) {
-			return "Rechnung angekommen";
-		} else {
+		try {
+			String ergebnis = bh.erfasseRechnung(verwendungszweck, "GM",
+					rechnungsersteller, rechnungsempfaenger, betrag,
+					rechnungsdatum, zahlungsdatum);
+			System.out.println(ergebnis);
+			if (ergebnis.equals("Rechnung angekommen")) {
+				return "Rechnung angekommen";
+			} else {
+				return Definitions.ERROR_MESSAGE;
+			}
+
+		} catch (ClientTransportException e) {
+			System.out.println(e.getMessage());
+			System.out.println("Fehler bei der Datenübergabe an BH");
 			return Definitions.ERROR_MESSAGE;
 		}
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -262,7 +279,7 @@ public class GmWSImpl implements GmWS {
 		if (localDate.equals(new Date(0))) {
 			System.out.println("Zeitinitialiserung... auf den " + day + "."
 					+ month + "." + (year + 1900));
-			timechange.setTime(new Date(year, month-1, day));
+			timechange.setTime(new Date(year, month - 1, day));
 			ShiftFrame.getInstance().setDatum();
 			returncode = 101;
 		} else {
@@ -315,7 +332,7 @@ public class GmWSImpl implements GmWS {
 			System.out.println("Object: " + o.toString());
 			System.out.println("sprungArt: " + sprungArt);
 			System.out.println("returncode: " + returncode);
-			timechange.setTime(new Date(year, month-1, day));
+			timechange.setTime(new Date(year, month - 1, day));
 			ShiftFrame.getInstance().setDatum();
 
 			System.out.println("aktuelles localDate - nach der Methode: " + day

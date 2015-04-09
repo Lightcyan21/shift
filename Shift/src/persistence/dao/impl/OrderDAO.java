@@ -29,7 +29,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			PreparedStatement pre;
 			pre = con
 					.prepareStatement(
-							"insert into job (wohnungsID, jobName, mieter, betrag, status, statusRechnung, statusBestaetigung, statusWeiterleitung) values (?, ?, ?, ?, ?, ?, ?, ?);",
+							"insert into job (wohnungsID, jobName, mieter, betrag, status, statusRechnung, statusBestaetigung, statusWeiterleitung, datum) values (?, ?, ?, ?, ?, ?, ?, ?,?);",
 							Statement.RETURN_GENERATED_KEYS);
 
 			pre.setString(1, null);
@@ -40,6 +40,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			pre.setBoolean(6, false);
 			pre.setBoolean(7, false);
 			pre.setBoolean(8, false);
+			pre.setString(9, null);
 
 			pre.execute();
 
@@ -104,6 +105,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 				order.setStatusWeiterleitung(result
 						.getBoolean("statusWeiterleitung"));
 				order.setSeen(result.getBoolean("seen"));
+				order.setDatum(result.getString("datum"));
 
 				orderList.add(order);
 			}
@@ -149,6 +151,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 				order.setStatusWeiterleitung(result
 						.getBoolean("statusWeiterleitung"));
 				order.setSeen(result.getBoolean("seen"));
+				order.setDatum(result.getString("datum"));
 
 				orderList.add(order);
 			}
@@ -196,6 +199,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 				order.setStatusWeiterleitung(result
 						.getBoolean("statusWeiterleitung"));
 				order.setSeen(result.getBoolean("seen"));
+				order.setDatum(result.getString("datum"));
 
 				orderList.add(order);
 
@@ -240,6 +244,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 				order.setStatusWeiterleitung(result
 						.getBoolean("statusWeiterleitung"));
 				order.setSeen(result.getBoolean("seen"));
+				order.setDatum(result.getString("datum"));
 
 				orderList.add(order);
 			}
@@ -264,7 +269,7 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 		try {
 			PreparedStatement pre;
 			pre = con
-					.prepareStatement("update job SET wohnungsID = ?, jobName = ?, mieter = ?, betrag = ?, status = ?, statusRechnung = ?, statusBestaetigung = ?, statusWeiterleitung = ?, seen = ? WHERE jobID = ?;");
+					.prepareStatement("update job SET wohnungsID = ?, jobName = ?, mieter = ?, betrag = ?, status = ?, statusRechnung = ?, statusBestaetigung = ?, statusWeiterleitung = ?, seen = ? , datum = ? WHERE jobID = ?;");
 			pre.setString(1, entity.getWohnungsID());
 			pre.setString(2, entity.getJobName());
 			pre.setString(3, entity.getMieter());
@@ -274,7 +279,8 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			pre.setBoolean(7, entity.isStatusBestaetigung());
 			pre.setBoolean(8, entity.isStatusWeiterleitung());
 			pre.setBoolean(9, entity.isSeen());
-			pre.setLong(10, entity.getId());
+			pre.setString(10, entity.getDatum());
+			pre.setLong(11, entity.getId());
 
 			if (entity.getId() != 0 && entity.getWohnungsID() != null
 					&& entity.getJobName() != null

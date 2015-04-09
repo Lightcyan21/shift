@@ -17,6 +17,11 @@ public class Order extends AbstractEntity {
 	private boolean statusBestaetigung;
 	private boolean statusWeiterleitung;
 	private boolean seen;
+	private String datum;
+
+	public String getDatum() {
+		return datum;
+	}
 
 	@Override
 	public Long getId() {
@@ -26,6 +31,10 @@ public class Order extends AbstractEntity {
 	@Override
 	public void setId(Long jobID) {
 		this.jobID = jobID;
+	}
+
+	public void setDatum(String datum) {
+		this.datum = datum;
 	}
 
 	public String getJobName() {
