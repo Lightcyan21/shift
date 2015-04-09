@@ -63,7 +63,7 @@ public class AccountingView extends AbstractView implements SpringTable {
 	private ShiftLabel name = new ShiftLabel("Schuldner");
 	private ShiftLabel betrag = new ShiftLabel("Betrag");
 	private ShiftLabel mahnung = new ShiftLabel("Mahnung");
-	private ShiftLabel nomahnung = new ShiftLabel("Keine Mahnung");
+	private ShiftLabel nomahnung = new ShiftLabel("Verzicht auf Mahnung");
 
 	public AccountingView(IModel model) {
 		super(model);

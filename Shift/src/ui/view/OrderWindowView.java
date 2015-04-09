@@ -61,7 +61,11 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 	}
 
 	@Override
-	public Object getMainSurface() {
+	public Object getMainSurface() {		
+		entries.clear();
+		table.removeAll();
+		rows = 1;
+		loadTable();
 		frame.getCardlayout().show(frame.getContentpanel(), "page");
 		frame.setHeadline(Definitions.ORDERS);
 		frame.validate();
@@ -186,10 +190,12 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			public void actionPerformed(ActionEvent e) {
 				fireLocalUIEvent(this, UI_EVENT.REMOVE_ORDER.ordinal());
 				OrderDAO orderdao = new OrderDAO();
-				Order order = orderdao.getById(id);
+				Order order = new Order();
+//				order = orderdao.getById(id);
+				order = ord;
 				deleteThisRow(rowdel);
 				order.setSeen(true);
-				JOptionPane.showMessageDialog(frame, "Auftrag gelöscht");
+				JOptionPane.showMessageDialog(frame, "Auftrag gelöscht in der Reihe " + rowdel + " gelöscht.");
 				orderdao.persist(order);
 			}
 		});
@@ -234,8 +240,12 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		if (deleted == null) {
 			System.out.println("Null: Error");
 		} else {
+//			deleted.setSeen(true);
+//			OrderDAO ordDao = new OrderDAO();
+//			ordDao.persist(deleted);			
 			System.out.println("Order mit der ID " + deleted.getId()
 					+ " gelöscht");
+			
 		}
 
 		rows = 1;
