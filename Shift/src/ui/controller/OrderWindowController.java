@@ -1,13 +1,13 @@
 package ui.controller;
 
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
-import persistence.dao.impl.HouseDAO;
 import persistence.dao.impl.OrderDAO;
-import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
 import ui.model.OrderWindowModel;
@@ -17,6 +17,7 @@ import webservices.ServiceWSImplService;
 
 import com.sun.xml.internal.ws.client.ClientTransportException;
 import components.Definitions;
+import components.ShiftLabel;
 
 /**
  * hierbei handelt es sich um die Seite, die Aufträge darstellt
@@ -42,33 +43,35 @@ public class OrderWindowController extends
 		}
 		if (event.getEventId() == UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal()) {
 			System.out.println("--- Auftrag wird weiter geleitet");
-			Order ord = (Order) event.getData();
 			ServiceWSImplService gebaeudeservice = new ServiceWSImplService();
 			ServiceWS gebaeude = gebaeudeservice.getServiceWSImplPort();
 			OrderDAO orderdao = new OrderDAO();
-			String id = (String) event.getData();
-			System.out.println("ID: " + id);
-			ord = orderdao.getById(Long.parseLong(id));
+			List<Object> objectlist = (List<Object>) event.getData();
+			Order ord = (Order) objectlist.get(0);
+			ShiftLabel entry6 = (ShiftLabel) objectlist.get(1);
 			String name = ord.getJobName();
 			String apartmentID = ord.getWohnungsID();
-			String[] arr = apartmentID.split("\\.");
-			Long houseID = Long.parseLong(arr[0]);
-			HouseDAO housedao = new HouseDAO();
-			House house = housedao.getById(houseID);
-			int flaeche = 0;
-			if (ord.getJobName() == "Test") {
-				flaeche = (int) house.getFlaeche(); // in db ist Fläche ein int.
-													// evtl ändern
-			} else {
-				flaeche = (int) house.getGartenflaeche(); // in db ist
-															// gartenflaeche ein
-															// int. evtl ändern
-			}
+			int flaeche = 1;
+			// Instandhaltung
+			// Schlüsseldienst
+			// Installationen
+			// Reparaturen
+			// Hecke schneiden
+
 			long orderID = ord.getId(); // javadoc verlangt long als datentyp
 			try {
-				String result = gebaeude.sendOrderToFm(name, apartmentID, flaeche, orderID);
-				ord.setDatum(result);
-				orderdao.persist(ord);
+			
+				String result = gebaeude.sendOrderToFm(name, apartmentID,
+						flaeche, orderID);
+				if (result == "") {
+					JOptionPane.showMessageDialog(new JFrame(),
+							"Fehlerhafte Parameter für Auftragsübergabe");
+				} else {
+					ord.setDatum(result);
+					ord.setStatusBestaetigung(true);
+					orderdao.persist(ord);
+					registeredViews.get(0).setzeBestaetigung(entry6);
+				}
 
 			} catch (ClientTransportException e) {
 				System.out.println(e.getMessage());

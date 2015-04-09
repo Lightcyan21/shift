@@ -177,12 +177,12 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 				PreparedStatement pre;
 				pre = con
 						.prepareStatement("select * from house where houseID = ?;");
-				
+
 				pre.setLong(1, long1);
-				
+
 				ResultSet result = pre.executeQuery();
-				
-				while(result.next()) {
+
+				while (result.next()) {
 					House house = new House();
 					house.setId(result.getLong("houseID"));
 					house.setPlz(result.getString("plz"));
@@ -194,24 +194,20 @@ public class HouseDAO extends AbstractDAO<House> implements DAO<House> {
 					house.setGartenflaeche(result.getDouble("gartenflaeche"));
 					house.setFlaeche(result.getDouble("flaeche"));
 					house.setSeen(result.getBoolean("seen"));
-					
-					houseHM.put(long1, house);
-					
+
+					houseHM.put(result.getLong("houseID"), house);
+
 				}
-				
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			if (houseHM.size() != 0) {
-				return houseHM;
-			} else {
-				return null;
-			}
-
 		}
-
-		return houseHM;
+		if (houseHM.size() != 0) {
+			return houseHM;
+		} else {
+			return null;
+		}
 
 	}
 

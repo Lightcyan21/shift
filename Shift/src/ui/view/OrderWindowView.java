@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
+import com.mysql.fabric.xmlrpc.base.Array;
+
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
 import persistence.dao.impl.OrderDAO;
@@ -23,7 +25,6 @@ import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
 import util.SpringUtilities;
-
 import components.Definitions;
 import components.ShiftButtonBack;
 import components.ShiftButtonBestaetigung;
@@ -54,6 +55,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 	private ShiftLabel bestaetigung = new ShiftLabel("Bestätigung");
 	private ShiftLabel rechnung = new ShiftLabel("Rechnung");
 	private ShiftLabel löschen = new ShiftLabel("Löschen");
+	private ImageIcon bestaetigungsicon = new ImageIcon("res/Bestaetigung.png");
 
 	public OrderWindowView(IModel model) {
 		super(model);
@@ -149,13 +151,15 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		ShiftTableEntry entry3 = new ShiftTableEntry(order.getJobName());
 		ShiftTableEntry entry4 = new ShiftTableEntry(order.getWohnungsID());
 		ShiftButtonWeiterleiten entry5 = new ShiftButtonWeiterleiten();
-		ShiftLabel entry6 = new ShiftLabel(res6);
-		ShiftLabel entry7 = new ShiftLabel(res7);
+		ShiftLabel entry6 = new ShiftLabel("");
+		ShiftLabel entry7 = new ShiftLabel("");
 		ShiftButtonBestaetigung entry8 = new ShiftButtonBestaetigung();
 
 		final Order ord = order;
 		final int rowdel = row;
-		final Long id = ord.getId();
+		final List<Object> objectlist = new ArrayList<Object>();
+		objectlist.add(ord);
+		objectlist.add(entry6);
 
 		// entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
 		entry5.addActionListener(new ActionListener() {
@@ -163,7 +167,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal(),
-						ord);
+						objectlist);
 			}
 		});
 
@@ -175,7 +179,6 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		}
 
 		entry6.setIcon(new ImageIcon(res6));
-
 		if (ord.isStatusRechnung() == true) {
 			res7 = "res/Rechnung.png";
 		} else {
@@ -213,7 +216,9 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 		SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
 				yPad);
+		table.validate();
 		frame.validate();
+		frame.repaint();
 
 	}
 
@@ -304,4 +309,14 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 	}
 
+	public void setzeBestaetigung(ShiftLabel entry6) {
+		Component[] comps = table.getComponents();
+		for (Component component : comps) {
+			if (component instanceof ShiftLabel) {
+				if (component.equals(entry6)) {
+					((ShiftLabel) component).setIcon(bestaetigungsicon);
+				}
+			}
+		}
+	}
 }

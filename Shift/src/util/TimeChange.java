@@ -32,7 +32,7 @@ public class TimeChange {
 	private Date localDate;
 
 	@SuppressWarnings("deprecation")
-	public void month(int month) {
+	public int month(int month) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		BillDAO billdao = new BillDAO();
 		int betrag = 0;
@@ -48,7 +48,7 @@ public class TimeChange {
 		try {
 			if (ws.sendNebenkosten(invoice) == 0) {
 				System.out.println("Nebenkosten nicht angekommen!");
-				return;
+				return Definitions.RETURNCODE_ERROR;
 			} else {
 				System.out.println("Nebenkosten angekommen!");
 			}
@@ -91,10 +91,15 @@ public class TimeChange {
 		// Buchhaltungsrechnung + gezahlte Aufträge + gewinn
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
 		BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
-		bh.erfasseRechnung(bill.getVerwendungszweck(), "GM",
+		if(bh.erfasseRechnung(bill.getVerwendungszweck(), "GM",
 				bill.getRechnungssteller(), bill.getRechnungsEmpfaenger(),
 				bill.getBetrag(), bill.getRechnungsdatum(),
-				bill.getZahlungsdatum());
+				bill.getZahlungsdatum())!="rechnung empfangen"){
+			System.out.println("Rechnung nicht empfangen...");
+			return Definitions.RETURNCODE_ERROR;
+		} else{
+			return Definitions.RETURNCODE_CORRECT;
+		}
 
 	}
 
@@ -108,7 +113,7 @@ public class TimeChange {
 		String result = null;
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
-		List<Apartment> list = aptdao.findAll();
+		List<Apartment> list = aptdao.listWhenNotEmpty();
 		for (Apartment apartment : list) {
 			String[] arr = apartment.getAptID().split("\\.");
 			house = housedao.getById(Long.parseLong(arr[0]));

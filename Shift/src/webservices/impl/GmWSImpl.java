@@ -95,9 +95,13 @@ public class GmWSImpl implements GmWS {
 			return Definitions.ERROR_MESSAGE;
 		} else {
 			apt.setMieteranzahl(NumberOfHirers);
-			aptdao.persist(apt);
-			System.out.println("Mieter erfolgreich hinzugefuegt...");
-			return "Mieter erfolgreich hinzugefügt.";
+			if( aptdao.persist(apt)){
+				System.out.println("Mieter erfolgreich hinzugefuegt...");
+				return "Mieter erfolgreich hinzugefügt.";
+
+			}else{
+				return Definitions.ERROR_MESSAGE;
+			}
 		}
 	}
 
@@ -182,22 +186,27 @@ public class GmWSImpl implements GmWS {
 	@WebMethod
 	public long sendOrder(String typ, String apartmentID, String mieter) {
 		System.out.println("Order erhalten...");
-		if (typ != Definitions.GARTENPFLEGE_STRING
-				|| typ != Definitions.RASEN_MAEHEN_STRING
-				|| typ != Definitions.FUSSWEG_RAEUMEN_STRING
-				|| typ != Definitions.INSTALLATION_STRING
-				|| typ != Definitions.INSTANDHALTUNG_STRING
-				|| typ != Definitions.HECKE_SCHNEIDEN_STRING
-				|| typ != Definitions.TREPPENREINIGUNG_STRING
-				|| typ != Definitions.FENSTERREINIGUNG_STRING
-				|| typ != Definitions.SCHLUESSELDIENST_STRING
-				|| typ != Definitions.REPARATUR_STRING) {
+		System.out.println(typ);
+		System.out.println(apartmentID);
+		System.out.println(mieter);
 
+		if (typ.equals(Definitions.GARTENPFLEGE_STRING)
+				|| typ.equals(Definitions.RASEN_MAEHEN_STRING)
+				|| typ.equals(Definitions.FUSSWEG_RAEUMEN_STRING)
+				|| typ.equals(Definitions.INSTALLATION_STRING)
+				|| typ.equals(Definitions.INSTANDHALTUNG_STRING)
+				|| typ.equals(Definitions.HECKE_SCHNEIDEN_STRING)
+				|| typ.equals(Definitions.TREPPENREINIGUNG_STRING)
+				|| typ.equals(Definitions.FENSTERREINIGUNG_STRING)
+				|| typ.equals(Definitions.SCHLUESSELDIENST_STRING)
+				|| typ.equals(Definitions.REPARATUR_STRING)) {
+			System.out.println("Auftragstyp korrekt...");
 			OrderDAO orderdao = new OrderDAO();
 			ApartmentDAO aptdao = new ApartmentDAO();
 			Order order = orderdao.create();
 			Apartment apt = aptdao.getApartment(apartmentID);
 			if (apt != null) {
+
 				System.out.println(typ);
 				System.out.println(apartmentID);
 				System.out.println(mieter);
@@ -311,7 +320,7 @@ public class GmWSImpl implements GmWS {
 					 * einem Monatssprung - in der Methode
 					 */
 					System.out.println("Monatssprung...");
-					timechange.month(month);
+					returncode = timechange.month(month);
 					break;
 				case "year":
 					/*
@@ -319,7 +328,7 @@ public class GmWSImpl implements GmWS {
 					 * einem Jahressprung - in der Methode
 					 */
 					System.out.println("Jahressprung...");
-					timechange.month(month);
+					returncode = timechange.month(month);
 					break;
 
 				default:
@@ -366,26 +375,29 @@ public class GmWSImpl implements GmWS {
 		HouseDAO housedao = new HouseDAO();
 		House house = null;
 		List<Long> longlist = new ArrayList<Long>();
-		List<House> houselist = new ArrayList<House>();
 		Map<String, String> map = new HashMap<String, String>();
 		ApartmentDAO aptdao = new ApartmentDAO();
 		List<Apartment> apts = aptdao.listWhenEmpty();
-		if (apts == null) {
+		if (apts != null) {
 
 			for (Apartment apartment : apts) {
 				String[] arr = apartment.getAptID().split("\\.");
-				if (!longlist.contains(arr[0])) {
+				if (!longlist.contains(Long.parseLong(arr[0]))) {
 					longlist.add(Long.parseLong(arr[0]));
 				}
 			}
 
-			Map<Long, House> housemap = housedao.getHouseWithEmptyApts(longlist);
+			Map<Long, House> housemap = housedao
+					.getHouseWithEmptyApts(longlist);
+			System.out.println(housemap);
 
 			for (Apartment apartment : apts) {
 				if (apartment.getMieteranzahl() == 0) {
 					// add to List
 					String[] arr = apartment.getAptID().split("\\.");
-					house = housemap.get(Integer.parseInt(arr[0]) - 1);
+					System.out.println(arr[0]);
+					house = housemap.get(Long.parseLong(arr[0]));
+
 					Map<String, String> infos = new HashMap<String, String>();
 					infos.put("WohnungsID", apartment.getAptID());
 					infos.put("Zimmeranzahl",
@@ -400,6 +412,7 @@ public class GmWSImpl implements GmWS {
 
 					map.put("_" + apartment.getAptID(),
 							ProjektXMLParser.mapToXMLString(infos));
+
 				}
 			}
 			return ProjektXMLParser.mapToXMLString(map);
