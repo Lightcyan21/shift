@@ -237,26 +237,28 @@ public class ExposeView extends AbstractView implements SpringTable {
 		int row = rows;
 
 		entries.put(Integer.toString(rows), house);
-		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
+		ShiftTableEntry entry = new ShiftTableEntry(Long.toString(house.getId()));
+		ShiftTableEntry entry1 = new ShiftTableEntry(Integer.toString(rows));
 		ShiftTableEntry entry2 = new ShiftTableEntry(house.getStrasse());
-		ShiftTableEntry entry3 = new ShiftTableEntry(house.getOrt());
-		ShiftTableEntry entry4 = new ShiftTableEntry(house.getPlz());
-		ShiftTableEntry entry5 = new ShiftTableEntry(Double.toString(Math
-				.round(house.getFlaeche() * 100d) / 100d));
+		ShiftTableEntry entry3 = new ShiftTableEntry(house.getHausnr());
+		ShiftTableEntry entry4 = new ShiftTableEntry(house.getOrt());
+		ShiftTableEntry entry5 = new ShiftTableEntry(house.getPlz());
 		ShiftTableEntry entry6 = new ShiftTableEntry(Double.toString(Math
+				.round(house.getFlaeche() * 100d) / 100d));
+		ShiftTableEntry entry7 = new ShiftTableEntry(Double.toString(Math
 				.round(house.getGartenflaeche() * 100d) / 100d));
 		ShiftTableEntry entry65 = new ShiftTableEntry(
 				Double.toString(Math.round((house.getFlaeche() / house
 						.getAnzahlWohnungen()) * 100d) / 100d));
-		ShiftButton2 entry7 = new ShiftButton2("");
-		entry7.setIcon(versicherungsicon);
 		ShiftButton2 entry8 = new ShiftButton2("");
-		entry8.setIcon(noversicherungsicon);
+		entry8.setIcon(versicherungsicon);
+		ShiftButton2 entry9 = new ShiftButton2("");
+		entry9.setIcon(noversicherungsicon);
 		final double area = house.getFlaeche();
 		final int rowdel = row;
 		final Long id = house.getId();
 
-		entry7.addActionListener(new ActionListener() {
+		entry8.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -270,7 +272,7 @@ public class ExposeView extends AbstractView implements SpringTable {
 			}
 		});
 
-		entry8.addActionListener(new ActionListener() {
+		entry9.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -285,6 +287,7 @@ public class ExposeView extends AbstractView implements SpringTable {
 		});
 
 		table.add(entry);
+		table.add(entry1);
 		table.add(entry2);
 		table.add(entry3);
 		table.add(entry4);
@@ -293,6 +296,7 @@ public class ExposeView extends AbstractView implements SpringTable {
 		table.add(entry65);
 		table.add(entry7);
 		table.add(entry8);
+		table.add(entry9);
 
 		rows++;
 		System.out.println("tablecount:" + table.getComponentCount()
