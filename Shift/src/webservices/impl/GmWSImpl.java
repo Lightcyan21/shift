@@ -370,39 +370,41 @@ public class GmWSImpl implements GmWS {
 		Map<String, String> map = new HashMap<String, String>();
 		ApartmentDAO aptdao = new ApartmentDAO();
 		List<Apartment> apts = aptdao.listWhenEmpty();
-		for (Apartment apartment : apts) {
-			String[] arr = apartment.getAptID().split("\\.");
-			if (!longlist.contains(arr[0])) {
-				longlist.add(Long.parseLong(arr[0]));
-			}
-		}
+		if (apts == null) {
 
-		for (Long zahl : longlist) {
-			house = housedao.getById(zahl);
-			houselist.add(house);
-		}
-
-		for (Apartment apartment : apts) {
-			if (apartment.getMieteranzahl() == 0) {
-				// add to List
+			for (Apartment apartment : apts) {
 				String[] arr = apartment.getAptID().split("\\.");
-				house = houselist.get(Integer.parseInt(arr[0]) - 1);
-				Map<String, String> infos = new HashMap<String, String>();
-				infos.put("WohnungsID", apartment.getAptID());
-				infos.put("Zimmeranzahl",
-						Integer.toString(apartment.getZimmeranzahl()));
-				infos.put("Wohnflaeche",
-						Double.toString(apartment.getWohnflaeche()));
-				infos.put("PLZ", house.getPlz());
-				infos.put("Ort", house.getOrt());
-				infos.put("Strasse", house.getStrasse());
-				infos.put("Hausnummer", house.getHausnr());
-				infos.put("Etage", arr[1]);
-
-				map.put("_" + apartment.getAptID(),
-						ProjektXMLParser.mapToXMLString(infos));
+				if (!longlist.contains(arr[0])) {
+					longlist.add(Long.parseLong(arr[0]));
+				}
 			}
+
+			Map<Long, House> housemap = housedao.getHouseWithEmptyApts(longlist);
+
+			for (Apartment apartment : apts) {
+				if (apartment.getMieteranzahl() == 0) {
+					// add to List
+					String[] arr = apartment.getAptID().split("\\.");
+					house = housemap.get(Integer.parseInt(arr[0]) - 1);
+					Map<String, String> infos = new HashMap<String, String>();
+					infos.put("WohnungsID", apartment.getAptID());
+					infos.put("Zimmeranzahl",
+							Integer.toString(apartment.getZimmeranzahl()));
+					infos.put("Wohnflaeche",
+							Double.toString(apartment.getWohnflaeche()));
+					infos.put("PLZ", house.getPlz());
+					infos.put("Ort", house.getOrt());
+					infos.put("Strasse", house.getStrasse());
+					infos.put("Hausnummer", house.getHausnr());
+					infos.put("Etage", arr[1]);
+
+					map.put("_" + apartment.getAptID(),
+							ProjektXMLParser.mapToXMLString(infos));
+				}
+			}
+			return ProjektXMLParser.mapToXMLString(map);
+		} else {
+			return ":(";
 		}
-		return ProjektXMLParser.mapToXMLString(map);
 	}
 }

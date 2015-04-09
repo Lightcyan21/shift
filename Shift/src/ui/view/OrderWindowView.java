@@ -18,15 +18,13 @@ import javax.swing.SpringLayout;
 
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
-import persistence.dao.impl.HouseDAO;
 import persistence.dao.impl.OrderDAO;
-import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
 import util.SpringUtilities;
+
 import components.Definitions;
-import components.ShiftButton2;
 import components.ShiftButtonBack;
 import components.ShiftButtonBestaetigung;
 import components.ShiftButtonWeiterleiten;
