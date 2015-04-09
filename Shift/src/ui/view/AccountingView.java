@@ -26,9 +26,7 @@ import mvc.view.abstrct.AbstractView;
 
 import org.jdom2.JDOMException;
 
-import persistence.dao.impl.AdmonitionDAO;
 import persistence.dao.impl.BillDAO;
-import persistence.entity.impl.Admonition;
 import persistence.entity.impl.Bill;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
