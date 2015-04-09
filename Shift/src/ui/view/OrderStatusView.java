@@ -117,11 +117,23 @@ public class OrderStatusView extends AbstractView {
 
 	public void incorrectInput() {
 		JOptionPane.showMessageDialog(new JFrame(), "Auftrag nicht gefunden");
+		textfield.requestFocus();
 	}
 
 	public void showStatus(Long id, String state) {
 		JOptionPane.showMessageDialog(new JFrame(), "Auftrag mit der ID: " + id
 				+ " hat den Status: " + state);
 
+	}
+
+	public void focus() {
+		textfield.requestFocus();
+	}
+
+	public void incorrectInputNumber() {
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Bitte geben Sie eine Zahl ein.", "Warnung",
+				JOptionPane.WARNING_MESSAGE);
+		textfield.requestFocus();
 	}
 }
