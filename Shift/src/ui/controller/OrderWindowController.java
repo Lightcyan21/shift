@@ -1,16 +1,22 @@
 package ui.controller;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import mvc.controller.abstrct.AbstractController;
+import mvc.event.LocalUIEvent;
 import persistence.dao.impl.HouseDAO;
 import persistence.dao.impl.OrderDAO;
 import persistence.entity.impl.House;
 import persistence.entity.impl.Order;
-import mvc.controller.abstrct.AbstractController;
-import mvc.event.LocalUIEvent;
 import ui.enums.UI_EVENT;
 import ui.model.OrderWindowModel;
 import ui.view.OrderWindowView;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
+
+import com.sun.xml.internal.ws.client.ClientTransportException;
+import components.Definitions;
 
 /**
  * hierbei handelt es sich um die Seite, die Aufträge darstellt
@@ -59,12 +65,21 @@ public class OrderWindowController extends
 															// int. evtl ändern
 			}
 			long orderID = ord.getId(); // javadoc verlangt long als datentyp
-			gebaeude.sendOrderToFm(name, apartmentID, flaeche, orderID);
+			try {
+				String result = gebaeude.sendOrderToFm(name, apartmentID, flaeche, orderID);
+				ord.setDatum(result);
+				orderdao.persist(ord);
+
+			} catch (ClientTransportException e) {
+				System.out.println(e.getMessage());
+				JOptionPane.showMessageDialog(new JFrame(),
+						Definitions.NO_CONNECTION_GS, Definitions.ERROR_TITLE,
+						JOptionPane.ERROR_MESSAGE);
+			}
 
 		}
 		if (event.getEventId() == UI_EVENT.REMOVE_ORDER.ordinal()) {
 			System.out.println("--- Auftrag löschen");
-			
 
 		}
 

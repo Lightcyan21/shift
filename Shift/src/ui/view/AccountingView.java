@@ -14,9 +14,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
@@ -32,8 +33,8 @@ import util.SpringUtilities;
 import webservices.impl.BuchhaltungWS;
 import webservices.impl.BuchhaltungWsImplService;
 import baldoapp.ProjektXMLParser;
+
 import components.Definitions;
-import components.ShiftButton2;
 import components.ShiftButtonBack;
 import components.ShiftButtonBestaetigung;
 import components.ShiftFrame;
@@ -56,8 +57,6 @@ public class AccountingView extends AbstractView implements SpringTable {
 
 	private SpringLayout layout;
 	private JLabel noEntries;
-	private Icon mahnungsicon;
-	private Icon nomahnungsicon;
 	private ShiftFrame frame;
 	private ShiftLabel rechnungID = new ShiftLabel("RechnungsID");
 	private ShiftLabel verwendungszweck = new ShiftLabel("Verwendungszweck");
@@ -128,49 +127,63 @@ public class AccountingView extends AbstractView implements SpringTable {
 		System.out.println("Lade Mahnungen von Buchhaltung...");
 		Bill bill = new Bill();
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
-		BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
-		String forderungslisteXML = bh.gebeForderungsliste("GM");
-		Map<String, String> forderungen = null;
 		try {
-			forderungslisteMap = ProjektXMLParser
-					.XMLStringToMap(forderungslisteXML);
-		} catch (JDOMException | IOException e) {
-			System.out.println("Es ist ein Fehler aufgetreten: "
-					+ e.getMessage());
-		}
-		if (forderungslisteMap.size() != 0) {
-			table.setLayout(layout);
-			headlinesSetzen();
-
-			Set<Entry<String, String>> rechnungen = forderungslisteMap
-					.entrySet();
-
-			for (Entry<String, String> entryXML : rechnungen) {
-				// "rechnungsersteller", Rechnungsersteller (wird immer nur eure
-				// Firma sein)/ "rechnungsempfaenger", Rechnungsempfänger/
-				// "betrag",
-				// Betrag/ "zahlungsdatum", Zahlungsdatum ("dd.MM.yyyy")/
-				// "verwendungszweck", Verwendungszweck/ "rechnungsdatum",
-				// Rechnungsdatum ("dd.MM.yyyy")/ "sender", Sender der Rechnung
-				// (wird immer nur eure Firma sein)
-				try {
-					forderungen = ProjektXMLParser.XMLStringToMap(entryXML
-							.getValue());
-				} catch (JDOMException | IOException e) {
-					System.out.println(e.getMessage());
-				}
-				bill.setRechnungssteller(forderungen.get("rechnungsersteller"));
-				bill.setRechnungsEmpfaenger(forderungen
-						.get("rechnungsempfaenger"));
-				bill.setBetrag(Double.parseDouble(forderungen.get("betrag")));
-				bill.setZahlungsdatum(forderungen.get("zahlungsdatum"));
-				bill.setVerwendungszweck(forderungen.get("verwendungszweck"));
-				bill.setRechnungsdatum(forderungen.get("rechnungsdatum"));
-				addRow(bill);
-				SpringUtilities.makeCompactGrid(table, rows, cols, initX,
-						initY, xPad, yPad);
+			BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
+			String forderungslisteXML = bh.gebeForderungsliste("GM");
+			Map<String, String> forderungen = null;
+			try {
+				forderungslisteMap = ProjektXMLParser
+						.XMLStringToMap(forderungslisteXML);
+			} catch (JDOMException | IOException e) {
+				System.out.println("Es ist ein Fehler aufgetreten: "
+						+ e.getMessage());
 			}
-		} else {
+			if (forderungslisteMap.size() != 0) {
+				table.setLayout(layout);
+				headlinesSetzen();
+
+				Set<Entry<String, String>> rechnungen = forderungslisteMap
+						.entrySet();
+
+				for (Entry<String, String> entryXML : rechnungen) {
+					// "rechnungsersteller", Rechnungsersteller (wird immer nur
+					// eure
+					// Firma sein)/ "rechnungsempfaenger", Rechnungsempfänger/
+					// "betrag",
+					// Betrag/ "zahlungsdatum", Zahlungsdatum ("dd.MM.yyyy")/
+					// "verwendungszweck", Verwendungszweck/ "rechnungsdatum",
+					// Rechnungsdatum ("dd.MM.yyyy")/ "sender", Sender der
+					// Rechnung
+					// (wird immer nur eure Firma sein)
+					try {
+						forderungen = ProjektXMLParser.XMLStringToMap(entryXML
+								.getValue());
+					} catch (JDOMException | IOException e) {
+						System.out.println(e.getMessage());
+						JOptionPane.showMessageDialog(new JFrame(),
+								Definitions.ERROR_MESSAGE,
+								"Fehlerhafte Daten der Buchhaltung",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					bill.setRechnungssteller(forderungen
+							.get("rechnungsersteller"));
+					bill.setRechnungsEmpfaenger(forderungen
+							.get("rechnungsempfaenger"));
+					bill.setBetrag(Double.parseDouble(forderungen.get("betrag")));
+					bill.setZahlungsdatum(forderungen.get("zahlungsdatum"));
+					bill.setVerwendungszweck(forderungen
+							.get("verwendungszweck"));
+					bill.setRechnungsdatum(forderungen.get("rechnungsdatum"));
+					addRow(bill);
+					SpringUtilities.makeCompactGrid(table, rows, cols, initX,
+							initY, xPad, yPad);
+				}
+			} else {
+				noEntries();
+			}
+		} catch (com.sun.xml.internal.ws.client.ClientTransportException e) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					Definitions.NO_CONNECTION_BH);
 			noEntries();
 		}
 
@@ -194,9 +207,9 @@ public class AccountingView extends AbstractView implements SpringTable {
 		ShiftTableEntry entry4 = new ShiftTableEntry(Double.toString(bill
 				.getBetrag()));
 		ShiftButtonBestaetigung entry5 = new ShiftButtonBestaetigung();
-		entry5.setIcon(new ImageIcon ("res/Mahnung.png"));
+		entry5.setIcon(new ImageIcon("res/Mahnung.png"));
 		ShiftButtonBestaetigung entry6 = new ShiftButtonBestaetigung();
-		entry6.setIcon(new ImageIcon ("res/VerzichtaufZahlung.png"));
+		entry6.setIcon(new ImageIcon("res/VerzichtaufZahlung.png"));
 		final int rowdel = row;
 		final String id = bill.getVerwendungszweck();
 
@@ -307,8 +320,6 @@ public class AccountingView extends AbstractView implements SpringTable {
 		layout = new SpringLayout();
 		noEntries = Definitions.NO_ENTRY;
 		rows = 1;
-		mahnungsicon = new ImageIcon("res/Mahnung.png");
-		nomahnungsicon = new ImageIcon("res/VerzichtaufZahlung.png");
 	}
 
 }

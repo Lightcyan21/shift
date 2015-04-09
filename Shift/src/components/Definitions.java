@@ -72,5 +72,8 @@ public class Definitions {
 	public static final int initY = 0;
 	public static final int xPad = 30;
 	public static final int yPad = 20;
+	public static final Object NO_CONNECTION_GS = "Der Gebäudeservice ist derzeit nicht verfügbar. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.";
+	public static final Object NO_CONNECTION_BH = "Die Buchhaltung ist derzeit nicht verfügbar. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.";
+	public static final String ERROR_TITLE = "Verbindungsaufbau fehlgeschlagen";
 
 }

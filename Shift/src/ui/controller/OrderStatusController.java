@@ -1,5 +1,6 @@
 package ui.controller;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import mvc.controller.abstrct.AbstractController;
@@ -11,6 +12,8 @@ import ui.model.OrderStatusModel;
 import ui.view.OrderStatusView;
 import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
+
+import components.Definitions;
 
 /**
  * hierbei handelt es sich um die Seite, die den Status der Aufträge darstellt
@@ -56,12 +59,21 @@ public class OrderStatusController extends
 			System.out.println("ID: " + id);
 			Order order = orderdao.getById(Long.parseLong(id));
 			if (order != null) {
-				System.out.println("test" + gs.getState(order.getId())+"test");
-				if (gs.getState(order.getId()) != "") {
-					registeredViews.get(0).showStatus(order.getId(),
-							gs.getState(order.getId()));
-				}else{
-				registeredViews.get(0).incorrectInput();
+				try {
+					System.out.println("test" + gs.getState(order.getId())
+							+ "test");
+					if (gs.getState(order.getId()) != "") {
+						registeredViews.get(0).showStatus(order.getId(),
+								gs.getState(order.getId()));
+					} else {
+						registeredViews.get(0).incorrectInput();
+					}
+
+				} catch (com.sun.xml.internal.ws.client.ClientTransportException e) {
+					System.out.println(e.getMessage());
+					JOptionPane.showMessageDialog(new JFrame(),
+							Definitions.NO_CONNECTION_GS,
+							Definitions.ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
 				}
 
 			} else {

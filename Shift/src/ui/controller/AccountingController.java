@@ -3,6 +3,8 @@ package ui.controller;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import components.Definitions;
+
 import mvc.controller.abstrct.AbstractController;
 import mvc.event.LocalUIEvent;
 import ui.enums.UI_EVENT;
@@ -42,12 +44,21 @@ public class AccountingController extends
 			System.out.println("Mahnung senden...");
 			BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
 			BuchhaltungWS bh = bhservice.getBuchhaltungWsImplPort();
-			String result = bh.uebergabeMahnauftrag(vz);
-			System.out.println(result);
-			if(result != "Mahnauftrag erhalten"){
-				JOptionPane.showMessageDialog(new JFrame(), result,"Fehler!",JOptionPane.ERROR_MESSAGE);
-			} else {
-				this.registeredViews.get(0).deleteThisRow(rowdel);
+			try {
+				String result = bh.uebergabeMahnauftrag(vz);
+				System.out.println(result);
+				if (result != "Mahnauftrag erhalten") {
+					JOptionPane.showMessageDialog(new JFrame(), result,
+							"Fehler!", JOptionPane.ERROR_MESSAGE);
+				} else {
+					this.registeredViews.get(0).deleteThisRow(rowdel);
+				}
+
+			} catch (com.sun.xml.internal.ws.client.ClientTransportException e) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						Definitions.NO_CONNECTION_BH,
+						Definitions.ERROR_TITLE,
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
