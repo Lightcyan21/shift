@@ -115,6 +115,9 @@ public class TimeChange {
 		House house = null;
 		Order order = null;
 		String result = null;
+		List<Order> orderlist;
+		List<List<Order>> orderlistlist = new ArrayList<List<Order>>();
+
 		ServiceWSImplService gsservice = new ServiceWSImplService();
 		ServiceWS gs = gsservice.getServiceWSImplPort();
 		List<Apartment> list = aptdao.listWhenNotEmpty();
@@ -135,6 +138,7 @@ public class TimeChange {
 					.getHouseWithEmptyApts(longlist);
 
 			for (Apartment apartment : list) {
+				orderlist = new ArrayList<Order>();
 				String[] arr = apartment.getAptID().split("\\.");
 				house = housemap.get(Long.parseLong(arr[0]));
 				String aptID = apartment.getAptID();
@@ -156,7 +160,7 @@ public class TimeChange {
 								* (house.getGartenflaeche() / house
 										.getAnzahlWohnungen()));
 						order.setDatum(result);
-						orderdao.persist(order);
+						orderlist.add(order);
 					} else {
 						System.out.println(Definitions.ERROR_MESSAGE);
 					}
@@ -172,7 +176,7 @@ public class TimeChange {
 						order.setJobName(Definitions.GARTENPFLEGE_STRING);
 						order.setBetrag(Definitions.gartenpflege);
 						order.setDatum(result);
-						orderdao.persist(order);
+						orderlist.add(order);
 					} else {
 						System.out.println(Definitions.ERROR_MESSAGE);
 					}
@@ -192,7 +196,7 @@ public class TimeChange {
 						order.setStatus(Definitions.ANGEKOMMEN);
 						order.setStatusBestaetigung(true);
 						order.setDatum(result);
-						orderdao.persist(order);
+						orderlist.add(order);
 					} else {
 						System.out.println(Definitions.ERROR_MESSAGE);
 					}
@@ -208,7 +212,7 @@ public class TimeChange {
 						order.setStatus(Definitions.ANGEKOMMEN);
 						order.setStatusBestaetigung(true);
 						order.setDatum(result);
-						orderdao.persist(order);
+						orderlist.add(order);
 					} else {
 						System.out.println(Definitions.ERROR_MESSAGE);
 					}
@@ -226,7 +230,7 @@ public class TimeChange {
 					order.setStatus(Definitions.ANGEKOMMEN);
 					order.setStatusBestaetigung(true);
 					order.setDatum(result);
-					orderdao.persist(order);
+					orderlist.add(order);
 
 				} else {
 					System.out.println(Definitions.ERROR_MESSAGE);
@@ -242,13 +246,14 @@ public class TimeChange {
 					order.setStatus(Definitions.ANGEKOMMEN);
 					order.setStatusBestaetigung(true);
 					order.setDatum(result);
-					orderdao.persist(order);
+					orderlist.add(order);
 
 				} else {
 					System.out.println(Definitions.ERROR_MESSAGE);
 				}
-
+				orderlistlist.add(orderlist);
 			}
+			orderdao.persistAll(orderlistlist);
 		}
 	}
 
