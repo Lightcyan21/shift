@@ -64,18 +64,28 @@ public class OrderWindowController extends
 
 			long orderID = ord.getId(); // javadoc verlangt long als datentyp
 			try {
+				long aID = ord.getId();
+				int rw = JOptionPane.showConfirmDialog(null,
+						"Auftrag mit der ID " + aID
+								+ " weiterleiten?", "",
+						JOptionPane.YES_NO_OPTION);
+				System.out.println(rw);
+				if (rw == 0) {
+					String result = gebaeude.sendOrderToFm(name, apartmentID,
+							flaeche, orderID);
+					if (result.equals("")) {
+						JOptionPane.showMessageDialog(new JFrame(),
+								"Fehlerhafte Parameter für Auftragsübergabe");
+					} else {
+						System.out.println("Ausführungsdatum: " + result);
+						ord.setDatum(result);
+						ord.setStatusBestaetigung(true);
+						orderdao.persist(ord);
+						registeredViews.get(0)
+								.setzeBestaetigung(entry5, entry6);
 
-				String result = gebaeude.sendOrderToFm(name, apartmentID,
-						flaeche, orderID);
-				if (result.equals("")) {
-					JOptionPane.showMessageDialog(new JFrame(),
-							"Fehlerhafte Parameter für Auftragsübergabe");
-				} else {
-					System.out.println("Ausführungsdatum: " + result);
-					ord.setDatum(result);
-					ord.setStatusBestaetigung(true);
-					orderdao.persist(ord);
-					registeredViews.get(0).setzeBestaetigung(entry5, entry6);
+					}
+
 				}
 
 			} catch (ClientTransportException | ServerSOAPFaultException e) {

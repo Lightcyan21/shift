@@ -154,7 +154,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		final ShiftLabel entry5 = new ShiftLabel("");
 		ShiftLabel entry6 = new ShiftLabel("");
 		ShiftLabel entry7 = new ShiftLabel("");
-		ShiftButtonBestaetigung entry8 = new ShiftButtonBestaetigung();
+		final ShiftLabel entry8 = new ShiftLabel("");
 
 		final Order ord = order;
 		final int rowdel = row;
@@ -165,7 +165,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 		if (ord.isStatusBestaetigung() == false) {
 			entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
-		}else {
+		} else {
 			entry5.setVisible(false);
 		}
 		entry5.addMouseListener(new MouseListener() {
@@ -197,9 +197,8 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource().equals(entry5))
-				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal(),
-						objectlist);
-
+					fireLocalUIEvent(this,
+							UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal(), objectlist);
 			}
 		});
 
@@ -221,19 +220,56 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		entry7.setIcon(new ImageIcon(res7));
 
 		entry8.setIcon(new ImageIcon("res/Loeschen2.png"));
-		entry8.addActionListener(new ActionListener() {
+		entry8.addMouseListener(new MouseListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				fireLocalUIEvent(this, UI_EVENT.REMOVE_ORDER.ordinal());
-				OrderDAO orderdao = new OrderDAO();
-				Order order = new Order();
-				order = ord;
-				deleteThisRow(rowdel);
-				order.setSeen(true);
-				JOptionPane.showMessageDialog(frame, "Auftrag in der Reihe "
-						+ rowdel + " gelöscht.");
-				orderdao.persist(order);
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getSource().equals(entry8)) {
+					fireLocalUIEvent(this, UI_EVENT.REMOVE_ORDER.ordinal());
+					OrderDAO orderdao = new OrderDAO();
+					Order order = new Order();
+					order = ord;
+					long oID = order.getId();
+					int rw = JOptionPane.showConfirmDialog(null,
+							"Soll der Auftrag mit der ID " + oID
+									+ " gelöscht werden?", "Auftrag löschen",
+							JOptionPane.YES_NO_OPTION);
+					if (rw == 0) {
+						deleteThisRow(rowdel);
+						order.setSeen(true);
+						JOptionPane
+								.showMessageDialog(frame,
+										"Auftrag mit der ID " + oID
+												+ " gelöscht.");
+						orderdao.persist(order);
+					}
+
+				}
+
 			}
 		});
 
@@ -348,8 +384,8 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			if (component instanceof ShiftLabel) {
 				if (component.equals(entry6)) {
 					((ShiftLabel) component).setIcon(bestaetigungsicon);
-				}else if (component.equals(entry5)) {
-					((ShiftLabel) component).setVisible(false);
+					 } else if (component.equals(entry5)) {
+					 ((ShiftLabel) component).setVisible(false);
 				}
 			}
 		}
