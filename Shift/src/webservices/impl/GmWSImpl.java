@@ -88,6 +88,7 @@ public class GmWSImpl implements GmWS {
 	@WebMethod
 	public String setHirer(int NumberOfHirers, String apartmentID) {
 		System.out.println("Neuer Mieter wird eingetragen...");
+		System.out.println("Anzahl Mieter: "+NumberOfHirers);
 		ApartmentDAO aptdao = new ApartmentDAO();
 		Apartment apt = aptdao.getApartment(apartmentID);
 		if (apt == null) {
@@ -95,11 +96,11 @@ public class GmWSImpl implements GmWS {
 			return Definitions.ERROR_MESSAGE;
 		} else {
 			apt.setMieteranzahl(NumberOfHirers);
-			if( aptdao.persist(apt)){
+			if (aptdao.persist(apt)) {
 				System.out.println("Mieter erfolgreich hinzugefuegt...");
 				return "Mieter erfolgreich hinzugefügt.";
 
-			}else{
+			} else {
 				return Definitions.ERROR_MESSAGE;
 			}
 		}
@@ -170,7 +171,8 @@ public class GmWSImpl implements GmWS {
 				break;
 			case "Bezahlt":
 				order.setStatus(Definitions.RECHNUNG_BEZAHLT);
-				break;
+			default:
+				return "Auftrag nicht vorhanden.";
 			}
 			orderdao.persist(order);
 			System.out.println("Status: " + status);
@@ -265,18 +267,18 @@ public class GmWSImpl implements GmWS {
 					rechnungsersteller, rechnungsempfaenger, betrag,
 					rechnungsdatum, zahlungsdatum);
 			System.out.println(ergebnis);
-			if (ergebnis.equals("Rechnung angekommen")) {
+			if (ergebnis.equals("true")) {
 				System.out.println("Rechnung angekommen...");
-				return "Rechnung angekommen";
+				return "true";
 			} else {
 				System.out.println("Rechnnung nicht angekommen...");
-				return Definitions.ERROR_MESSAGE;
+				return "false";
 			}
 
 		} catch (ClientTransportException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Fehler bei der Datenübergabe an BH");
-			return Definitions.ERROR_MESSAGE;
+			return "false";
 		}
 
 	}

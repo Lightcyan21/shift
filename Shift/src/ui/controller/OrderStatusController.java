@@ -62,7 +62,7 @@ public class OrderStatusController extends
 				if (order != null) {
 					try {
 						String state = gs.getState(order.getId());
-						if (state != "") {
+						if (!state.equals("")) {
 							registeredViews.get(0).showStatus(order.getId(),
 									state);
 						} else {

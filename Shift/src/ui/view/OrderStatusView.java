@@ -121,9 +121,8 @@ public class OrderStatusView extends AbstractView {
 	}
 
 	public void showStatus(Long id, String state) {
-		JOptionPane.showMessageDialog(new JFrame(), "Auftrag mit der ID: " + id
-				+ " hat den Status: " + state);
-
+		JOptionPane.showMessageDialog(new JFrame(), "Auftrag mit der ID " + id
+				+ " hat den Status \"" + state + "\"");
 	}
 
 	public void focus() {
