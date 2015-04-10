@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +15,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
@@ -199,9 +202,9 @@ public class ExposeView extends AbstractView implements SpringTable {
 			for (House house : houses) {
 				addRow(house);
 			}
-			SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY, xPad,
-					yPad);
-		} else {	
+			SpringUtilities.makeCompactGrid(table, rows, cols, initX, initY,
+					xPad, yPad);
+		} else {
 			noEntries();
 
 		}
@@ -243,7 +246,8 @@ public class ExposeView extends AbstractView implements SpringTable {
 
 		entries.put(Integer.toString(rows), house);
 		ShiftTableEntry entry = new ShiftTableEntry(Integer.toString(rows));
-		ShiftTableEntry entry1 = new ShiftTableEntry(Long.toString(house.getId()));
+		ShiftTableEntry entry1 = new ShiftTableEntry(Long.toString(house
+				.getId()));
 		ShiftTableEntry entry2 = new ShiftTableEntry(house.getPlz());
 		ShiftTableEntry entry3 = new ShiftTableEntry(house.getOrt());
 		ShiftTableEntry entry4 = new ShiftTableEntry(house.getStrasse());
@@ -262,33 +266,66 @@ public class ExposeView extends AbstractView implements SpringTable {
 		final double area = house.getFlaeche();
 		final int rowdel = row;
 		final Long id = house.getId();
-
-		entry8.addActionListener(new ActionListener() {
+		entry8.addMouseListener(new MouseListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Versicherung angelegt");
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Versicherung beauftragt...");
 				List<Object> data = new ArrayList<Object>();
 				data.add(area);
 				data.add(rowdel);
 				data.add(id);
 				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), data);
-				
-				
 			}
 		});
 
-		entry9.addActionListener(new ActionListener() {
+		entry9.addMouseListener(new MouseListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Keine Versicherung beauftragt");
-				System.out.println("Lösche Reihe: " + rowdel);
-				HouseDAO housedao = new HouseDAO();
-				House house = housedao.getById(id);
-				deleteThisRow(rowdel);
-				house.setSeen(true);
-				housedao.persist(house);
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Keine Versicherung beauftragt...");
+				int rw = JOptionPane.showConfirmDialog(null,
+						"Keine Versicherung anlegen?", "Bestätigung",
+						JOptionPane.YES_NO_OPTION);
+				if (rw == 0) {
+					HouseDAO housedao = new HouseDAO();
+					House house = housedao.getById(id);
+					deleteThisRow(rowdel);
+					house.setSeen(true);
+					housedao.persist(house);
+				}
 			}
 		});
 

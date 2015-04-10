@@ -212,18 +212,15 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		}
 
 		entry7.setIcon(new ImageIcon(res7));
-
 		entry8.setIcon(new ImageIcon("res/Loeschen2.png"));
 		entry8.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
 			}
 
 			@Override

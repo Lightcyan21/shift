@@ -7,10 +7,13 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,7 +32,6 @@ import util.SpringUtilities;
 import components.Definitions;
 import components.ShiftButtonBack;
 import components.ShiftButtonSearch;
-import components.ShiftButtonSearchTable;
 import components.ShiftFrame;
 import components.ShiftLabel;
 import components.ShiftPanel2;
@@ -42,7 +44,7 @@ public class AptRequestView extends AbstractView implements SpringTable {
 	private ShiftPanel2 table;
 	private int rows;
 	private int cols = 5;
-	private int initX = Definitions.initX;
+	private int initX = Definitions.initX + 50;
 	private int initY = Definitions.initY;
 	private int xPad = Definitions.xPad;
 	private int yPad = Definitions.yPad - 10;
@@ -218,13 +220,30 @@ public class AptRequestView extends AbstractView implements SpringTable {
 				.getWohnflaeche()));
 		ShiftTableEntry entry4 = new ShiftTableEntry(Integer.toString(apt
 				.getZimmeranzahl()));
-		ShiftButtonSearchTable entry5 = new ShiftButtonSearchTable();
+		ShiftLabel entry5 = new ShiftLabel("");
 
 		final Apartment apart = apt;
-		entry5.addActionListener(new ActionListener() {
+		entry5.setIcon(new ImageIcon("res/GebInfo.png"));
+		entry5.addMouseListener(new MouseListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				System.out.println("Details der Wohnung " + apart.getAptID()
 						+ " anzeigen...");
 				fireLocalUIEvent(this, UI_EVENT.PUSH_DETAILS.ordinal(), apart);

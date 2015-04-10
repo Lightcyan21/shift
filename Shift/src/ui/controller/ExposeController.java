@@ -46,51 +46,57 @@ public class ExposeController extends
 		if (event.getEventId() == UI_EVENT.PUSH_INSURANCE.ordinal()) {
 			BVWSImplService bankservice = new BVWSImplService();
 			BVWebService bank = bankservice.getBVWSImplPort();
-			if(!(event.getData() instanceof List<?>)){
-				JOptionPane.showMessageDialog(new JFrame(), "Fehler beim Casten der Objekte");
+			if (!(event.getData() instanceof List<?>)) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Fehler beim Casten der Objekte");
 				return;
 			}
 			@SuppressWarnings("unchecked")
-			List<Object> data =  (List<Object>) event.getData();
+			List<Object> data = (List<Object>) event.getData();
 			Double area = (Double) data.get(0);
 			Integer rowdel = (Integer) data.get(1);
-			Long id = (Long)data.get(2);
-			
-			try {
-				Double betrag = bank.getGebVersicherung(Definitions.iban,
-						area.floatValue());
-				if (betrag == 0) {
-					JOptionPane.showMessageDialog(new JFrame(),
-							"Fehler beim Eintragen der Versicherung",
-							Definitions.ERROR_TITLE, JOptionPane.ERROR_MESSAGE,
-							null);
-				} else {
-					InsuranceDAO insudao = new InsuranceDAO();
-					Insurance insu = insudao.create();
-					insu.setBetrag(betrag);
-					if (insudao.persist(insu)) {
-						System.out.println("Versicherung gespeichert!");
-						registeredViews.get(0).deleteThisRow(rowdel);
-						HouseDAO housedao = new HouseDAO();
-						House house = housedao.getById(id);
-						house.setSeen(true);
-						housedao.persist(house);
-
-					} else {
-
+			Long id = (Long) data.get(2);
+			int rw = JOptionPane.showConfirmDialog(null,
+					"Versicherung abschlieﬂen", "Best‰tigung", JOptionPane.YES_NO_OPTION);
+			if (rw == 0) {
+				try {
+					Double betrag = bank.getGebVersicherung(Definitions.iban,
+							area.floatValue());
+					if (betrag == 0) {
 						JOptionPane.showMessageDialog(new JFrame(),
-								"Fehler beim Speichern der Versicherung",
+								"Fehler beim Eintragen der Versicherung",
 								Definitions.ERROR_TITLE,
-								JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			} catch (ClientTransportException e) {
-				System.out.println(e.getMessage());
-				JOptionPane.showMessageDialog(new JFrame(),
-						Definitions.NO_CONNECTION_BANK,
-						Definitions.ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
-			}
+								JOptionPane.ERROR_MESSAGE, null);
+					} else {
+						InsuranceDAO insudao = new InsuranceDAO();
+						Insurance insu = insudao.createNew(id);
+						insu.setBetrag(betrag);
+						if (insudao.persist(insu)) {
+							System.out.println("Versicherung gespeichert!");
+							registeredViews.get(0).deleteThisRow(rowdel);
+							HouseDAO housedao = new HouseDAO();
+							House house = housedao.getById(id);
+							house.setSeen(true);
+							housedao.persist(house);
 
+						} else {
+
+							JOptionPane
+									.showMessageDialog(
+											new JFrame(),
+											"Fehler beim internen Speichern der Versicherung",
+											Definitions.ERROR_TITLE,
+											JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				} catch (ClientTransportException e) {
+					System.out.println(e.getMessage());
+					JOptionPane.showMessageDialog(new JFrame(),
+							Definitions.NO_CONNECTION_BANK,
+							Definitions.ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
 		}
 	}
 

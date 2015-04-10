@@ -14,7 +14,7 @@ import persistence.entity.impl.Insurance;
 
 public class InsuranceDAO extends AbstractDAO<Insurance> implements
 		DAO<Insurance> {
-
+	@Deprecated
 	@Override
 	public Insurance create() {
 
@@ -30,6 +30,33 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 					.prepareStatement("insert into insurance (houseID, betrag) values (?, ?);");
 
 			pre.setString(1, null);
+			pre.setDouble(2, 0);
+
+			pre.execute();
+
+			insu.setId((long) key);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return insu;
+	}
+
+	public Insurance createNew(Long houseid) {
+
+		Insurance insu = new Insurance();
+		int key = 0;
+
+		Connection con;
+		con = DBUtil.getConnection();
+
+		try {
+			PreparedStatement pre;
+			pre = con
+					.prepareStatement("insert into insurance (houseID, betrag) values (?, ?);");
+
+			pre.setLong(1, houseid);
 			pre.setDouble(2, 0);
 
 			pre.execute();
@@ -94,6 +121,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			return null;
 		}
 	}
+
 	@Deprecated
 	@Override
 	public Insurance getById(long id) {
@@ -153,7 +181,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 			pre.setDouble(2, entity.getBetrag());
 			pre.setLong(3, entity.getId());
 
-			if (entity.getId() != 0 && entity.getBetrag() != 0) {
+			if (entity.getId() != 0 ) {
 				pre.executeUpdate();
 				rt = true;
 			} else {

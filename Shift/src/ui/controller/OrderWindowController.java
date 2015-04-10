@@ -69,7 +69,6 @@ public class OrderWindowController extends
 						"Auftrag mit der ID " + aID
 								+ " weiterleiten?", "",
 						JOptionPane.YES_NO_OPTION);
-				System.out.println(rw);
 				if (rw == 0) {
 					String result = gebaeude.sendOrderToFm(name, apartmentID,
 							flaeche, orderID);

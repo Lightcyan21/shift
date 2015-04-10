@@ -16,6 +16,53 @@ import persistence.entity.impl.Order;
 import com.mysql.jdbc.Statement;
 
 public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
+	public List<Order> createAll(int count) {
+		Connection con;
+		con = DBUtil.getConnection();
+		List<Order> orderlist = new ArrayList<Order>();
+		for (int i = 0; i < count; i++) {
+
+			Order order = new Order();
+			int key = 0;
+
+			try {
+				PreparedStatement pre;
+				pre = con
+						.prepareStatement(
+								"insert into job (wohnungsID, jobName, mieter, betrag, status, statusRechnung, statusBestaetigung, statusWeiterleitung, datum) values (?, ?, ?, ?, ?, ?, ?, ?,?);",
+								Statement.RETURN_GENERATED_KEYS);
+
+				pre.setString(1, null);
+				pre.setString(2, null);
+				pre.setString(3, null);
+				pre.setDouble(4, 0);
+				pre.setInt(5, 0);
+				pre.setBoolean(6, false);
+				pre.setBoolean(7, false);
+				pre.setBoolean(8, false);
+				pre.setString(9, null);
+
+				pre.execute();
+
+				ResultSet rs = pre.getGeneratedKeys();
+				if (rs != null && rs.next()) {
+					key = rs.getInt(1);
+				}
+				order.setId((long) key);
+
+				orderlist.add(order);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		try {
+			con.close();
+		} catch (Exception e) {
+			System.out.println("Close fehlgeschlagen");
+		}
+		return orderlist;
+	}
 
 	@Override
 	public Order create() {
@@ -128,11 +175,9 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
 		HashMap<String, List<Order>> hm = new HashMap<>();
 		List<Order> orderList = new ArrayList<Order>();
-		{
-		}
-		;
 
 		for (String string : list) {
+			orderList = new ArrayList<Order>();
 			try {
 				PreparedStatement pre;
 				pre = con
@@ -161,8 +206,8 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
 					orderList.add(order);
 
-					hm.put(string, orderList);
 				}
+				hm.put(string, orderList);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -293,7 +338,6 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
 			if (entity.getId() != 0 && entity.getWohnungsID() != null
 					&& entity.getJobName() != null
-					&& entity.getMieter() != null
 			// && entity.getStatus() != 0
 			) {
 				pre.executeUpdate();
@@ -338,7 +382,6 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
 					if (entity.getId() != 0 && entity.getWohnungsID() != null
 							&& entity.getJobName() != null
-							&& entity.getMieter() != null
 					// && entity.getStatus() != 0
 					) {
 						pre.executeUpdate();

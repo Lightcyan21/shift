@@ -286,77 +286,89 @@ public class GmWSImpl implements GmWS {
 	@SuppressWarnings("deprecation")
 	@Override
 	@WebMethod
-	public int pushDate(int year, int month, int day) {
-		TimeChange timechange = TimeChange.getInstance();
-		System.out.println("Zeitsprung erhalten..." + day + "." + (month + 1)
-				+ "." + year);
-		Date localDate = timechange.getTime();
-		int returncode = 100;
-		if (localDate.equals(new Date(0))) {
-			System.out.println("Zeitinitialiserung... auf den " + day + "."
-					+ (month + 1) + "." + (year + 1900));
-			timechange.setTime(new Date(year, month, day));
-			ShiftFrame.getInstance().setDatum();
-			returncode = 101;
-		} else {
+	public int pushDate(final int year, final int month, final int day) {
+		
+		
+		Thread d = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				TimeChange timechange = TimeChange.getInstance();
+				System.out.println("Zeitsprung erhalten..." + day + "." + (month + 1)
+						+ "." + year);
+				Date localDate = timechange.getTime();
+				int returncode = 100;
+				if (localDate.equals(new Date(0))) {
+					System.out.println("Zeitinitialiserung... auf den " + day + "."
+							+ (month + 1) + "." + (year + 1900));
+					timechange.setTime(new Date(year, month, day));
+					ShiftFrame.getInstance().setDatum();
+					returncode = 101;
+				} else {
 
-			Zeitsprung zeitsprung = new Zeitsprung(localDate);
-			System.out.println("localDate - zu Beginn der Methode: "
-					+ localDate.getDate() + "." + (localDate.getMonth() + 1)
-					+ "." + (localDate.getYear()));
-			Date sprungDate = new Date(year, month, day);
-			String sprungArt = null;
+					Zeitsprung zeitsprung = new Zeitsprung(localDate);
+					System.out.println("localDate - zu Beginn der Methode: "
+							+ localDate.getDate() + "." + (localDate.getMonth() + 1)
+							+ "." + (localDate.getYear()));
+					Date sprungDate = new Date(year, month, day);
+					String sprungArt = null;
 
-			Object o = zeitsprung.bestimmeVorgehen(sprungDate);
-			if (o instanceof Integer) {
-				returncode = (Integer) o;
+					Object o = zeitsprung.bestimmeVorgehen(sprungDate);
+					if (o instanceof Integer) {
+						returncode = (Integer) o;
 
-			} else if (o instanceof String) {
-				sprungArt = (String) o;
-				switch (sprungArt) {
-				case "day":
-					break;
-				case "halfMonth":
-					break;
-				case "month":
-					/*
-					 * Abarbeitung der erforderlichen Anwendungsschritte bei
-					 * einem Monatssprung - in der Methode
-					 */
-					System.out.println("Monatssprung...");
-					returncode = timechange.month(month);
-					break;
-				case "year":
-					/*
-					 * Abarbeitung der erforderlichen Anwendungsschritte bei
-					 * einem Jahressprung - in der Methode
-					 */
-					System.out.println("Jahressprung...");
-					returncode = timechange.month(month);
-					break;
+					} else if (o instanceof String) {
+						sprungArt = (String) o;
+						switch (sprungArt) {
+						case "day":
+							break;
+						case "halfMonth":
+							break;
+						case "month":
+							/*
+							 * Abarbeitung der erforderlichen Anwendungsschritte bei
+							 * einem Monatssprung - in der Methode
+							 */
+							System.out.println("Monatssprung...");
+							returncode = timechange.month(month);
+							break;
+						case "year":
+							/*
+							 * Abarbeitung der erforderlichen Anwendungsschritte bei
+							 * einem Jahressprung - in der Methode
+							 */
+							System.out.println("Jahressprung...");
+							returncode = timechange.month(month);
+							break;
 
-				default:
-					/* Defaulthandling */
-					returncode = 401;
+						default:
+							/* Defaulthandling */
+							returncode = 401;
+						}
+						timechange.setTime(new Date(year, month, day));
+						ShiftFrame.getInstance().setDatum();
+
+					} else {
+						// Object o ist weder vom Typ Integer noch von String
+						returncode = 402;
+					}
+
+					System.out.println("Object: " + o.toString());
+					System.out.println("sprungArt: " + sprungArt);
+					System.out.println("returncode: " + returncode);
+					Date localDateNew = timechange.getTime();
+					System.out.println("aktuelles localDate - nach der Methode: "
+							+ localDate.getDate() + "." + (localDateNew.getMonth() + 1)
+							+ "." + (localDateNew.getYear() + 1900));
 				}
-				timechange.setTime(new Date(year, month, day));
-				ShiftFrame.getInstance().setDatum();
 
-			} else {
-				// Object o ist weder vom Typ Integer noch von String
-				returncode = 402;
+				BVWSImplService ws = new BVWSImplService();
+				BVWebService wws = ws.getBVWSImplPort();
+				wws.pushDateSuccesful(returncode);
 			}
-
-			System.out.println("Object: " + o.toString());
-			System.out.println("sprungArt: " + sprungArt);
-			System.out.println("returncode: " + returncode);
-			Date localDateNew = timechange.getTime();
-			System.out.println("aktuelles localDate - nach der Methode: "
-					+ localDate.getDate() + "." + (localDateNew.getMonth() + 1)
-					+ "." + (localDateNew.getYear() + 1900));
-		}
-
-		return returncode;
+		});
+		d.start();
+		return 100;
 	}
 
 	@Override
