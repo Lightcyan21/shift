@@ -316,6 +316,52 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
 	}
 
+	public boolean persistAll(List<Order> list) {
+
+		Connection con = DBUtil.getConnection();
+		for (Order entity : list) {
+			try {
+				PreparedStatement pre;
+				pre = con
+						.prepareStatement("update job SET wohnungsID = ?, jobName = ?, mieter = ?, betrag = ?, status = ?, statusRechnung = ?, statusBestaetigung = ?, statusWeiterleitung = ?, seen = ? , datum = ? WHERE jobID = ?;");
+				pre.setString(1, entity.getWohnungsID());
+				pre.setString(2, entity.getJobName());
+				pre.setString(3, entity.getMieter());
+				pre.setDouble(4, entity.getBetrag());
+				pre.setInt(5, entity.getStatus());
+				pre.setBoolean(6, entity.isStatusRechnung());
+				pre.setBoolean(7, entity.isStatusBestaetigung());
+				pre.setBoolean(8, entity.isStatusWeiterleitung());
+				pre.setBoolean(9, entity.isSeen());
+				pre.setString(10, entity.getDatum());
+				pre.setLong(11, entity.getId());
+
+				if (entity.getId() != 0 && entity.getWohnungsID() != null
+						&& entity.getJobName() != null
+						&& entity.getMieter() != null
+				// && entity.getStatus() != 0
+				) {
+					pre.executeUpdate();
+
+				} else {
+					System.out.println("Unvollständisges Objekt, persist nicht ausgeführt.");
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+
+	}
+
 	@Override
 	public void reload(Order entity) {
 
