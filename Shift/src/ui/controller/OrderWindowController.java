@@ -51,7 +51,8 @@ public class OrderWindowController extends
 			@SuppressWarnings("unchecked")
 			List<Object> objectlist = (List<Object>) event.getData();
 			Order ord = (Order) objectlist.get(0);
-			ShiftLabel entry6 = (ShiftLabel) objectlist.get(1);
+			ShiftLabel entry5 = (ShiftLabel) objectlist.get(1);
+			ShiftLabel entry6 = (ShiftLabel) objectlist.get(2);
 			String name = ord.getJobName();
 			String apartmentID = ord.getWohnungsID();
 			int flaeche = 1;
@@ -74,7 +75,7 @@ public class OrderWindowController extends
 					ord.setDatum(result);
 					ord.setStatusBestaetigung(true);
 					orderdao.persist(ord);
-					registeredViews.get(0).setzeBestaetigung(entry6);
+					registeredViews.get(0).setzeBestaetigung(entry5, entry6);
 				}
 
 			} catch (ClientTransportException | ServerSOAPFaultException e) {

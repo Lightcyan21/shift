@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,7 +151,7 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 				.getId()));
 		ShiftTableEntry entry3 = new ShiftTableEntry(order.getJobName());
 		ShiftTableEntry entry4 = new ShiftTableEntry(order.getWohnungsID());
-		ShiftButtonWeiterleiten entry5 = new ShiftButtonWeiterleiten();
+		final ShiftLabel entry5 = new ShiftLabel("");
 		ShiftLabel entry6 = new ShiftLabel("");
 		ShiftLabel entry7 = new ShiftLabel("");
 		ShiftButtonBestaetigung entry8 = new ShiftButtonBestaetigung();
@@ -158,22 +160,50 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		final int rowdel = row;
 		final List<Object> objectlist = new ArrayList<Object>();
 		objectlist.add(ord);
+		objectlist.add(entry5);
 		objectlist.add(entry6);
 
-		// entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
-		entry5.addActionListener(new ActionListener() {
+		entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
+		entry5.addMouseListener(new MouseListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getSource().equals(entry5))
 				fireLocalUIEvent(this, UI_EVENT.AUFTRAG_WEITERLEITEN.ordinal(),
 						objectlist);
+
 			}
 		});
+
 		// true= Bestaetigung gesendet, else nicht
 		if (ord.isStatusBestaetigung() == true) {
 			res6 = "res/Bestaetigung.png";
 		} else {
-				res6 = "res/keineBestaetigung.png";
+			res6 = "res/keineBestaetigung.png";
 		}
 
 		entry6.setIcon(new ImageIcon(res6));
@@ -308,12 +338,14 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 
 	}
 
-	public void setzeBestaetigung(ShiftLabel entry6) {
+	public void setzeBestaetigung(ShiftLabel entry5, ShiftLabel entry6) {
 		Component[] comps = table.getComponents();
 		for (Component component : comps) {
 			if (component instanceof ShiftLabel) {
 				if (component.equals(entry6)) {
 					((ShiftLabel) component).setIcon(bestaetigungsicon);
+				}else if (component.equals(entry5)) {
+					((ShiftLabel) component).setVisible(false);
 				}
 			}
 		}
