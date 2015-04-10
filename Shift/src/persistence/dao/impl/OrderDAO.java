@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.mysql.fabric.xmlrpc.base.Array;
 import com.mysql.jdbc.Statement;
 
 import persistence.DBUtil;
@@ -120,48 +122,56 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 		}
 	}
 
-	public List<Order> getOrderByRequester(String id) {
+	public HashMap<String, List<Order>> getOrderByRequester(List<String> list) {
 
 		Connection con;
 		con = DBUtil.getConnection();
 
-		List<Order> orderList = new ArrayList<>();
+		HashMap<String, List<Order>> hm = new HashMap<>();
+		List<Order> orderList = new ArrayList<Order>();
+		{
+		}
+		;
 
-		try {
-			PreparedStatement pre;
-			pre = con
-					.prepareStatement("select * from job where wohnungsID =?;");
+		for (String string : list) {
+			try {
+				PreparedStatement pre;
+				pre = con
+						.prepareStatement("select * from job where wohnungsID =?;");
 
-			pre.setString(1, id);
+				pre.setString(1, string);
 
-			ResultSet result = pre.executeQuery();
+				ResultSet result = pre.executeQuery();
 
-			while (result.next()) {
+				while (result.next()) {
 
-				Order order = new Order();
-				order.setId(result.getLong("jobID"));
-				order.setWohnungsID(result.getString("wohnungsID"));
-				order.setJobName(result.getString("jobName"));
-				order.setMieter(result.getString("mieter"));
-				order.setBetrag(result.getDouble("betrag"));
-				order.setStatus(result.getInt("status"));
-				order.setStatusRechnung(result.getBoolean("statusRechnung"));
-				order.setStatusBestaetigung(result
-						.getBoolean("statusBestaetigung"));
-				order.setStatusWeiterleitung(result
-						.getBoolean("statusWeiterleitung"));
-				order.setSeen(result.getBoolean("seen"));
-				order.setDatum(result.getString("datum"));
+					Order order = new Order();
+					order.setId(result.getLong("jobID"));
+					order.setWohnungsID(result.getString("wohnungsID"));
+					order.setJobName(result.getString("jobName"));
+					order.setMieter(result.getString("mieter"));
+					order.setBetrag(result.getDouble("betrag"));
+					order.setStatus(result.getInt("status"));
+					order.setStatusRechnung(result.getBoolean("statusRechnung"));
+					order.setStatusBestaetigung(result
+							.getBoolean("statusBestaetigung"));
+					order.setStatusWeiterleitung(result
+							.getBoolean("statusWeiterleitung"));
+					order.setSeen(result.getBoolean("seen"));
+					order.setDatum(result.getString("datum"));
 
-				orderList.add(order);
+					orderList.add(order);
+
+					hm.put(string, orderList);
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
-		if (orderList.size() != 0) {
-			return orderList;
+		if (hm.size() != 0) {
+			return hm;
 		} else {
 			return null;
 		}
@@ -285,9 +295,9 @@ public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 			if (entity.getId() != 0 && entity.getWohnungsID() != null
 					&& entity.getJobName() != null
 					&& entity.getMieter() != null
-//					&& entity.getStatus() != 0
-					) {
-					pre.executeUpdate();
+			// && entity.getStatus() != 0
+			) {
+				pre.executeUpdate();
 				rt = true;
 			} else {
 				rt = false;
