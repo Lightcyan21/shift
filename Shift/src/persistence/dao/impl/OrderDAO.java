@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.mysql.fabric.xmlrpc.base.Array;
-import com.mysql.jdbc.Statement;
-
 import persistence.DBUtil;
 import persistence.dao.AbstractDAO;
 import persistence.dao.DAO;
 import persistence.entity.impl.Order;
+
+import com.mysql.jdbc.Statement;
 
 public class OrderDAO extends AbstractDAO<Order> implements DAO<Order> {
 
