@@ -16,6 +16,8 @@ import webservices.ServiceWS;
 import webservices.ServiceWSImplService;
 
 import com.sun.xml.internal.ws.client.ClientTransportException;
+import com.sun.xml.internal.ws.fault.ServerSOAPFaultException;
+
 import components.Definitions;
 import components.ShiftLabel;
 
@@ -46,6 +48,7 @@ public class OrderWindowController extends
 			ServiceWSImplService gebaeudeservice = new ServiceWSImplService();
 			ServiceWS gebaeude = gebaeudeservice.getServiceWSImplPort();
 			OrderDAO orderdao = new OrderDAO();
+			@SuppressWarnings("unchecked")
 			List<Object> objectlist = (List<Object>) event.getData();
 			Order ord = (Order) objectlist.get(0);
 			ShiftLabel entry6 = (ShiftLabel) objectlist.get(1);
@@ -60,20 +63,21 @@ public class OrderWindowController extends
 
 			long orderID = ord.getId(); // javadoc verlangt long als datentyp
 			try {
-			
+
 				String result = gebaeude.sendOrderToFm(name, apartmentID,
 						flaeche, orderID);
-				if (result == "") {
+				if (result.equals("")) {
 					JOptionPane.showMessageDialog(new JFrame(),
 							"Fehlerhafte Parameter für Auftragsübergabe");
 				} else {
+					System.out.println("Ausführungsdatum: " + result);
 					ord.setDatum(result);
 					ord.setStatusBestaetigung(true);
 					orderdao.persist(ord);
 					registeredViews.get(0).setzeBestaetigung(entry6);
 				}
 
-			} catch (ClientTransportException e) {
+			} catch (ClientTransportException | ServerSOAPFaultException e) {
 				System.out.println(e.getMessage());
 				JOptionPane.showMessageDialog(new JFrame(),
 						Definitions.NO_CONNECTION_GS, Definitions.ERROR_TITLE,

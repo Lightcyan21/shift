@@ -174,7 +174,6 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 			res6 = "res/Bestaetigung.png";
 		} else {
 				res6 = "res/keineBestaetigung.png";
-				System.out.println("Fehler?");
 		}
 
 		entry6.setIcon(new ImageIcon(res6));
