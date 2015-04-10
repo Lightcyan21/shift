@@ -7,6 +7,11 @@ import javax.swing.JButton;
 
 public class ShiftButtonSearchTable extends JButton {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5531647012545168329L;
+
 	public ShiftButtonSearchTable() {
 		super();
 

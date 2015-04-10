@@ -2,7 +2,6 @@ package components;
 
 import java.awt.Dimension;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class ShiftButtonBestaetigung extends JButton{

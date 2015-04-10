@@ -88,7 +88,7 @@ public class GmWSImpl implements GmWS {
 	@WebMethod
 	public String setHirer(int NumberOfHirers, String apartmentID) {
 		System.out.println("Neuer Mieter wird eingetragen...");
-		System.out.println("Anzahl Mieter: "+NumberOfHirers);
+		System.out.println("Anzahl Mieter: " + NumberOfHirers);
 		ApartmentDAO aptdao = new ApartmentDAO();
 		Apartment apt = aptdao.getApartment(apartmentID);
 		if (apt == null) {
@@ -339,6 +339,8 @@ public class GmWSImpl implements GmWS {
 					/* Defaulthandling */
 					returncode = 401;
 				}
+				timechange.setTime(new Date(year, month, day));
+				ShiftFrame.getInstance().setDatum();
 
 			} else {
 				// Object o ist weder vom Typ Integer noch von String
@@ -348,11 +350,10 @@ public class GmWSImpl implements GmWS {
 			System.out.println("Object: " + o.toString());
 			System.out.println("sprungArt: " + sprungArt);
 			System.out.println("returncode: " + returncode);
-			timechange.setTime(new Date(year, month, day));
-			ShiftFrame.getInstance().setDatum();
-
-			System.out.println("aktuelles localDate - nach der Methode: " + day
-					+ "." + (month + 1) + "." + year);
+			Date localDateNew = timechange.getTime();
+			System.out.println("aktuelles localDate - nach der Methode: "
+					+ localDate.getDate() + "." + (localDateNew.getMonth() + 1)
+					+ "." + (localDateNew.getYear() + 1900));
 		}
 
 		return returncode;

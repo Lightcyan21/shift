@@ -18,6 +18,7 @@ import webservices.impl.BVWSImplService;
 import webservices.impl.BVWebService;
 
 import com.sun.xml.internal.ws.client.ClientTransportException;
+
 import components.Definitions;
 
 /**
@@ -49,6 +50,7 @@ public class ExposeController extends
 				JOptionPane.showMessageDialog(new JFrame(), "Fehler beim Casten der Objekte");
 				return;
 			}
+			@SuppressWarnings("unchecked")
 			List<Object> data =  (List<Object>) event.getData();
 			Double area = (Double) data.get(0);
 			Integer rowdel = (Integer) data.get(1);

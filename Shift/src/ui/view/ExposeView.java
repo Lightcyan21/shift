@@ -274,6 +274,7 @@ public class ExposeView extends AbstractView implements SpringTable {
 				data.add(id);
 				fireLocalUIEvent(this, UI_EVENT.PUSH_INSURANCE.ordinal(), data);
 				
+				
 			}
 		});
 
