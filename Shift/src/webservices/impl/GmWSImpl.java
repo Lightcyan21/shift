@@ -172,7 +172,7 @@ public class GmWSImpl implements GmWS {
 			case "Bezahlt":
 				order.setStatus(Definitions.RECHNUNG_BEZAHLT);
 			default:
-				return "Auftrag nicht vorhanden.";
+				return "bei GM angekommen.";
 			}
 			orderdao.persist(order);
 			System.out.println("Status: " + status);
