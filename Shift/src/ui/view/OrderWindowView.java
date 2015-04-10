@@ -16,8 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
-import com.mysql.fabric.xmlrpc.base.Array;
-
 import mvc.model.IModel;
 import mvc.view.abstrct.AbstractView;
 import persistence.dao.impl.OrderDAO;
@@ -25,6 +23,7 @@ import persistence.entity.impl.Order;
 import ui.enums.UI_EVENT;
 import util.SpringTable;
 import util.SpringUtilities;
+
 import components.Definitions;
 import components.ShiftButtonBack;
 import components.ShiftButtonBestaetigung;
@@ -170,18 +169,16 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 						objectlist);
 			}
 		});
-
 		// true= Bestaetigung gesendet, else nicht
-		if (ord.isStatusWeiterleitung() == true) {
+		if (ord.isStatusBestaetigung() == true) {
 			res6 = "res/Bestaetigung.png";
-		} if (ord.isStatusBestaetigung() == false) {
-			res6 = "res/keineBestaetigung.png";
-		}else {
-			System.out.println("Fehler?");
+		} else {
+				res6 = "res/keineBestaetigung.png";
+				System.out.println("Fehler?");
 		}
 
 		entry6.setIcon(new ImageIcon(res6));
-		
+
 		if (ord.isStatusRechnung() == true) {
 			res7 = "res/Rechnung.png";
 		} else {
