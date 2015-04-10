@@ -163,7 +163,11 @@ public class OrderWindowView extends AbstractView implements SpringTable {
 		objectlist.add(entry5);
 		objectlist.add(entry6);
 
-		entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
+		if (ord.isStatusBestaetigung() == false) {
+			entry5.setIcon(new ImageIcon("res/Weiterleiten.png"));
+		}else {
+			entry5.setVisible(false);
+		}
 		entry5.addMouseListener(new MouseListener() {
 
 			@Override
