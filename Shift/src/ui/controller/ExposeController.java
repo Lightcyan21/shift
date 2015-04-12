@@ -71,6 +71,7 @@ public class ExposeController extends
 						InsuranceDAO insudao = new InsuranceDAO();
 						Insurance insu = insudao.createNew(id);
 						insu.setBetrag(betrag);
+						System.out.println(betrag);
 						if (insudao.persist(insu)) {
 							System.out.println("Versicherung gespeichert!");
 							registeredViews.get(0).deleteThisRow(rowdel);

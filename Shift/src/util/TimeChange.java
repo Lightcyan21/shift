@@ -67,15 +67,21 @@ public class TimeChange {
 				Date billdate;
 				try {
 					billdate = sdf.parse(bill2.getRechnungsdatum());
-					if (month==1){
-						
-					}else{
-					if (billdate.getMonth() == (month - 1)
-							&& billdate.getYear() == (year)) {
-						if (!bill2.getVerwendungszweck().startsWith("GM")) {
-							betrag += bill2.getBetrag();
+					if (month == 0) {
+						if (billdate.getMonth() == (11)
+								&& billdate.getYear() == (year-1)) {
+							if (!bill2.getVerwendungszweck().startsWith("GM")) {
+								betrag += bill2.getBetrag();
+							}
 						}
-					}}
+					} else {
+						if (billdate.getMonth() == (month - 1)
+								&& billdate.getYear() == (year)) {
+							if (!bill2.getVerwendungszweck().startsWith("GM")) {
+								betrag += bill2.getBetrag();
+							}
+						}
+					}
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -115,7 +121,17 @@ public class TimeChange {
 			System.out.println("Rechnung nicht abgesendet...");
 			return Definitions.RETURNCODE_ERROR;
 		} else {
-			return Definitions.RETURNCODE_CORRECT;
+			if (ws.erfasseRechnung(bill.getVerwendungszweck(), "GM",
+					bill.getRechnungssteller(), bill.getRechnungsEmpfaenger(),
+					bill.getBetrag(), bill.getRechnungsdatum(),
+					bill.getZahlungsdatum()).equals("false")) {
+				System.out
+						.println("Rechnung nicht bei Verwaltung angekommen...");
+				return Definitions.RETURNCODE_ERROR;
+
+			} else {
+				return Definitions.RETURNCODE_CORRECT;
+			}
 		}
 
 	}

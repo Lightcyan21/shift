@@ -46,8 +46,6 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 	public Insurance createNew(Long houseid) {
 
 		Insurance insu = new Insurance();
-		int key = 0;
-
 		Connection con;
 		con = DBUtil.getConnection();
 
@@ -61,7 +59,7 @@ public class InsuranceDAO extends AbstractDAO<Insurance> implements
 
 			pre.execute();
 
-			insu.setId((long) key);
+			insu.setId((long) houseid);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
