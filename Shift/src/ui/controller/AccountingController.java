@@ -47,7 +47,7 @@ public class AccountingController extends
 			try {
 				String result = bh.uebergabeMahnauftrag(vz);
 				System.out.println(result);
-				if (result != "Mahnauftrag erhalten") {
+				if (result.equals("Mahnauftrag erhalten")) {
 					JOptionPane.showMessageDialog(new JFrame(), result,
 							"Fehler!", JOptionPane.ERROR_MESSAGE);
 				} else {

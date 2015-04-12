@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +39,6 @@ import baldoapp.ProjektXMLParser;
 
 import components.Definitions;
 import components.ShiftButtonBack;
-import components.ShiftButtonBestaetigung;
 import components.ShiftFrame;
 import components.ShiftLabel;
 import components.ShiftPanel2;
@@ -175,13 +176,12 @@ public class AccountingView extends AbstractView implements SpringTable {
 								.println("Rechnung nicht im System vorhanden");
 					} else {
 						table.setLayout(layout);
-						headlinesSetzen();
 
 						addRow(bill);
 						SpringUtilities.makeCompactGrid(table, rows, cols,
 								initX, initY, xPad, yPad);
 					}
-					if(table.getComponents().length== 0){
+					if (table.getComponents().length == 0) {
 						noEntries();
 					}
 
@@ -215,34 +215,63 @@ public class AccountingView extends AbstractView implements SpringTable {
 				bill.getRechnungsEmpfaenger());
 		ShiftTableEntry entry4 = new ShiftTableEntry(Double.toString(bill
 				.getBetrag()));
-		ShiftButtonBestaetigung entry5 = new ShiftButtonBestaetigung();
+		ShiftLabel entry5 = new ShiftLabel("");
 		entry5.setIcon(new ImageIcon("res/Mahnung.png"));
-		ShiftButtonBestaetigung entry6 = new ShiftButtonBestaetigung();
+		ShiftLabel entry6 = new ShiftLabel("");
 		entry6.setIcon(new ImageIcon("res/VerzichtaufZahlung.png"));
 		final int rowdel = row;
 		final String id = bill.getVerwendungszweck();
-
-		entry5.addActionListener(new ActionListener() {
+		entry5.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				System.out.println("Mahnung beauftragt...");
 				fireLocalUIEvent(this, UI_EVENT.PUSH_MAHNUNG.ordinal(), id
 						+ "#" + rowdel);
 			}
 		});
-
-		entry6.addActionListener(new ActionListener() {
+		entry6.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				System.out.println("Keine Mahnung beauftragt...");
 				System.out.println("Lösche Reihe: " + rowdel);
 				BillDAO billDao = new BillDAO();
 				Bill bill = billDao.getByVerwendungszweck(id);
 				deleteThisRow(rowdel);
-				JOptionPane.showMessageDialog(frame, "Rechnung in der Reihe "
-						+ rowdel + " gelöscht.");
+				JOptionPane.showMessageDialog(frame,
+						"Rechnung mit dem Verwendungzweck " + id
+								+ " aus der Ansicht entfernt.");
 				billDao.persist(bill);
 			}
 		});

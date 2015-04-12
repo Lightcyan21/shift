@@ -99,6 +99,7 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 				bill.setBetrag(result.getDouble("gesamtbetrag"));
 				bill.setRechnungsdatum(result.getString("rechnungsdatum"));
 				bill.setZahlungsdatum(result.getString("zahlungsdatum"));
+				bill.setVerwendungszweck(result.getString("verwendungszweck"));
 
 				billList.add(bill);
 			}
@@ -210,13 +211,11 @@ public class BillDAO extends AbstractDAO<Bill> implements DAO<Bill> {
 			pre.setString(6, entity.getZahlungsdatum());
 			pre.setLong(7, entity.getId());
 
-
 			if (
-//					entity.getId() != 0 && entity.getRechnungssteller() != null
-//					&& entity.getRechnungsEmpfaenger() != null
-//					&& entity.getBetrag() != 0 && 
-					entity.getVerwendungszweck() != null
-					) {
+			// entity.getId() != 0 && entity.getRechnungssteller() != null
+			// && entity.getRechnungsEmpfaenger() != null
+			// && entity.getBetrag() != 0 &&
+			entity.getVerwendungszweck() != null) {
 				pre.executeUpdate();
 				rt = true;
 			} else {

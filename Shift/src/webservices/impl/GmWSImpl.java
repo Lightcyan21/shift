@@ -255,9 +255,11 @@ public class GmWSImpl implements GmWS {
 
 			OrderDAO orderdao = new OrderDAO();
 			Order order = orderdao.getById(Long.parseLong(id));
-			order.setBetrag(betrag);
-			order.setStatusRechnung(true);
-			orderdao.persist(order);
+			if (order != null) {
+				order.setBetrag(betrag);
+				order.setStatusRechnung(true);
+				orderdao.persist(order);
+			}
 		}
 		System.out.println("Rechnung an BH senden...");
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
@@ -287,20 +289,19 @@ public class GmWSImpl implements GmWS {
 	@Override
 	@WebMethod
 	public int pushDate(final int year, final int month, final int day) {
-		
-		
+
 		Thread d = new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				TimeChange timechange = TimeChange.getInstance();
-				System.out.println("Zeitsprung erhalten..." + day + "." + (month + 1)
-						+ "." + year);
+				System.out.println("Zeitsprung erhalten..." + day + "."
+						+ (month + 1) + "." + year);
 				Date localDate = timechange.getTime();
 				int returncode = 100;
 				if (localDate.equals(new Date(0))) {
-					System.out.println("Zeitinitialiserung... auf den " + day + "."
-							+ (month + 1) + "." + (year + 1900));
+					System.out.println("Zeitinitialiserung... auf den " + day
+							+ "." + (month + 1) + "." + (year + 1900));
 					timechange.setTime(new Date(year, month, day));
 					ShiftFrame.getInstance().setDatum();
 					returncode = 101;
@@ -308,8 +309,9 @@ public class GmWSImpl implements GmWS {
 
 					Zeitsprung zeitsprung = new Zeitsprung(localDate);
 					System.out.println("localDate - zu Beginn der Methode: "
-							+ localDate.getDate() + "." + (localDate.getMonth() + 1)
-							+ "." + (localDate.getYear()));
+							+ localDate.getDate() + "."
+							+ (localDate.getMonth() + 1) + "."
+							+ (localDate.getYear()));
 					Date sprungDate = new Date(year, month, day);
 					String sprungArt = null;
 
@@ -326,19 +328,19 @@ public class GmWSImpl implements GmWS {
 							break;
 						case "month":
 							/*
-							 * Abarbeitung der erforderlichen Anwendungsschritte bei
-							 * einem Monatssprung - in der Methode
+							 * Abarbeitung der erforderlichen Anwendungsschritte
+							 * bei einem Monatssprung - in der Methode
 							 */
 							System.out.println("Monatssprung...");
-							returncode = timechange.month(month);
+							returncode = timechange.month(month, year);
 							break;
 						case "year":
 							/*
-							 * Abarbeitung der erforderlichen Anwendungsschritte bei
-							 * einem Jahressprung - in der Methode
+							 * Abarbeitung der erforderlichen Anwendungsschritte
+							 * bei einem Jahressprung - in der Methode
 							 */
 							System.out.println("Jahressprung...");
-							returncode = timechange.month(month);
+							returncode = timechange.month(month, year);
 							break;
 
 						default:
@@ -357,9 +359,11 @@ public class GmWSImpl implements GmWS {
 					System.out.println("sprungArt: " + sprungArt);
 					System.out.println("returncode: " + returncode);
 					Date localDateNew = timechange.getTime();
-					System.out.println("aktuelles localDate - nach der Methode: "
-							+ localDate.getDate() + "." + (localDateNew.getMonth() + 1)
-							+ "." + (localDateNew.getYear() + 1900));
+					System.out
+							.println("aktuelles localDate - nach der Methode: "
+									+ localDate.getDate() + "."
+									+ (localDateNew.getMonth() + 1) + "."
+									+ (localDateNew.getYear() + 1900));
 				}
 
 				BVWSImplService ws = new BVWSImplService();

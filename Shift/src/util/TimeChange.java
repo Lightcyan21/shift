@@ -38,10 +38,10 @@ public class TimeChange {
 	private Date localDate;
 
 	@SuppressWarnings("deprecation")
-	public int month(int month) {
+	public int month(int month, int year) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		BillDAO billdao = new BillDAO();
-		int betrag = 0;
+		double betrag = 0;
 
 		// Nebenkosten berechnen und an Verwaltung senden
 		StringArrayArray invoice = getUtilities(month);
@@ -59,6 +59,28 @@ public class TimeChange {
 			System.out.println("Fehler bei Uebergabe der Nebenkosten an VW: "
 					+ e.getMessage());
 		}
+		// Berechnen des Rechnungsbetrags
+		List<Bill> billlist = billdao.findAll();
+		// Mapping auf Month
+		for (Bill bill2 : billlist) {
+			if (bill2.getRechnungsdatum() != null) {
+				Date billdate;
+				try {
+					billdate = sdf.parse(bill2.getRechnungsdatum());
+					if (month==1){
+						
+					}else{
+					if (billdate.getMonth() == (month - 1)
+							&& billdate.getYear() == (year)) {
+						if (!bill2.getVerwendungszweck().startsWith("GM")) {
+							betrag += bill2.getBetrag();
+						}
+					}}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		// Rechnung erstellen
 		Bill bill = billdao.create();
 		bill.setRechnungsEmpfaenger("VW");
@@ -73,33 +95,15 @@ public class TimeChange {
 			verwendungszweck += "0";
 		}
 		bill.setVerwendungszweck(verwendungszweck.concat(Long.toString(bill
-				.getId()))); 
+				.getId())));
 
-		// Berechnen des Rechnungsbetrags
-		List<Bill> billlist = billdao.findAll();
-
-		// Mapping auf Month
-		for (Bill bill2 : billlist) {
-			if (bill2.getRechnungsdatum() != null) {
-
-				Date billdate;
-				try {
-					billdate = sdf.parse(bill2.getRechnungsdatum());
-					if (billdate.getMonth() == month) {
-						betrag += bill2.getBetrag();
-
-					}
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-
-			}
-		}
-
-		bill.setBetrag(betrag *(1+ Definitions.gewinn));
+		System.out.println("Gesamtbetrag: " + betrag);
+		bill.setBetrag(betrag * (1 + Definitions.gewinn));
 
 		// speichern
-		billdao.persist(bill);
+		if (billdao.persist(bill) != true) {
+			return Definitions.RETURNCODE_ERROR;
+		}
 
 		// Buchhaltungsrechnung + gezahlte Aufträge + gewinn
 		BuchhaltungWsImplService bhservice = new BuchhaltungWsImplService();
@@ -108,7 +112,7 @@ public class TimeChange {
 				bill.getRechnungssteller(), bill.getRechnungsEmpfaenger(),
 				bill.getBetrag(), bill.getRechnungsdatum(),
 				bill.getZahlungsdatum()).equals("true")) {
-			System.out.println("Rechnung nicht empfangen...");
+			System.out.println("Rechnung nicht abgesendet...");
 			return Definitions.RETURNCODE_ERROR;
 		} else {
 			return Definitions.RETURNCODE_CORRECT;
@@ -171,7 +175,7 @@ public class TimeChange {
 									aptID, (int) house.getGartenflaeche()
 											/ house.getAnzahlWohnungen(),
 									order.getId());
-					if (result != "") {
+					if (!result.equals("")) {
 
 						order.setWohnungsID(aptID);
 						order.setStatusBestaetigung(true);
@@ -191,7 +195,7 @@ public class TimeChange {
 					order = leereorder.get(index++);
 					result = gs.sendOrderToFm(Definitions.GARTENPFLEGE_STRING,
 							aptID, 1, order.getId());
-					if (result != "") {
+					if (!result.equals("")) {
 
 						order.setWohnungsID(aptID);
 						order.setStatusBestaetigung(true);
@@ -213,7 +217,7 @@ public class TimeChange {
 					result = gs.sendOrderToFm(
 							Definitions.FUSSWEG_RAEUMEN_STRING, aptID, 1,
 							order.getId());
-					if (result != "") {
+					if (!result.equals("")) {
 						order.setWohnungsID(aptID);
 						order.setJobName(Definitions.FUSSWEG_RAEUMEN_STRING);
 						order.setBetrag(Definitions.fusswege_raeumen);
@@ -230,7 +234,7 @@ public class TimeChange {
 					order = leereorder.get(index++);
 					result = gs.sendOrderToFm(Definitions.SALZ_STREUEN_STRING,
 							aptID, 1, order.getId());
-					if (result != "") {
+					if (!result.equals("")) {
 						order.setWohnungsID(aptID);
 						order.setJobName(Definitions.SALZ_STREUEN_STRING);
 						order.setBetrag(Definitions.salz_streuen);
@@ -250,7 +254,7 @@ public class TimeChange {
 				order = leereorder.get(index++);
 				result = gs.sendOrderToFm(Definitions.FENSTERREINIGUNG_STRING,
 						aptID, house.getStockwerke(), order.getId());
-				if (result != "") {
+				if (!result.equals("")) {
 					order.setWohnungsID(aptID);
 					order.setJobName(Definitions.FENSTERREINIGUNG_STRING);
 					order.setBetrag(Definitions.fensterreinigung);
@@ -268,7 +272,7 @@ public class TimeChange {
 				order = leereorder.get(index++);
 				result = gs.sendOrderToFm(Definitions.TREPPENREINIGUNG_STRING,
 						aptID, house.getStockwerke(), order.getId());
-				if (result != "") {
+				if (!result.equals("")) {
 					order.setWohnungsID(aptID);
 					order.setJobName(Definitions.TREPPENREINIGUNG_STRING);
 					order.setBetrag(Definitions.treppenreinigung);
@@ -490,9 +494,9 @@ public class TimeChange {
 
 	}
 
-	@SuppressWarnings("deprecation")
-	public void year() {
-		int month = localDate.getMonth();
+	@Deprecated
+	public void year(int month, int year) {
+		// int month = localDate.getMonth();
 
 		for (int i = 0; i < 12; i++) {
 			if (month < 11) {
@@ -500,7 +504,7 @@ public class TimeChange {
 			} else {
 				month = 0;
 			}
-			month(month);
+			month(month, year);
 		}
 		setTime(localDate);
 	}

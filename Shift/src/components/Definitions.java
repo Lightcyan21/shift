@@ -19,7 +19,7 @@ public class Definitions {
 	public static final String INFO = "<html><body><center>Infos von<br>Buchhaltung</html></body>";
 	public static final String HOUSES = "<html><body><center>Gebäude</html></body>";
 	public static final double hecke_schneiden = 34.99;
-	public static final double rasen_maehen = 0.99; // pro qm
+	public static final double rasen_maehen = 0.49; // pro qm
 	public static final double gartenpflege = 99.99; // pro Monat
 	public static final double fusswege_raeumen = 39.99; // pro Monat
 	public static final double salz_streuen = 19.99; // pro Monat
