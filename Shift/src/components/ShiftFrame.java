@@ -80,7 +80,7 @@ public class ShiftFrame extends JFrame {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyy");
 		 datum = new JLabel(
 				sdf.format(TimeChange.getInstance().getTime()));
-		datum.setFont(new Font("Arial Black", Font.ITALIC, 15));
+		datum.setFont(new Font("Arial Black", Font.BOLD, 15));
 		datum.setForeground(Color.black);
 		datumspanel.setLayout(new BoxLayout(datumspanel, BoxLayout.PAGE_AXIS));
 		datumspanel.add(new Box.Filler(datumsize, datumsize, datumsize));
