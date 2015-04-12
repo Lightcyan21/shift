@@ -73,7 +73,7 @@ public class TimeChange {
 			verwendungszweck += "0";
 		}
 		bill.setVerwendungszweck(verwendungszweck.concat(Long.toString(bill
-				.getId())));
+				.getId()))); 
 
 		// Berechnen des Rechnungsbetrags
 		List<Bill> billlist = billdao.findAll();
@@ -162,48 +162,49 @@ public class TimeChange {
 				house = housemap.get(Long.parseLong(arr[0]));
 				String aptID = apartment.getAptID();
 
-				if (sommer)
+				if (sommer) {
 					// Rasen maehen
 					order = leereorder.get(index++);
 
-				result = gs.sendOrderToFm(
-						Definitions.RASEN_MAEHEN_STRING,
-						aptID,
-						(int) house.getGartenflaeche()
-								/ house.getAnzahlWohnungen(), order.getId());
-				if (result != "") {
+					result = gs
+							.sendOrderToFm(Definitions.RASEN_MAEHEN_STRING,
+									aptID, (int) house.getGartenflaeche()
+											/ house.getAnzahlWohnungen(),
+									order.getId());
+					if (result != "") {
 
-					order.setWohnungsID(aptID);
-					order.setStatusBestaetigung(true);
-					order.setStatus(Definitions.ANGEKOMMEN);
-					order.setJobName(Definitions.RASEN_MAEHEN_STRING);
-					order.setBetrag(Definitions.rasen_maehen
-							* (house.getGartenflaeche() / house
-									.getAnzahlWohnungen()));
-					order.setDatum(result);
-					order.setSeen(true);
-					orderlist.add(order);
-				} else {
-					System.out.println(Definitions.ERROR_MESSAGE);
-				}
+						order.setWohnungsID(aptID);
+						order.setStatusBestaetigung(true);
+						order.setStatus(Definitions.ANGEKOMMEN);
+						order.setJobName(Definitions.RASEN_MAEHEN_STRING);
+						order.setBetrag(Definitions.rasen_maehen
+								* (house.getGartenflaeche() / house
+										.getAnzahlWohnungen()));
+						order.setDatum(result);
+						order.setSeen(true);
+						orderlist.add(order);
+					} else {
+						System.out.println(Definitions.ERROR_MESSAGE);
+					}
 
-				// Gartenpflege
-				order = leereorder.get(index++);
-				result = gs.sendOrderToFm(Definitions.GARTENPFLEGE_STRING,
-						aptID, 1, order.getId());
-				if (result != "") {
+					// Gartenpflege
+					order = leereorder.get(index++);
+					result = gs.sendOrderToFm(Definitions.GARTENPFLEGE_STRING,
+							aptID, 1, order.getId());
+					if (result != "") {
 
-					order.setWohnungsID(aptID);
-					order.setStatusBestaetigung(true);
-					order.setStatus(Definitions.ANGEKOMMEN);
-					order.setJobName(Definitions.GARTENPFLEGE_STRING);
-					order.setBetrag(Definitions.gartenpflege);
-					order.setDatum(result);
-					order.setSeen(true);
+						order.setWohnungsID(aptID);
+						order.setStatusBestaetigung(true);
+						order.setStatus(Definitions.ANGEKOMMEN);
+						order.setJobName(Definitions.GARTENPFLEGE_STRING);
+						order.setBetrag(Definitions.gartenpflege);
+						order.setDatum(result);
+						order.setSeen(true);
 
-					orderlist.add(order);
-				} else {
-					System.out.println(Definitions.ERROR_MESSAGE);
+						orderlist.add(order);
+					} else {
+						System.out.println(Definitions.ERROR_MESSAGE);
+					}
 				}
 
 				if (!sommer) {
