@@ -96,7 +96,7 @@ public class TimeChange {
 			}
 		}
 
-		bill.setBetrag(betrag * Definitions.gewinn);
+		bill.setBetrag(betrag *(1+ Definitions.gewinn));
 
 		// speichern
 		billdao.persist(bill);
